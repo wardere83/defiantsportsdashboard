@@ -1,8 +1,12 @@
-# Deployment Guide
+# GitHub Deployment Guide
 
-## Node host deployment
+## Recommended setup
 
-Use a Node.js runtime with Node 20 or newer.
+Use GitHub as the source repository, then connect the repository to a Node.js deployment platform.
+
+The app requires Node 20 or newer because `server.js` powers the live endpoints used by the dashboard.
+
+## Commands
 
 Build/start commands:
 
@@ -19,29 +23,53 @@ Default port:
 
 Most hosts inject a `PORT` environment variable. The server automatically uses it.
 
-## HostGator Node.js deployment
+## GitHub repository setup
 
-If your HostGator/cPanel account has Setup Node.js App:
-
-1. Upload the project files into the application folder.
-2. Set the application root to that folder.
-3. Set application startup file to:
+1. Create a GitHub repository.
+2. Upload all project files into the repository root.
+3. Confirm this structure:
 
 ```text
-server.js
+/
+  package.json
+  package-lock.json
+  server.js
+  README.md
+  docs/
+    DEPLOYMENT.md
+    LIVE_SOURCES.md
+  public/
+    index.html
+    assets/
+      defiant-sports-logo.jpeg
 ```
 
-4. Run dependency installation:
+4. Commit and push to `main`.
 
-```bash
-npm install
+## Deploying from GitHub
+
+Connect the GitHub repo to a Node-capable platform and use:
+
+```text
+Build command: npm install
+Start command: npm start
 ```
 
-5. Start or restart the Node app.
-6. Map `defiantsports.io` and `defiantsports.com` to the app.
+The platform should expose the app on its assigned `PORT`; the included server reads `process.env.PORT` automatically.
+
+## Domain mapping
+
+Point these domains to the deployed Node app:
+
+```text
+defiantsports.io
+defiantsports.com
+```
+
+Use your deployment platform’s custom-domain instructions, then update DNS records where your domains are managed.
 
 ## Static-only hosting limitation
 
-GitHub Pages and basic File Manager static hosting cannot run `server.js`. The dashboard page will still display, but live API sections require a Node service.
+GitHub Pages cannot run `server.js`. The dashboard page will still display, but live API sections require a Node service.
 
-For static-only hosting, use the earlier standalone `index.html` package and connect `/api/live-feeds` plus `/api/grant-feeds` through another backend service.
+For static-only GitHub Pages, you would need to move `/api/live-feeds` and `/api/grant-feeds` to a separate backend or serverless service and update the dashboard to call that service.

@@ -35,11 +35,15 @@ npm run dev
 1. Create a new GitHub repository.
 2. Upload the contents of this folder, not the ZIP file itself.
 3. Commit the files to `main`.
-4. Deploy to a Node-capable host, or connect the repo to a platform that can run `npm install` and `npm start`.
+4. Deploy from GitHub to a Node-capable runtime that can run `npm install` and `npm start`.
 
-## HostGator note
+## Important GitHub hosting note
 
-For full live functionality, the app needs Node.js enabled because the dashboard calls `/api/live-feeds` and `/api/grant-feeds`. If your HostGator plan only supports static file hosting, the dashboard UI will load, but live endpoint checks will show unavailable until a Node app or external API service is connected.
+For full live functionality, the app needs a Node.js runtime because the dashboard calls `/api/live-feeds` and `/api/grant-feeds`.
+
+GitHub Pages is static hosting only. It can serve `public/index.html`, but it cannot run `server.js`. If you use GitHub Pages by itself, the dashboard UI will load, but the live API sections will show unavailable.
+
+For the fully functional version, keep the code in GitHub and connect the repository to a Node-capable deployment service such as Render, Railway, Fly.io, DigitalOcean App Platform, or a VPS that pulls from GitHub.
 
 ## Domains
 
@@ -55,7 +59,7 @@ Pointing/mirror domain:
 defiantsports.com
 ```
 
-Configure both domains in your hosting control panel to route to the same Node app or reverse proxy.
+Configure both domains in your DNS provider or deployment platform to route to the same Node app.
 
 ## Live-data policy
 
