@@ -1,0 +1,1470 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Defiant Sports World Cup 2026 Dashboard</title>
+    <meta
+      name="description"
+      content="A monochrome, interactive Defiant Sports dashboard for FIFA World Cup 2026 host cities, stadiums, transportation, open nonprofit funding, fan safety, business exposure, cultural partnerships, and verified source tracking."
+    />
+    <meta property="og:title" content="Defiant Sports World Cup 2026 Dashboard" />
+    <meta
+      property="og:description"
+      content="Interactive World Cup 2026 fan operations dashboard with source-linked stadium, safety, grant, transportation, business, Marathon Clothing, Pogba Academy, and Defiant Records sections."
+    />
+    <meta property="og:type" content="website" />
+    <style>
+      :root {
+        --bg: #f2f2f2;
+        --surface: #f7f7f7;
+        --text: #000000;
+        --text-secondary: #4f4f4f;
+        --text-muted: #9e9e9e;
+        --border: #d1d1d1;
+        --cta: #000000;
+        --cta-text: #ffffff;
+        --shadow: 0 16px 42px rgba(0, 0, 0, 0.08);
+        --radius: 22px;
+        --radius-sm: 14px;
+        --sidebar: 286px;
+        --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font);
+        line-height: 1.5;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .app {
+        display: grid;
+        min-height: 100vh;
+        grid-template-columns: var(--sidebar) minmax(0, 1fr);
+      }
+
+      .sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+        border-right: 1px solid var(--border);
+        background: #000000;
+        color: #ffffff;
+        padding: 22px 18px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-bottom: 22px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+      }
+
+      .brand img {
+        width: 108px;
+        height: auto;
+        border-radius: 8px;
+        background: #ffffff;
+      }
+
+      .brand small {
+        display: block;
+        margin-top: 4px;
+        color: rgba(255, 255, 255, 0.68);
+        font-size: 12px;
+      }
+
+      .nav {
+        display: grid;
+        gap: 8px;
+        margin-top: 24px;
+      }
+
+      .nav button {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid transparent;
+        border-radius: 18px;
+        background: transparent;
+        color: #ffffff;
+        padding: 14px 14px;
+        text-align: left;
+        transition:
+          background 160ms ease,
+          color 160ms ease,
+          border-color 160ms ease;
+      }
+
+      .nav button span {
+        display: block;
+      }
+
+      .nav button small {
+        display: block;
+        margin-top: 3px;
+        color: rgba(255, 255, 255, 0.58);
+        font-size: 12px;
+      }
+
+      .nav button.active,
+      .nav button:hover,
+      .nav button:focus-visible {
+        background: #ffffff;
+        color: #000000;
+        outline: none;
+      }
+
+      .nav button.active small,
+      .nav button:hover small,
+      .nav button:focus-visible small {
+        color: #4f4f4f;
+      }
+
+      .side-note {
+        margin-top: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 18px;
+        padding: 16px;
+        color: rgba(255, 255, 255, 0.72);
+        font-size: 13px;
+      }
+
+      .content {
+        min-width: 0;
+      }
+
+      .topbar {
+        position: sticky;
+        z-index: 10;
+        top: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        border-bottom: 1px solid var(--border);
+        background: rgba(242, 242, 242, 0.94);
+        padding: 16px 24px;
+        backdrop-filter: blur(12px);
+      }
+
+      .topbar-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+
+      .page {
+        padding: 24px;
+      }
+
+      .section {
+        display: none;
+      }
+
+      .section.active {
+        display: block;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--surface);
+        padding: 7px 12px;
+        color: var(--text-secondary);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        letter-spacing: -0.04em;
+        line-height: 1.04;
+      }
+
+      h1 {
+        font-size: clamp(30px, 3vw, 46px);
+      }
+
+      h2 {
+        font-size: clamp(26px, 2.2vw, 34px);
+      }
+
+      h3 {
+        font-size: 20px;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      .muted {
+        color: var(--text-secondary);
+      }
+
+      .faint {
+        color: var(--text-muted);
+      }
+
+      .hero {
+        display: grid;
+        gap: 22px;
+        grid-template-columns: minmax(0, 1fr) 380px;
+        align-items: stretch;
+      }
+
+      .card {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .card.flat {
+        box-shadow: none;
+      }
+
+      .card-header {
+        border-bottom: 1px solid var(--border);
+        padding: 20px;
+      }
+
+      .card-body {
+        padding: 20px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid.three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .grid.four {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .stat {
+        min-height: 160px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        padding: 20px;
+      }
+
+      .stat .label {
+        color: var(--text-secondary);
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .stat .value {
+        margin-top: 24px;
+        font-size: 32px;
+        font-weight: 950;
+        letter-spacing: -0.06em;
+      }
+
+      .stat .detail {
+        margin-top: 10px;
+        color: var(--text-secondary);
+        font-size: 14px;
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin: 16px 0;
+      }
+
+      .field,
+      .button,
+      .select {
+        min-height: 42px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--surface);
+        color: var(--text);
+        padding: 0 15px;
+      }
+
+      .field {
+        min-width: 280px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+        transition:
+          background 160ms ease,
+          color 160ms ease,
+          border-color 160ms ease,
+          transform 160ms ease;
+      }
+
+      .button.primary {
+        border-color: var(--cta);
+        background: var(--cta);
+        color: var(--cta-text);
+      }
+
+      .button:hover,
+      .button:focus-visible {
+        border-color: #000000;
+        transform: translateY(-1px);
+        outline: none;
+      }
+
+      .list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.35);
+        padding: 16px;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 5px 10px;
+        color: var(--text-secondary);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .tabs-inline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .tabs-inline button {
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--surface);
+        padding: 10px 14px;
+      }
+
+      .tabs-inline button.active {
+        border-color: #000000;
+        background: #000000;
+        color: #ffffff;
+      }
+
+      .source-link {
+        font-weight: 800;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 3px;
+      }
+
+      .panel {
+        display: none;
+      }
+
+      .panel.active {
+        display: block;
+      }
+
+      .bracket-grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(6, minmax(150px, 1fr));
+        overflow-x: auto;
+        padding-bottom: 6px;
+      }
+
+      .round {
+        min-width: 150px;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.35);
+        padding: 14px;
+      }
+
+      .round strong {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      .match-slot {
+        border-top: 1px solid var(--border);
+        padding: 10px 0;
+        color: var(--text-secondary);
+        font-size: 13px;
+      }
+
+      .source-status {
+        display: grid;
+        gap: 10px;
+      }
+
+      .meter {
+        overflow: hidden;
+        height: 10px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: #ffffff;
+      }
+
+      .meter span {
+        display: block;
+        width: var(--value, 0%);
+        height: 100%;
+        background: #000000;
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 40;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 18px;
+      }
+
+      .modal.open {
+        display: flex;
+      }
+
+      .modal-card {
+        width: min(720px, 100%);
+        max-height: 88vh;
+        overflow: auto;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .quote {
+        border-left: 4px solid #000000;
+        padding: 10px 0 10px 18px;
+        font-size: 22px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+      }
+
+      .notice {
+        border: 1px dashed var(--border);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.42);
+        padding: 16px;
+        color: var(--text-secondary);
+      }
+
+      .mobile-toggle {
+        display: none;
+      }
+
+      @media (max-width: 1100px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          position: fixed;
+          z-index: 30;
+          inset: 0 auto 0 0;
+          width: min(320px, 86vw);
+          transform: translateX(-105%);
+          transition: transform 180ms ease;
+        }
+
+        .sidebar.open {
+          transform: translateX(0);
+        }
+
+        .mobile-toggle {
+          display: inline-flex;
+        }
+
+        .hero,
+        .grid.two,
+        .grid.three,
+        .grid.four {
+          grid-template-columns: 1fr;
+        }
+
+        .field {
+          width: 100%;
+          min-width: 0;
+        }
+      }
+
+      @media (max-width: 680px) {
+        .topbar,
+        .page {
+          padding: 14px;
+        }
+
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .row {
+          display: grid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" id="sidebar" aria-label="Dashboard navigation">
+        <div class="brand">
+          <img src="./assets/defiant-sports-logo.jpeg" alt="Defiant Sports logo" />
+          <div>
+            <strong>Defiant Sports</strong>
+            <small>World Cup 2026</small>
+          </div>
+        </div>
+
+        <nav class="nav" id="mainNav"></nav>
+
+        <div class="side-note">
+          <strong>Verified-source mode</strong>
+          <p style="margin-top: 8px">No fabricated feeds, match results, grant openings, or final squad claims are displayed.</p>
+        </div>
+      </aside>
+
+      <main class="content">
+        <header class="topbar">
+          <button class="button mobile-toggle" id="menuButton" type="button">Menu</button>
+          <div>
+            <span class="eyebrow" data-i18n="platformEyebrow">Private planning dashboard</span>
+            <h1 id="pageTitle" data-i18n="overviewTitle">Command Center</h1>
+          </div>
+          <div class="topbar-actions">
+            <select class="select" id="languageSelect" aria-label="Dashboard language">
+              <option value="en">English</option>
+              <option value="es">Español</option>
+              <option value="fr">Français</option>
+              <option value="pt">Português</option>
+              <option value="de">Deutsch</option>
+              <option value="ar">العربية</option>
+            </select>
+            <button class="button" id="refreshFeeds" type="button" data-i18n="refreshSources">Refresh live sources</button>
+            <a class="button primary" href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" rel="noopener" data-i18n="fifaSource">FIFA source</a>
+          </div>
+        </header>
+
+        <div class="page">
+          <section class="section active" id="overview"></section>
+          <section class="section" id="stadiums"></section>
+          <section class="section" id="bracket"></section>
+          <section class="section" id="teams"></section>
+          <section class="section" id="grants"></section>
+          <section class="section" id="transport"></section>
+          <section class="section" id="business"></section>
+          <section class="section" id="safety"></section>
+          <section class="section" id="marathon"></section>
+          <section class="section" id="youth"></section>
+          <section class="section" id="records"></section>
+          <section class="section" id="translations"></section>
+          <section class="section" id="sources"></section>
+        </div>
+      </main>
+    </div>
+
+    <div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-card">
+        <div class="card-header row">
+          <div>
+            <span class="eyebrow">Detail</span>
+            <h2 id="modalTitle" style="margin-top: 10px">Detail</h2>
+          </div>
+          <button class="button" id="closeModal" type="button">Close</button>
+        </div>
+        <div class="card-body" id="modalBody"></div>
+      </div>
+    </div>
+
+    <script>
+      const SOURCES = {
+        fifaFacts: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/fifa-world-cup-2026-hosts-cities-dates-usa-mexico-canada",
+        fifaStadiums: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/world-cup-2026-stadiums-fifa-soccer-football-mexico-usa-canada",
+        fifaFixtures: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+        fifaTeams: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/teams",
+        fifaStandings: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+        fifaFormat: "https://www.fifa.com/en/articles/article-fifa-world-cup-2026-mexico-canada-usa-new-format-tournament-football-soccer",
+        cdcRss: "https://wwwnc.cdc.gov/travel/rss/notices.xml",
+        cdcMassGatherings: "https://wwwnc.cdc.gov/travel/page/travel-to-mass-gatherings",
+        cdcRespiratory: "https://www.cdc.gov/respiratory-viruses/prevention/index.html",
+        whoMassGatherings: "https://www.who.int/activities/managing-health-risks-during-mass-gatherings",
+        seattleGrant: "https://frontporch.seattle.gov/2026/01/23/bring-your-community-together-small-sparks-grants-available-to-support-community-events/",
+        seattleGrantOfficial: "https://www.seattle.gov/neighborhoods/community-grants/neighborhood-matching-fund",
+        la84: "https://www.la84.org/grants",
+        ga100: "https://www.atlutd.com/community/atlanta-united-foundation/ga-100-faqs",
+        usSoccerSafe: "https://ussoccerfoundation.org/programs/safe-places-to-play/",
+        laMetro: "https://www.metro.net/riding/world-cup/",
+        soundTransit: "https://www.soundtransit.org/soccertournament/soccertournament-faq",
+        njTransit: "https://www.njtransit.com/press-releases/fifa-world-cup-2026tm-new-york-new-jersey-host-committee-and-nj-transit-announce",
+        philly: "https://www.phila.gov/2026-04-17-fifa-world-cup-2026-philadelphia-safety-and-event-information/",
+        dallas: "https://www.dallasfwc26.com/dallas-2026/transportation-mobility/",
+        marathonStore: "https://www.themarathonclothing.com/",
+        billboardMarathon: "https://www.billboard.com/music/rb-hip-hop/nipsey-hussle-marathon-clothing-smart-store-7840863/",
+        goodreadsNipsey: "https://www.goodreads.com/author/quotes/16968315.Nipsey_Hussle",
+        messi: "https://www.fifa.com/en/articles/lionel-messi-argentina-quotes-records",
+        mbappe: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/kylian-mbappe-france-quotes-records",
+        ronaldo: "https://www.fifa.com/en/articles/26-superstars-cristiano-ronaldo",
+        bellingham: "https://www.fifa.com/en/articles/jude-bellingham-stats-quotes-records",
+        haaland: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/erling-haaland-norway-50-goals"
+      };
+
+      const TRANSLATIONS = {
+        en: {
+          platformEyebrow: "Private planning dashboard",
+          overviewTitle: "Command Center",
+          stadiumsTitle: "Stadium Happenings",
+          bracketTitle: "Interactive Bracket",
+          teamsTitle: "Countries & Players",
+          grantsTitle: "Open Grant Tracker",
+          transportTitle: "Transportation Advisory",
+          businessTitle: "Business Exposure",
+          safetyTitle: "Fan Safety & Health",
+          marathonTitle: "The Marathon Clothing",
+          youthTitle: "Pogba Academy x Defiant Sports",
+          recordsTitle: "Defiant Records",
+          translationsTitle: "Translation Operations",
+          sourcesTitle: "Verified Source Register",
+          refreshSources: "Refresh live sources",
+          fifaSource: "FIFA source"
+        },
+        es: {
+          platformEyebrow: "Panel privado de planificación",
+          overviewTitle: "Centro de mando",
+          stadiumsTitle: "Estadios y eventos",
+          bracketTitle: "Cuadro interactivo",
+          teamsTitle: "Países y jugadores",
+          grantsTitle: "Seguimiento de subvenciones abiertas",
+          transportTitle: "Asesoría de transporte",
+          businessTitle: "Exposición comercial",
+          safetyTitle: "Seguridad y salud",
+          marathonTitle: "The Marathon Clothing",
+          youthTitle: "Pogba Academy x Defiant Sports",
+          recordsTitle: "Defiant Records",
+          translationsTitle: "Operaciones de traducción",
+          sourcesTitle: "Registro de fuentes verificadas",
+          refreshSources: "Actualizar fuentes",
+          fifaSource: "Fuente FIFA"
+        },
+        fr: {
+          platformEyebrow: "Tableau de planification privé",
+          overviewTitle: "Centre de commandement",
+          stadiumsTitle: "Stades et événements",
+          bracketTitle: "Tableau interactif",
+          teamsTitle: "Pays et joueurs",
+          grantsTitle: "Suivi des subventions ouvertes",
+          transportTitle: "Conseils de transport",
+          businessTitle: "Exposition commerciale",
+          safetyTitle: "Sécurité et santé",
+          marathonTitle: "The Marathon Clothing",
+          youthTitle: "Pogba Academy x Defiant Sports",
+          recordsTitle: "Defiant Records",
+          translationsTitle: "Opérations de traduction",
+          sourcesTitle: "Registre des sources vérifiées",
+          refreshSources: "Actualiser les sources",
+          fifaSource: "Source FIFA"
+        },
+        pt: {
+          platformEyebrow: "Painel privado de planejamento",
+          overviewTitle: "Centro de comando",
+          stadiumsTitle: "Estádios e eventos",
+          bracketTitle: "Chave interativa",
+          teamsTitle: "Países e jogadores",
+          grantsTitle: "Rastreador de subsídios abertos",
+          transportTitle: "Aviso de transporte",
+          businessTitle: "Exposição comercial",
+          safetyTitle: "Segurança e saúde",
+          marathonTitle: "The Marathon Clothing",
+          youthTitle: "Pogba Academy x Defiant Sports",
+          recordsTitle: "Defiant Records",
+          translationsTitle: "Operações de tradução",
+          sourcesTitle: "Registro de fontes verificadas",
+          refreshSources: "Atualizar fontes",
+          fifaSource: "Fonte FIFA"
+        },
+        de: {
+          platformEyebrow: "Privates Planungsdashboard",
+          overviewTitle: "Kommandozentrale",
+          stadiumsTitle: "Stadien und Ereignisse",
+          bracketTitle: "Interaktiver Turnierbaum",
+          teamsTitle: "Länder und Spieler",
+          grantsTitle: "Offene Fördermittel",
+          transportTitle: "Verkehrshinweise",
+          businessTitle: "Geschäftspräsenz",
+          safetyTitle: "Sicherheit und Gesundheit",
+          marathonTitle: "The Marathon Clothing",
+          youthTitle: "Pogba Academy x Defiant Sports",
+          recordsTitle: "Defiant Records",
+          translationsTitle: "Übersetzungsbetrieb",
+          sourcesTitle: "Register geprüfter Quellen",
+          refreshSources: "Quellen aktualisieren",
+          fifaSource: "FIFA-Quelle"
+        },
+        ar: {
+          platformEyebrow: "لوحة تخطيط خاصة",
+          overviewTitle: "مركز القيادة",
+          stadiumsTitle: "الملاعب والفعاليات",
+          bracketTitle: "جدول تفاعلي",
+          teamsTitle: "الدول واللاعبون",
+          grantsTitle: "تتبع المنح المفتوحة",
+          transportTitle: "إرشادات النقل",
+          businessTitle: "ظهور الأعمال",
+          safetyTitle: "سلامة وصحة المشجعين",
+          marathonTitle: "The Marathon Clothing",
+          youthTitle: "Pogba Academy x Defiant Sports",
+          recordsTitle: "Defiant Records",
+          translationsTitle: "عمليات الترجمة",
+          sourcesTitle: "سجل المصادر الموثقة",
+          refreshSources: "تحديث المصادر",
+          fifaSource: "مصدر FIFA"
+        }
+      };
+
+      const NAV = [
+        ["overview", "overviewTitle", "Tournament pulse"],
+        ["stadiums", "stadiumsTitle", "Host-city guide"],
+        ["bracket", "bracketTitle", "Official format"],
+        ["teams", "teamsTitle", "Country intelligence"],
+        ["grants", "grantsTitle", "Open funding"],
+        ["transport", "transportTitle", "Fan routes"],
+        ["business", "businessTitle", "Local economy"],
+        ["safety", "safetyTitle", "Protocols"],
+        ["marathon", "marathonTitle", "Culture homage"],
+        ["youth", "youthTitle", "Futsal pathway"],
+        ["records", "recordsTitle", "Player branding"],
+        ["translations", "translationsTitle", "Language access"],
+        ["sources", "sourcesTitle", "Audit trail"]
+      ];
+
+      const STADIUMS = [
+        ["Atlanta", "USA", "Atlanta Stadium", "75,000", "Five group matches, Round of 32, Round of 16, semi-final", SOURCES.fifaStadiums],
+        ["Boston", "USA", "Boston Stadium", "65,000", "Five group matches, Round of 32, quarter-final", SOURCES.fifaStadiums],
+        ["Dallas", "USA", "Dallas Stadium", "94,000", "Five group matches, two Round of 32 matches, Round of 16, semi-final", SOURCES.fifaStadiums],
+        ["Guadalajara", "Mexico", "Estadio Guadalajara", "48,000", "Four group-stage matches", SOURCES.fifaStadiums],
+        ["Houston", "USA", "Houston Stadium", "72,000", "Five group matches, Round of 32, Round of 16", SOURCES.fifaStadiums],
+        ["Kansas City", "USA", "Kansas City Stadium", "73,000", "Four group matches, Round of 32, quarter-final", SOURCES.fifaStadiums],
+        ["Los Angeles", "USA", "Los Angeles Stadium", "70,000", "Five group matches, two Round of 32 matches, quarter-final", SOURCES.fifaStadiums],
+        ["Mexico City", "Mexico", "Estadio Azteca Mexico City", "83,000", "Opening match, three group matches, Round of 32, Round of 16", SOURCES.fifaStadiums],
+        ["Miami", "USA", "Miami Stadium", "65,000", "Four group matches, Round of 32, quarter-final, third-place match", SOURCES.fifaStadiums],
+        ["Monterrey", "Mexico", "Estadio Monterrey", "53,500", "Three group matches, Round of 32", SOURCES.fifaStadiums],
+        ["New York New Jersey", "USA", "New York New Jersey Stadium", "82,500", "Five group matches, Round of 32, Round of 16, final", SOURCES.fifaStadiums],
+        ["Philadelphia", "USA", "Philadelphia Stadium", "69,000", "Five group matches, Round of 16", SOURCES.fifaStadiums],
+        ["San Francisco Bay Area", "USA", "San Francisco Bay Area Stadium", "71,000", "Five group matches, Round of 32", SOURCES.fifaStadiums],
+        ["Seattle", "USA", "Seattle Stadium", "69,000", "Four group matches, Round of 32, Round of 16", SOURCES.fifaStadiums],
+        ["Toronto", "Canada", "Toronto Stadium", "45,000", "Five group matches, Round of 32", SOURCES.fifaStadiums],
+        ["Vancouver", "Canada", "BC Place Vancouver", "54,000", "Five group matches, Round of 32, Round of 16", SOURCES.fifaStadiums]
+      ];
+
+      const GRANTS = [
+        {
+          city: "Seattle",
+          program: "Small Sparks Fund",
+          status: "Open",
+          amount: "Up to $5,000",
+          deadline: "Rolling through October 30, 2026 or until funding is allocated",
+          fit: "Neighborhood watch parties, youth soccer activations, cultural gatherings, and community-building events.",
+          partner: "The Defiant Foundation can shape the community impact case; Bulle Consulting can build the grant budget and calendar; DreamCo Management can build the local marketing rollout.",
+          source: SOURCES.seattleGrant
+        },
+        {
+          city: "Los Angeles",
+          program: "LA84 Foundation Small Grant Cycle",
+          status: "Ongoing",
+          amount: "Small grant cycle is listed as open year-round by LA84",
+          deadline: "Verify current portal timing before submission",
+          fit: "Youth sports access, play equity, soccer, futsal, and community recreation connected to World Cup momentum.",
+          partner: "The Defiant Foundation can define youth outcomes; Bulle Consulting can prepare funder-ready material; DreamCo Management can support recruitment and exposure.",
+          source: SOURCES.la84
+        },
+        {
+          city: "Atlanta",
+          program: "GA 100 mini-pitch initiative",
+          status: "Ongoing",
+          amount: "Matching grant up to $100,000",
+          deadline: "RFP pathway listed; no fixed deadline shown on the FAQ page",
+          fit: "Mini-pitches, futsal courts, and safe field access in Georgia communities.",
+          partner: "The Defiant Foundation can lead youth access programming; Bulle Consulting can package match-funding readiness; DreamCo Management can manage community storytelling.",
+          source: SOURCES.ga100
+        },
+        {
+          city: "U.S. host cities",
+          program: "Safe Places to Play / mini-pitch expansion",
+          status: "Ongoing",
+          amount: "Varies by project",
+          deadline: "Monitor current U.S. Soccer Foundation pathway",
+          fit: "Safe places to play, accessible soccer surfaces, hard-court futsal, and neighborhood soccer hubs.",
+          partner: "The Defiant Foundation can frame safe-play impact; Bulle Consulting can align outcomes and budgets; DreamCo Management can drive city-by-city donor marketing.",
+          source: SOURCES.usSoccerSafe
+        }
+      ];
+
+      const TRANSPORT = [
+        ["Seattle", "Use Sound Transit and official stadium-route updates; plan extra transfer time for match days.", SOURCES.soundTransit],
+        ["Los Angeles", "Use LA Metro's World Cup service guidance for stadium access and high-volume travel planning.", SOURCES.laMetro],
+        ["New York New Jersey", "Use NJ TRANSIT and host committee mobility updates for New York New Jersey Stadium access.", SOURCES.njTransit],
+        ["Philadelphia", "Follow City of Philadelphia safety and event information for transit, crowd, and public-area updates.", SOURCES.philly],
+        ["Dallas", "Use Dallas World Cup 26 transportation and mobility guidance for stadium movement planning.", SOURCES.dallas]
+      ];
+
+      const COUNTRY_SPOTLIGHTS = [
+        ["Canada", "Host", "English, French", "Confirmed host country; use FIFA team hub for current roster and fixtures."],
+        ["Mexico", "Host", "Spanish", "Confirmed host country and opening-match host city context through Mexico City."],
+        ["United States", "Host", "English", "Confirmed host country with matches across U.S. host cities."],
+        ["Argentina", "Qualified spotlight", "Spanish", "Listed in FIFA qualified-team coverage; Lionel Messi has FIFA player-feature coverage."],
+        ["Brazil", "Qualified spotlight", "Portuguese", "Listed in FIFA qualified-team coverage; use FIFA team hub for current roster."],
+        ["Australia", "Qualified spotlight", "English", "Listed in FIFA qualified-team coverage; use FIFA team hub for current roster."],
+        ["Belgium", "Qualified spotlight", "Dutch, French, German", "Listed in FIFA qualified-team coverage; use FIFA team hub for current roster."],
+        ["Algeria", "Qualified spotlight", "Arabic, French", "Listed in FIFA qualified-team coverage; use FIFA team hub for current roster."],
+        ["Cabo Verde", "Qualified spotlight", "Portuguese, Cape Verdean Creole", "Listed in FIFA qualified-team coverage; use FIFA team hub for current roster."]
+      ];
+
+      const PLAYER_SPOTLIGHTS = [
+        ["Lionel Messi", "Argentina", "FIFA records, quotes, and Argentina feature coverage.", SOURCES.messi],
+        ["Kylian Mbappé", "France", "FIFA records and France feature coverage.", SOURCES.mbappe],
+        ["Cristiano Ronaldo", "Portugal", "FIFA superstar feature coverage.", SOURCES.ronaldo],
+        ["Jude Bellingham", "England", "FIFA stats, quotes, and records coverage.", SOURCES.bellingham],
+        ["Erling Haaland", "Norway", "FIFA feature coverage tied to Norway's World Cup 2026 qualifying storylines.", SOURCES.haaland]
+      ];
+
+      const SOURCE_CHECKS = [
+        ["FIFA tournament facts", SOURCES.fifaFacts],
+        ["FIFA stadiums", SOURCES.fifaStadiums],
+        ["FIFA fixtures and schedule", SOURCES.fifaFixtures],
+        ["FIFA teams hub", SOURCES.fifaTeams],
+        ["CDC travel notices RSS", SOURCES.cdcRss],
+        ["Seattle Small Sparks", SOURCES.seattleGrant],
+        ["LA84 grants", SOURCES.la84],
+        ["Atlanta United GA 100", SOURCES.ga100],
+        ["U.S. Soccer Foundation Safe Places to Play", SOURCES.usSoccerSafe],
+        ["The Marathon Clothing official store", SOURCES.marathonStore]
+      ];
+
+      let state = {
+        section: "overview",
+        lang: "en",
+        stadiumQuery: "",
+        grantQuery: "",
+        teamQuery: "",
+        businessCity: "Seattle",
+        businessType: "Restaurant / bar",
+        sourceState: "idle"
+      };
+
+      const $ = (selector) => document.querySelector(selector);
+      const $$ = (selector) => [...document.querySelectorAll(selector)];
+      const source = (label, url) => `<a class="source-link" href="${url}" target="_blank" rel="noopener">${label}</a>`;
+      const safe = (text) => String(text).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
+
+      function renderNav() {
+        $("#mainNav").innerHTML = NAV.map(([id, key, sub]) => `
+          <button type="button" class="${state.section === id ? "active" : ""}" data-nav="${id}">
+            <span><strong data-i18n="${key}">${TRANSLATIONS[state.lang][key]}</strong><small>${sub}</small></span>
+            <span aria-hidden="true">›</span>
+          </button>
+        `).join("");
+      }
+
+      function renderOverview() {
+        $("#overview").innerHTML = `
+          <div class="hero">
+            <div class="card">
+              <div class="card-body">
+                <span class="eyebrow">Defiant Sports x World Cup 2026</span>
+                <h2 style="margin-top: 16px">Fan experience operating map</h2>
+                <p class="muted" style="margin-top: 14px">
+                  FIFA says World Cup 2026 runs from 11 June to 19 July 2026, will be hosted by Canada, Mexico, and the United States, and will expand to 48 teams. ${source("FIFA tournament facts", SOURCES.fifaFacts)}
+                </p>
+                <div class="toolbar">
+                  <button class="button primary" data-go="stadiums">View stadiums</button>
+                  <button class="button" data-go="bracket">Open bracket</button>
+                  <button class="button" data-go="grants">Open grants</button>
+                </div>
+              </div>
+              <div class="grid three" style="border-top: 1px solid var(--border); gap: 0">
+                <div class="card-body" style="border-right: 1px solid var(--border)">
+                  <h3>Games and happenings</h3>
+                  <p class="muted" style="margin-top: 10px">Stadium-by-stadium context, source links, fan programming, and venue-stage filters.</p>
+                </div>
+                <div class="card-body" style="border-right: 1px solid var(--border)">
+                  <h3>Business exposure</h3>
+                  <p class="muted" style="margin-top: 10px">Local watch locations, sponsor readiness, neighborhood offers, and partner lanes.</p>
+                </div>
+                <div class="card-body">
+                  <h3>Safety and health</h3>
+                  <p class="muted" style="margin-top: 10px">Mass-gathering, respiratory, hydration, heat, accessibility, and transit-readiness prompts.</p>
+                </div>
+              </div>
+            </div>
+            <div class="card flat">
+              <div class="card-header">
+                <h3>Verified live source layer</h3>
+                <p class="muted" style="margin-top: 10px">The standalone page tries same-origin live endpoints when available and shows no fallback stories when unavailable.</p>
+              </div>
+              <div class="card-body">
+                <div id="sourceSummary" class="source-status"></div>
+              </div>
+            </div>
+          </div>
+          <div class="grid four" style="margin-top: 18px">
+            ${stat("Host cities", "16", "FIFA lists 16 stadiums across Canada, Mexico, and the United States.")}
+            ${stat("Match window", "Jun 11-Jul 19", "Opening match in Mexico City; final at New York New Jersey Stadium.")}
+            ${stat("Tournament format", "48 teams", "12 groups of four, then a Round of 32 knockout path.")}
+            ${stat("Open grant cards", String(GRANTS.length), "Only open or ongoing funding routes are displayed.")}
+          </div>
+        `;
+      }
+
+      function stat(label, value, detail) {
+        return `<article class="stat"><div class="label">${label}</div><div class="value">${value}</div><div class="detail">${detail}</div></article>`;
+      }
+
+      function renderStadiums() {
+        const q = state.stadiumQuery.toLowerCase();
+        const rows = STADIUMS.filter((item) => item.join(" ").toLowerCase().includes(q));
+        $("#stadiums").innerHTML = `
+          ${sectionIntro("stadiumsTitle", "Every stadium record links back to FIFA's stadium reference, and listed capacities are preliminary per FIFA's own stadium page.")}
+          <div class="toolbar">
+            <input class="field" id="stadiumSearch" placeholder="Search city, country, stadium, or stage" value="${safe(state.stadiumQuery)}" />
+            <a class="button" href="${SOURCES.fifaStadiums}" target="_blank" rel="noopener">Official FIFA stadiums</a>
+          </div>
+          <div class="grid two">
+            ${rows.map(([city, country, stadium, capacity, fixtures, url]) => `
+              <article class="card flat">
+                <div class="card-body">
+                  <div class="row" style="border: 0; padding: 0; background: transparent">
+                    <div>
+                      <span class="tag">${country}</span>
+                      <h3 style="margin-top: 14px">${city}</h3>
+                      <p class="muted" style="margin-top: 6px">${stadium}</p>
+                    </div>
+                    <span class="tag">${capacity}</span>
+                  </div>
+                  <p style="margin-top: 18px">${fixtures}</p>
+                  <div class="toolbar">
+                    <button class="button" data-detail="${safe(city)}">View operating brief</button>
+                    ${source("FIFA source", url)}
+                  </div>
+                </div>
+              </article>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      function renderBracket() {
+        const rounds = [
+          ["Group stage", "12 groups of four", "Top two from each group plus eight best third-place teams advance."],
+          ["Round of 32", "32 teams", "First knockout round under the expanded format."],
+          ["Round of 16", "16 teams", "Winner-take-all knockout fixtures."],
+          ["Quarter-finals", "8 teams", "Four matches across assigned venues."],
+          ["Semi-finals", "4 teams", "Atlanta Stadium and Dallas Stadium are FIFA-listed semi-final venues."],
+          ["Final", "2 teams", "FIFA lists New York New Jersey Stadium for the final on 19 July 2026."]
+        ];
+        $("#bracket").innerHTML = `
+          ${sectionIntro("bracketTitle", "This is a factual interactive bracket framework based on FIFA's 48-team format. It does not invent match winners, final squads, or unsupported fixtures.")}
+          <div class="card">
+            <div class="card-header">
+              <div class="tabs-inline" id="bracketTabs">
+                ${rounds.map((round, index) => `<button class="${index === 0 ? "active" : ""}" data-round="${index}">${round[0]}</button>`).join("")}
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="roundDetail"></div>
+              <div class="bracket-grid" style="margin-top: 16px">
+                ${rounds.map((round, index) => `
+                  <div class="round">
+                    <strong>${round[0]}</strong>
+                    <div class="match-slot">${round[1]}</div>
+                    <div class="match-slot">${round[2]}</div>
+                  </div>
+                `).join("")}
+              </div>
+              <p class="notice" style="margin-top: 16px">
+                Bracket data should be reconciled against FIFA fixtures and standings before publishing match-specific editorial, because live standings and knockout placements update as the tournament progresses. ${source("FIFA standings", SOURCES.fifaStandings)}
+              </p>
+            </div>
+          </div>
+        `;
+        updateRoundDetail(rounds, 0);
+      }
+
+      function updateRoundDetail(rounds, index) {
+        const [name, count, detail] = rounds[index];
+        $("#roundDetail").innerHTML = `<h3>${name}</h3><p class="muted" style="margin-top: 8px">${count}. ${detail} ${source("FIFA format", SOURCES.fifaFormat)}</p>`;
+        $$("#bracketTabs button").forEach((button) => button.classList.toggle("active", Number(button.dataset.round) === index));
+      }
+
+      function renderTeams() {
+        const q = state.teamQuery.toLowerCase();
+        const countries = COUNTRY_SPOTLIGHTS.filter((item) => item.join(" ").toLowerCase().includes(q));
+        $("#teams").innerHTML = `
+          ${sectionIntro("teamsTitle", "Country and player cards use FIFA-linked tournament, team, and player sources. Final tournament rosters should always be verified against official FIFA team pages.")}
+          <div class="toolbar">
+            <input class="field" id="teamSearch" placeholder="Search country, language, or note" value="${safe(state.teamQuery)}" />
+            <a class="button" href="${SOURCES.fifaTeams}" target="_blank" rel="noopener">Official FIFA teams hub</a>
+          </div>
+          <div class="grid three">
+            ${countries.map(([country, status, languages, note]) => `
+              <article class="card flat">
+                <div class="card-body">
+                  <span class="tag">${status}</span>
+                  <h3 style="margin-top: 14px">${country}</h3>
+                  <p class="muted" style="margin-top: 8px"><strong>Language coverage:</strong> ${languages}</p>
+                  <p style="margin-top: 12px">${note}</p>
+                </div>
+              </article>
+            `).join("")}
+          </div>
+          <div class="card" style="margin-top: 18px">
+            <div class="card-header">
+              <h3>High-profile player storyline desk</h3>
+              <p class="muted" style="margin-top: 8px">These are FIFA player-feature storylines, not final squad confirmations.</p>
+            </div>
+            <div class="card-body list">
+              ${PLAYER_SPOTLIGHTS.map(([player, country, note, url]) => `
+                <div class="row">
+                  <div><strong>${player}</strong><p class="muted">${country} · ${note}</p></div>
+                  ${source("FIFA player source", url)}
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderGrants() {
+        const q = state.grantQuery.toLowerCase();
+        const grants = GRANTS.filter((grant) => Object.values(grant).join(" ").toLowerCase().includes(q));
+        $("#grants").innerHTML = `
+          ${sectionIntro("grantsTitle", "Only open, rolling, or ongoing funding routes are active. Closed, awarded, and expired fixed-window grants are intentionally excluded from cards.")}
+          <div class="toolbar">
+            <input class="field" id="grantSearch" placeholder="Search grants by city, funder, partner, or fit" value="${safe(state.grantQuery)}" />
+            <button class="button" id="grantEndpointButton" type="button">Check /api/grant-feeds</button>
+          </div>
+          <div id="grantEndpointStatus" class="notice" style="margin-bottom: 16px">Live grant endpoint not checked yet. Static hosting will still show source-verified cards; live tracking requires the Node endpoint.</div>
+          <div class="grid two">
+            ${grants.map((grant) => `
+              <article class="card flat">
+                <div class="card-body">
+                  <div class="row" style="border: 0; padding: 0; background: transparent">
+                    <div>
+                      <span class="tag">${grant.status}</span>
+                      <h3 style="margin-top: 14px">${grant.program}</h3>
+                      <p class="muted">${grant.city}</p>
+                    </div>
+                    <span class="tag">${grant.amount}</span>
+                  </div>
+                  <p style="margin-top: 14px"><strong>Deadline:</strong> ${grant.deadline}</p>
+                  <p class="muted" style="margin-top: 10px"><strong>Fit:</strong> ${grant.fit}</p>
+                  <p class="muted" style="margin-top: 10px"><strong>Scale-up lane:</strong> ${grant.partner}</p>
+                  <div class="toolbar">${source("Grant source", grant.source)}</div>
+                </div>
+              </article>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      function renderTransport() {
+        $("#transport").innerHTML = `
+          ${sectionIntro("transportTitle", "Transportation advisories are source-linked and should be refreshed against host-city and transit-agency pages before each match day.")}
+          <div class="grid two">
+            ${TRANSPORT.map(([city, note, url]) => `
+              <article class="card flat">
+                <div class="card-body">
+                  <span class="tag">Advisory</span>
+                  <h3 style="margin-top: 14px">${city}</h3>
+                  <p class="muted" style="margin-top: 10px">${note}</p>
+                  <div class="toolbar">${source("Transit source", url)}</div>
+                </div>
+              </article>
+            `).join("")}
+          </div>
+          <div class="card" style="margin-top: 18px">
+            <div class="card-body">
+              <h3>Fan movement protocol</h3>
+              <div class="grid three" style="margin-top: 14px">
+                ${["Arrive early and use official routes", "Avoid unsupported rideshare staging zones", "Keep hydration, medication, and emergency contacts accessible"].map((item) => `<div class="notice">${item}</div>`).join("")}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderBusiness() {
+        const recommendation = businessRecommendation();
+        $("#business").innerHTML = `
+          ${sectionIntro("businessTitle", "Business exposure tools help restaurants, retailers, wellness providers, creators, and sponsors convert match-day traffic into safe and measurable fan engagement.")}
+          <div class="card">
+            <div class="card-header">
+              <h3>Activation planner</h3>
+              <p class="muted" style="margin-top: 8px">Choose a market and business type to generate a high-level operational plan.</p>
+            </div>
+            <div class="card-body">
+              <div class="toolbar">
+                <select class="select" id="businessCity">${["Seattle", "Los Angeles", "Atlanta", "New York New Jersey", "Dallas", "Philadelphia"].map((city) => `<option ${state.businessCity === city ? "selected" : ""}>${city}</option>`).join("")}</select>
+                <select class="select" id="businessType">${["Restaurant / bar", "Retail", "Wellness provider", "Creator / media", "Nonprofit partner"].map((type) => `<option ${state.businessType === type ? "selected" : ""}>${type}</option>`).join("")}</select>
+              </div>
+              <div class="grid three">
+                <div class="notice"><strong>Offer:</strong><br />${recommendation.offer}</div>
+                <div class="notice"><strong>Safety:</strong><br />${recommendation.safety}</div>
+                <div class="notice"><strong>Marketing:</strong><br />${recommendation.marketing}</div>
+              </div>
+            </div>
+          </div>
+          <div class="grid three" style="margin-top: 18px">
+            ${partnerCard("The Defiant Foundation", "Community impact and program design", "Frames youth, culture, fan safety, futsal, and neighborhood access programs so organizations can show measurable World Cup legacy value.")}
+            ${partnerCard("Bulle Consulting", "Fund development and growth systems", "Builds grant calendars, sponsorship packages, budgets, partner decks, reporting logic, and city-by-city revenue development workflows.")}
+            ${partnerCard("DreamCo Management", "Marketing, talent, and exposure strategy", "Packages campaigns, creator activations, player/community storytelling, local business exposure, and audience-development plans.")}
+          </div>
+        `;
+      }
+
+      function businessRecommendation() {
+        const market = state.businessCity;
+        const type = state.businessType;
+        return {
+          offer: `${market}: build a match-window offer for ${type.toLowerCase()} audiences with clear reservation, queue, accessibility, and language-support instructions.`,
+          safety: "Use posted capacity limits, hydration access, staff escalation contacts, crowd-flow signage, and food/allergen notices.",
+          marketing: "Create source-safe match-day messaging, partner landing pages, QR codes, opt-in capture, and post-event sponsor reporting."
+        };
+      }
+
+      function partnerCard(name, lane, body) {
+        return `<article class="card flat"><div class="card-body"><span class="tag">${lane}</span><h3 style="margin-top: 14px">${name}</h3><p class="muted" style="margin-top: 10px">${body}</p></div></article>`;
+      }
+
+      function renderSafety() {
+        $("#safety").innerHTML = `
+          ${sectionIntro("safetyTitle", "Safety guidance is based on CDC travel-health, CDC respiratory prevention, and WHO mass-gathering risk-management source layers.")}
+          <div class="grid three">
+            ${[
+              ["Mass gatherings", "Plan crowd movement, emergency escalation, heat exposure, accessibility, and venue-entry procedures.", SOURCES.cdcMassGatherings],
+              ["Respiratory prevention", "Promote staying home when sick, hand hygiene, ventilation awareness, and optional mask readiness for crowded indoor settings.", SOURCES.cdcRespiratory],
+              ["Event health risk planning", "Coordinate health risks before, during, and after large events with multi-agency planning.", SOURCES.whoMassGatherings]
+            ].map(([title, body, url]) => `<article class="card flat"><div class="card-body"><h3>${title}</h3><p class="muted" style="margin-top: 10px">${body}</p><div class="toolbar">${source("Health source", url)}</div></div></article>`).join("")}
+          </div>
+          <div class="card" style="margin-top: 18px">
+            <div class="card-body">
+              <h3>Fan safety checklist</h3>
+              <div class="list" style="margin-top: 14px">
+                ${["Know the nearest public transit exit before entering a fan zone.", "Carry water and required medication.", "Use official links for tickets, match schedules, transit changes, and health notices.", "Report unsafe overcrowding, blocked exits, or medical concerns to event staff immediately."].map((item) => `<div class="row"><span>${item}</span><span class="tag">Protocol</span></div>`).join("")}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderMarathon() {
+        $("#marathon").innerHTML = `
+          ${sectionIntro("marathonTitle", "A culture-and-commerce tab highlighting The Marathon Clothing, its official store, and the entrepreneurial legacy connected to Nipsey Hussle, Blacc Sam, and Steven Carless.")}
+          <div class="hero">
+            <div class="card">
+              <div class="card-body">
+                <span class="eyebrow">The Marathon Continues</span>
+                <h2 style="margin-top: 14px">Retail, ownership, and cultural memory</h2>
+                <p class="muted" style="margin-top: 14px">
+                  The Marathon Clothing official store presents apparel, accessories, and music, and Billboard reported that Nipsey Hussle opened the Crenshaw smart-store concept in 2017 with app-enabled exclusive content.
+                </p>
+                <div class="toolbar">
+                  ${source("Official store", SOURCES.marathonStore)}
+                  ${source("Billboard smart-store feature", SOURCES.billboardMarathon)}
+                </div>
+                <blockquote class="quote">“We honor the people that ain't quit, we honor the people that stayed down.”</blockquote>
+                <p class="muted" style="margin-top: 10px">Nipsey Hussle quote source: ${source("Goodreads", SOURCES.goodreadsNipsey)}</p>
+              </div>
+            </div>
+            <div class="grid">
+              ${partnerCard("Nipsey Hussle", "Entrepreneurial legacy", "Neighborhood ownership, patient execution, and culture-led commerce.")}
+              ${partnerCard("Blacc Sam", "Family stewardship", "Continued cultural presence and brand continuity.")}
+              ${partnerCard("Steven Carless", "Brand bridge", "Music, talent, culture, and strategic brand-building.")}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderYouth() {
+        $("#youth").innerHTML = `
+          ${sectionIntro("youthTitle", "A youth-access operating lane for multicultural World Cup experiences, futsal tournaments, safe-play spaces, and community leadership.")}
+          <div class="grid three">
+            ${partnerCard("Cultural access", "Youth experience", "Build free or low-barrier World Cup watch and learning experiences for youth from different cultural backgrounds.")}
+            ${partnerCard("Futsal tournaments", "Play pathway", "Use compact, high-touch futsal formats that work for community centers, school gyms, mini-pitches, and hard-court spaces.")}
+            ${partnerCard("Mentor operations", "Leadership", "Pair coaches, translators, player-storytelling, safety leads, and nonprofit partners in each host city.")}
+          </div>
+          <div class="card" style="margin-top: 18px"><div class="card-body"><h3>Funding alignment</h3><p class="muted" style="margin-top: 10px">Connect this lane to Seattle Small Sparks, LA84 youth sports, GA 100 mini-pitch, and U.S. Soccer Foundation safe-play source tracks where eligible.</p></div></div>
+        `;
+      }
+
+      function renderRecords() {
+        $("#records").innerHTML = `
+          ${sectionIntro("recordsTitle", "Defiant Records focuses on branding strategies that connect players, music, culture, sponsors, community activations, and fan storytelling without inventing player endorsements.")}
+          <div class="grid three">
+            ${partnerCard("Player narrative strategy", "Branding", "Build source-safe profiles, social arcs, multilingual press lines, and sponsor-safe story pillars.")}
+            ${partnerCard("Music and culture campaigns", "Activation", "Pair watch parties, local artists, creator content, and city-specific fan moments.")}
+            ${partnerCard("Rights-safe execution", "Compliance", "Use public sources, official links, and clear rights reviews before using player names, images, team marks, or tournament marks commercially.")}
+          </div>
+        `;
+      }
+
+      function renderTranslations() {
+        $("#translations").innerHTML = `
+          ${sectionIntro("translationsTitle", "The language system provides operational UI translation and a country-language matrix. Final country coverage should sync to FIFA's official team list as the tournament field changes.")}
+          <div class="notice">Use the language selector in the top bar to translate dashboard navigation and operational chrome. Event-specific safety, legal, and emergency content should be human-reviewed before publication.</div>
+          <div class="grid two" style="margin-top: 18px">
+            ${COUNTRY_SPOTLIGHTS.map(([country, status, languages, note]) => `<div class="row"><div><strong>${country}</strong><p class="muted">${languages}</p></div><span class="tag">${status}</span></div>`).join("")}
+          </div>
+        `;
+      }
+
+      function renderSources() {
+        $("#sources").innerHTML = `
+          ${sectionIntro("sourcesTitle", "All factual modules are backed by official or verified source links. Same-origin API checks are optional and never create fabricated records.")}
+          <div class="list">
+            ${SOURCE_CHECKS.map(([label, url]) => `<div class="row"><div><strong>${label}</strong><p class="muted">${url}</p></div>${source("Open", url)}</div>`).join("")}
+          </div>
+        `;
+      }
+
+      function sectionIntro(key, body) {
+        return `<div class="card" style="margin-bottom: 18px"><div class="card-body"><span class="eyebrow" data-i18n="${key}">${TRANSLATIONS[state.lang][key]}</span><h2 style="margin-top: 14px">${TRANSLATIONS[state.lang][key]}</h2><p class="muted" style="margin-top: 12px">${body}</p></div></div>`;
+      }
+
+      function renderSourceSummary() {
+        const statusText = state.sourceState === "live" ? "Connected to live endpoint" : state.sourceState === "error" ? "Live endpoint unavailable" : "Ready to check";
+        $("#sourceSummary").innerHTML = `
+          <div class="row">
+            <div><strong>${statusText}</strong><p class="muted">Same-origin endpoints checked: /api/live-feeds and /api/grant-feeds</p></div>
+            <span class="tag">${state.sourceState}</span>
+          </div>
+          ${SOURCE_CHECKS.slice(0, 5).map(([label, url]) => `<div class="row"><div><strong>${label}</strong><p class="muted">Verified source</p></div>${source("Open", url)}</div>`).join("")}
+        `;
+      }
+
+      function renderAll() {
+        renderNav();
+        renderOverview();
+        renderStadiums();
+        renderBracket();
+        renderTeams();
+        renderGrants();
+        renderTransport();
+        renderBusiness();
+        renderSafety();
+        renderMarathon();
+        renderYouth();
+        renderRecords();
+        renderTranslations();
+        renderSources();
+        renderSourceSummary();
+        applyLanguage();
+      }
+
+      function switchSection(id) {
+        state.section = id;
+        $$(".section").forEach((section) => section.classList.toggle("active", section.id === id));
+        renderNav();
+        const navItem = NAV.find((item) => item[0] === id);
+        if (navItem) $("#pageTitle").textContent = TRANSLATIONS[state.lang][navItem[1]];
+        $("#sidebar").classList.remove("open");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      async function checkLiveFeeds() {
+        state.sourceState = "checking";
+        renderSourceSummary();
+        try {
+          const [live, grants] = await Promise.all([
+            fetch("/api/live-feeds", { headers: { Accept: "application/json" } }),
+            fetch("/api/grant-feeds", { headers: { Accept: "application/json" } })
+          ]);
+          if (!live.ok || !grants.ok) throw new Error("Endpoint unavailable");
+          state.sourceState = "live";
+        } catch (error) {
+          state.sourceState = "error";
+        }
+        renderSourceSummary();
+      }
+
+      async function checkGrantEndpoint() {
+        const target = $("#grantEndpointStatus");
+        if (!target) return;
+        target.textContent = "Checking /api/grant-feeds...";
+        try {
+          const response = await fetch("/api/grant-feeds", { headers: { Accept: "application/json" } });
+          if (!response.ok) throw new Error("Endpoint unavailable");
+          const data = await response.json();
+          target.innerHTML = `Live grant endpoint connected. ${data.sources?.length || 0} source records returned; no fabricated grant records added.`;
+        } catch (error) {
+          target.innerHTML = "Live grant endpoint unavailable in static mode. This is safe: verified grant cards remain visible, and the page does not invent live grant records.";
+        }
+      }
+
+      function openModal(title, body) {
+        $("#modalTitle").textContent = title;
+        $("#modalBody").innerHTML = body;
+        $("#detailModal").classList.add("open");
+      }
+
+      function applyLanguage() {
+        const dict = TRANSLATIONS[state.lang] || TRANSLATIONS.en;
+        $$("[data-i18n]").forEach((el) => {
+          const key = el.dataset.i18n;
+          if (dict[key]) el.textContent = dict[key];
+        });
+        const navItem = NAV.find((item) => item[0] === state.section);
+        if (navItem) $("#pageTitle").textContent = dict[navItem[1]];
+        document.documentElement.lang = state.lang;
+        document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr";
+      }
+
+      document.addEventListener("click", (event) => {
+        const nav = event.target.closest("[data-nav]");
+        if (nav) switchSection(nav.dataset.nav);
+
+        const go = event.target.closest("[data-go]");
+        if (go) switchSection(go.dataset.go);
+
+        const detail = event.target.closest("[data-detail]");
+        if (detail) {
+          const city = detail.dataset.detail;
+          const venue = STADIUMS.find((item) => item[0] === city);
+          if (venue) {
+            openModal(`${venue[0]} operating brief`, `
+              <p><strong>Venue:</strong> ${venue[2]}</p>
+              <p style="margin-top: 10px"><strong>Capacity:</strong> ${venue[3]} preliminary FIFA-listed capacity.</p>
+              <p style="margin-top: 10px"><strong>Fixture allocation:</strong> ${venue[4]}</p>
+              <p class="notice" style="margin-top: 14px">Operations focus: transit route confirmation, accessibility messaging, hydration planning, local business coordination, language support, and post-match dispersal.</p>
+              <div class="toolbar">${source("FIFA stadium source", venue[5])}</div>
+            `);
+          }
+        }
+
+        const round = event.target.closest("[data-round]");
+        if (round) {
+          const rounds = [
+            ["Group stage", "12 groups of four", "Top two from each group plus eight best third-place teams advance."],
+            ["Round of 32", "32 teams", "First knockout round under the expanded format."],
+            ["Round of 16", "16 teams", "Winner-take-all knockout fixtures."],
+            ["Quarter-finals", "8 teams", "Four matches across assigned venues."],
+            ["Semi-finals", "4 teams", "Atlanta Stadium and Dallas Stadium are FIFA-listed semi-final venues."],
+            ["Final", "2 teams", "FIFA lists New York New Jersey Stadium for the final on 19 July 2026."]
+          ];
+          updateRoundDetail(rounds, Number(round.dataset.round));
+        }
+      });
+
+      document.addEventListener("input", (event) => {
+        if (event.target.id === "stadiumSearch") {
+          state.stadiumQuery = event.target.value;
+          renderStadiums();
+        }
+        if (event.target.id === "grantSearch") {
+          state.grantQuery = event.target.value;
+          renderGrants();
+        }
+        if (event.target.id === "teamSearch") {
+          state.teamQuery = event.target.value;
+          renderTeams();
+        }
+      });
+
+      document.addEventListener("change", (event) => {
+        if (event.target.id === "languageSelect") {
+          state.lang = event.target.value;
+          renderAll();
+          switchSection(state.section);
+        }
+        if (event.target.id === "businessCity") {
+          state.businessCity = event.target.value;
+          renderBusiness();
+        }
+        if (event.target.id === "businessType") {
+          state.businessType = event.target.value;
+          renderBusiness();
+        }
+      });
+
+      $("#refreshFeeds").addEventListener("click", checkLiveFeeds);
+      $("#menuButton").addEventListener("click", () => $("#sidebar").classList.add("open"));
+      $("#closeModal").addEventListener("click", () => $("#detailModal").classList.remove("open"));
+      $("#detailModal").addEventListener("click", (event) => {
+        if (event.target.id === "detailModal") $("#detailModal").classList.remove("open");
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") $("#detailModal").classList.remove("open");
+      });
+      document.addEventListener("click", (event) => {
+        if (event.target.id === "grantEndpointButton") checkGrantEndpoint();
+      });
+
+      renderAll();
+    </script>
+  </body>
+</html>
