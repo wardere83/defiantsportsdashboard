@@ -921,7 +921,9 @@
       // ───────────────── State ─────────────────
       const state = {
         view: "overview",
-        city: "Mexico City",
+        city: "New York/NJ",
+        stadiumQuery: "",
+        stadiumSort: { key: "cap", dir: "desc" },
         live: "syncing",
         grantLive: "syncing",
         liveSources: [],
@@ -963,17 +965,41 @@
       // ───────────────── KPIs ─────────────────
       function renderKpis() {
         const totalCap = stadiums.reduce((s, x) => s + x.cap, 0);
-        const focus = stadiums.find(s => s.city === state.city) || stadiums[0];
+        // Impact = projected fan reach across the tournament (avg fill * 104 matches)
+        const projectedReach = Math.round((totalCap / stadiums.length) * 0.95 * 104 / 1e6 * 10) / 10;
         const liveCount = state.liveSources.filter(s => s.status === "live" || s.status === "reachable").length;
         const liveTotal = state.liveSources.length || 4;
         return `
           <div class="kpis grid-kpi">
-            <div class="kpi"><span class="label">Host Cities</span><span class="value">16</span><span class="sub">USA · CAN · MEX</span></div>
-            <div class="kpi"><span class="label">Total Capacity</span><span class="value">${(totalCap/1e6).toFixed(2)}M</span><span class="sub"><span class="delta">+${stadiums.length} venues</span></span></div>
-            <div class="kpi"><span class="label">Focus City</span><span class="value">${focus.city}</span><span class="sub">${focus.cap.toLocaleString()} cap</span></div>
-            <div class="kpi"><span class="label">Live Feeds</span><span class="value">${liveCount}/${liveTotal}</span><span class="sub">${state.live === "connected" ? "Streaming" : state.live}</span></div>
-            <div class="kpi invert"><span class="label">FIFA 2026</span><span class="value">48</span><span class="sub">Teams · 104 matches</span></div>
+            <div class="kpi"><span class="label">Host Cities</span><span class="value" data-count="16">16</span><span class="sub">USA · CAN · MEX</span></div>
+            <div class="kpi"><span class="label">Total Capacity</span><span class="value" data-count="${(totalCap/1e6).toFixed(2)}" data-suffix="M">${(totalCap/1e6).toFixed(2)}M</span><span class="sub"><span class="delta">+${stadiums.length} venues</span></span></div>
+            <div class="kpi"><span class="label">Impact</span><span class="value" data-count="${projectedReach}" data-suffix="M+">${projectedReach}M+</span><span class="sub">Projected fan reach · 104 matches</span></div>
+            <div class="kpi"><span class="label">Live Feeds</span><span class="value" data-count="${liveCount}">${liveCount}/${liveTotal}</span><span class="sub">${state.live === "connected" ? "Streaming" : state.live}</span></div>
+            <div class="kpi invert"><span class="label">FIFA 2026</span><span class="value" data-count="48">48</span><span class="sub">Teams · 104 matches</span></div>
           </div>`;
+      }
+
+      // KPI count-up animation (runs after render)
+      function animateCountUps(root = document) {
+        root.querySelectorAll(".kpi .value[data-count]").forEach((el) => {
+          if (el.dataset.animated === "1") return;
+          el.dataset.animated = "1";
+          const target = parseFloat(el.dataset.count);
+          const suffix = el.dataset.suffix || "";
+          if (!isFinite(target)) return;
+          const orig = el.textContent;
+          const duration = 700;
+          const start = performance.now();
+          const decimals = (String(target).split(".")[1] || "").length;
+          function tick(now) {
+            const t = Math.min(1, (now - start) / duration);
+            const eased = 1 - Math.pow(1 - t, 3);
+            const v = (target * eased).toFixed(decimals);
+            el.textContent = (decimals > 0 ? v : Math.round(target * eased)) + suffix;
+            if (t < 1) requestAnimationFrame(tick); else el.textContent = orig;
+          }
+          requestAnimationFrame(tick);
+        });
       }
 
       // ───────────────── Live FIFA card ─────────────────
@@ -1165,23 +1191,65 @@
       }
 
       function renderStadiums() {
+        const q = state.stadiumQuery.toLowerCase();
+        const { key, dir } = state.stadiumSort;
+        const filtered = stadiums.filter(s =>
+          !q || s.city.toLowerCase().includes(q) || s.country.toLowerCase().includes(q)
+            || s.venue.toLowerCase().includes(q) || s.role.toLowerCase().includes(q)
+        );
+        const sorted = filtered.slice().sort((a, b) => {
+          const av = a[key], bv = b[key];
+          const cmp = typeof av === "number" ? av - bv : String(av).localeCompare(String(bv));
+          return dir === "asc" ? cmp : -cmp;
+        });
+        const arrow = (k) => key === k ? (dir === "asc" ? " ↑" : " ↓") : "";
         $("#stadiums").innerHTML = `
           ${renderKpis()}
           <div class="fill">
             <div class="card">
-              <div class="card-head"><h3>Stadium Register</h3><span class="meta">${stadiums.length} venues</span></div>
+              <div class="card-head">
+                <h3>Stadium Register</h3>
+                <div style="display:flex; gap:8px; align-items:center">
+                  <input class="input" id="stadiumSearch" type="search" placeholder="Search city, venue, role…"
+                    value="${escapeHtml(state.stadiumQuery)}"
+                    style="height:30px; padding:0 10px; border-radius:8px; border:1px solid var(--line); background:var(--white); font-size:12px; min-width:220px"
+                    autocomplete="off" />
+                  <span class="meta">${sorted.length}/${stadiums.length} venues</span>
+                </div>
+              </div>
               <div class="card-body flush"><div class="table-wrap">
                 <table>
-                  <thead><tr><th>City</th><th>Country</th><th>Venue</th><th>Capacity</th><th>Role</th></tr></thead>
+                  <thead><tr>
+                    <th data-sort="city" style="cursor:pointer">City${arrow("city")}</th>
+                    <th data-sort="country" style="cursor:pointer">Country${arrow("country")}</th>
+                    <th data-sort="venue" style="cursor:pointer">Venue${arrow("venue")}</th>
+                    <th data-sort="cap" style="cursor:pointer">Capacity${arrow("cap")}</th>
+                    <th data-sort="role" style="cursor:pointer">Role${arrow("role")}</th>
+                  </tr></thead>
                   <tbody>
-                    ${stadiums.map(s => `
-                      <tr><td><strong>${s.city}</strong></td><td>${s.country}</td><td>${s.venue}</td><td style="font-family:var(--mono)">${s.cap.toLocaleString()}</td><td>${s.role}</td></tr>
+                    ${sorted.map(s => `
+                      <tr data-focus-city="${escapeHtml(s.city)}" style="cursor:pointer">
+                        <td><strong>${s.city}</strong></td>
+                        <td>${s.country}</td>
+                        <td>${s.venue}</td>
+                        <td style="font-family:var(--mono)">${s.cap.toLocaleString()}</td>
+                        <td>${s.role}</td>
+                      </tr>
                     `).join("")}
+                    ${sorted.length === 0 ? `<tr><td colspan="5" style="text-align:center; color:var(--ink-3); padding:24px">No venues match "${escapeHtml(state.stadiumQuery)}"</td></tr>` : ""}
                   </tbody>
                 </table>
               </div></div>
             </div>
           </div>`;
+        const search = $("#stadiumSearch");
+        if (search) {
+          search.addEventListener("input", (e) => {
+            state.stadiumQuery = e.target.value;
+            renderStadiums();
+            const s = $("#stadiumSearch"); if (s) { s.focus(); s.setSelectionRange(s.value.length, s.value.length); }
+          });
+        }
       }
 
       function renderGrants() {
@@ -1374,7 +1442,10 @@
         $("#liveLabel").textContent = isLive ? "Live · streaming" : `Live · ${state.live}`;
         $("#footPing").classList.toggle("live", isLive);
 
-        requestAnimationFrame(initVisibleMaps);
+        requestAnimationFrame(() => {
+          initVisibleMaps();
+          animateCountUps();
+        });
       }
 
       function initVisibleMaps() {
@@ -1477,6 +1548,28 @@
         if (navBtn) {
           state.view = navBtn.dataset.view;
           renderActive();
+          return;
+        }
+        const sortHeader = e.target.closest("th[data-sort]");
+        if (sortHeader) {
+          const k = sortHeader.dataset.sort;
+          if (state.stadiumSort.key === k) {
+            state.stadiumSort.dir = state.stadiumSort.dir === "asc" ? "desc" : "asc";
+          } else {
+            state.stadiumSort = { key: k, dir: k === "cap" ? "desc" : "asc" };
+          }
+          renderStadiums();
+          return;
+        }
+        const focusRow = e.target.closest("[data-focus-city]");
+        if (focusRow) {
+          const city = focusRow.dataset.focusCity;
+          if (stadiums.some(s => s.city === city)) {
+            state.city = city;
+            state.view = "map";
+            renderActive();
+            toast(`Focused ${city}`);
+          }
           return;
         }
         const openCity = e.target.closest("[data-open-city]");

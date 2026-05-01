@@ -1,9 +1,9 @@
 {
   "name": "defiant-sports-world-cup-2026-dashboard",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
-  "description": "Defiant Sports FIFA World Cup 2026 interactive dashboard with live source and grant endpoint tracking.",
+  "description": "Defiant Sports FIFA World Cup 2026 operations dashboard — single-viewport interactive UI with live FIFA source streaming, host-city intelligence, grants, transit, safety, and impact metrics.",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
