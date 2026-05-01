@@ -246,6 +246,13 @@ app.use(express.static(path.join(__dirname, "public"), {
   maxAge: "10m",
 }));
 
+app.use(
+  "/assets",
+  express.static(path.join(__dirname, "assets"), {
+    maxAge: "10m",
+  })
+);
+
 app.use((_req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
