@@ -1,0 +1,1032 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Defiant Sports World Cup 2026 Steward</title>
+    <meta
+      name="description"
+      content="Defiant Sports FIFA World Cup 2026 stewardship dashboard for host cities, fan safety, transportation, grants, business exposure, cultural partnerships, youth programming, and live source checks."
+    />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+      :root {
+        --bg: #f2f2f2;
+        --panel: #f7f7f7;
+        --panel-2: #ffffff;
+        --text: #000000;
+        --text-2: #4f4f4f;
+        --text-3: #9e9e9e;
+        --border: #d1d1d1;
+        --black: #000000;
+        --white: #ffffff;
+        --sidebar: 286px;
+        --radius: 8px;
+        --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font);
+        font-size: 14px;
+        line-height: 1.38;
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .app {
+        display: grid;
+        min-height: 100vh;
+        grid-template-columns: var(--sidebar) minmax(0, 1fr);
+      }
+
+      .sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        border-right: 1px solid var(--border);
+        background: #f6f6f6;
+      }
+
+      .brand {
+        padding: 26px 22px 20px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .brand-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand img {
+        width: 116px;
+        height: auto;
+        border-radius: 4px;
+      }
+
+      .brand-kicker {
+        margin-top: 20px;
+        color: var(--text-2);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .brand h1 {
+        margin: 16px 0 0;
+        font-size: 22px;
+        line-height: 1.08;
+        letter-spacing: -0.04em;
+      }
+
+      .brand p {
+        margin: 8px 0 0;
+        color: var(--text-2);
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 16px;
+        border: 1px solid #ead9a4;
+        border-radius: 999px;
+        background: #fff5d7;
+        color: #6b5b22;
+        padding: 8px 12px;
+        font-size: 12px;
+        font-weight: 750;
+      }
+
+      .nav {
+        padding: 14px 12px;
+        display: grid;
+        gap: 4px;
+      }
+
+      .nav button {
+        display: grid;
+        grid-template-columns: 22px 1fr auto;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        border: 0;
+        border-radius: 5px;
+        background: transparent;
+        color: var(--text-2);
+        padding: 10px 12px;
+        text-align: left;
+      }
+
+      .nav button.active {
+        background: var(--black);
+        color: var(--white);
+      }
+
+      .nav .index {
+        min-width: 20px;
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        color: var(--text-3);
+        padding: 2px 5px;
+        text-align: center;
+        font-size: 12px;
+      }
+
+      .nav button.active .index {
+        border-color: rgba(255, 255, 255, 0.3);
+        color: var(--white);
+      }
+
+      .sidebar-foot {
+        border-top: 1px solid var(--border);
+        padding: 18px 22px;
+        color: var(--text-2);
+        font-size: 12px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg);
+        padding: 20px 30px;
+      }
+
+      .top-title h2 {
+        margin: 0;
+        font-size: 24px;
+        letter-spacing: -0.04em;
+      }
+
+      .top-title p {
+        margin: 4px 0 0;
+        color: var(--text-2);
+      }
+
+      .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .button,
+      .select,
+      .input {
+        min-height: 40px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--panel);
+        color: var(--text);
+        padding: 0 14px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-weight: 750;
+      }
+
+      .button.dark {
+        border-color: var(--black);
+        background: var(--black);
+        color: var(--white);
+      }
+
+      .content {
+        min-width: 0;
+      }
+
+      .main {
+        padding: 30px;
+      }
+
+      .section {
+        display: none;
+      }
+
+      .section.active {
+        display: block;
+      }
+
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 22px;
+      }
+
+      .card {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--panel);
+      }
+
+      .card-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px solid var(--border);
+        padding: 14px 16px;
+      }
+
+      .card-body {
+        padding: 16px;
+      }
+
+      .metric {
+        min-height: 112px;
+        padding: 18px;
+      }
+
+      .label {
+        color: var(--text-2);
+        font-size: 12px;
+        font-weight: 850;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .value {
+        margin-top: 8px;
+        font-size: 36px;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+      }
+
+      .sub {
+        margin-top: 4px;
+        color: var(--text-2);
+        font-size: 12px;
+      }
+
+      .overview-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 410px;
+        gap: 22px;
+      }
+
+      .map-card {
+        min-height: 560px;
+      }
+
+      .map {
+        height: 512px;
+        overflow: hidden;
+        background: #e8ecec;
+      }
+
+      .leaflet-container {
+        font-family: var(--font);
+        background: #e8ecec;
+      }
+
+      .leaflet-control-attribution {
+        font-size: 10px;
+        color: var(--text-2);
+      }
+
+      .leaflet-control-zoom a {
+        color: #000;
+      }
+
+      .host-marker {
+        display: block;
+        width: 13px;
+        height: 13px;
+        border: 2px solid #000000;
+        border-radius: 999px;
+        background: #f7f7f7;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.92);
+      }
+
+      .host-marker.active {
+        width: 17px;
+        height: 17px;
+        border-width: 3px;
+        background: #f7f7f7;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.96);
+      }
+
+      .map-note {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        border-top: 1px solid var(--border);
+        padding: 12px 16px;
+        color: var(--text-2);
+        font-size: 12px;
+      }
+
+      .stack {
+        display: grid;
+        gap: 12px;
+      }
+
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        border-bottom: 1px solid var(--border);
+        padding: 10px 0;
+      }
+
+      .row:last-child {
+        border-bottom: 0;
+      }
+
+      .row strong {
+        font-weight: 850;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 5px 9px;
+        color: var(--text-2);
+        font-size: 11px;
+        font-weight: 850;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: var(--text-3);
+      }
+
+      .dot.live {
+        background: #000;
+      }
+
+      .bar-row {
+        display: grid;
+        grid-template-columns: 1fr 190px 36px;
+        gap: 10px;
+        align-items: center;
+        margin-top: 12px;
+        color: var(--text-2);
+        font-size: 12px;
+      }
+
+      .track {
+        height: 7px;
+        background: #eeeeee;
+        overflow: hidden;
+      }
+
+      .track span {
+        display: block;
+        width: var(--w);
+        height: 100%;
+        background: #000;
+      }
+
+      .donut {
+        width: 112px;
+        height: 112px;
+        margin: 10px auto 18px;
+        border-radius: 999px;
+        background: conic-gradient(#000 0 50%, #686868 50% 75%, #9e9e9e 75% 91.67%, #d1d1d1 91.67% 100%);
+        display: grid;
+        place-items: center;
+      }
+
+      .donut span {
+        display: grid;
+        place-items: center;
+        width: 66px;
+        height: 66px;
+        border-radius: 999px;
+        background: var(--panel);
+        font-size: 12px;
+        font-weight: 850;
+        text-align: center;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid var(--border);
+        padding: 12px 10px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        color: var(--text-2);
+        font-size: 11px;
+        font-weight: 850;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .three-col {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .section-title {
+        margin: 0 0 16px;
+        font-size: 22px;
+        letter-spacing: -0.04em;
+      }
+
+      .muted {
+        color: var(--text-2);
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.45);
+        padding: 18px;
+      }
+
+      .modal.open {
+        display: flex;
+      }
+
+      .modal-card {
+        width: min(720px, 100%);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--panel);
+      }
+
+      .mobile-nav {
+        display: none;
+      }
+
+      @media (max-width: 1180px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          position: relative;
+          height: auto;
+        }
+
+        .nav {
+          display: none;
+        }
+
+        .mobile-nav {
+          display: block;
+          margin-top: 14px;
+          width: 100%;
+        }
+
+        .overview-grid,
+        .two-col,
+        .three-col {
+          grid-template-columns: 1fr;
+        }
+
+        .kpis {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 720px) {
+        .topbar,
+        .main {
+          padding: 16px;
+        }
+
+        .topbar {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .top-actions {
+          flex-wrap: wrap;
+        }
+
+        .button,
+        .select,
+        .input {
+          width: 100%;
+        }
+
+        .kpis {
+          grid-template-columns: 1fr;
+        }
+
+        .map {
+          height: 620px;
+        }
+
+        .bar-row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-row">
+            <img src="./assets/defiant-sports-logo.jpeg" alt="Defiant Sports logo" />
+          </div>
+          <div class="brand-kicker">Defiant Sports · Safety Steward</div>
+          <h1>World Cup 2026 Fan Steward</h1>
+          <p>Host-city operations dashboard</p>
+          <div class="status-pill"><span class="dot"></span><span id="sideStatus">Awaiting live source sync</span></div>
+          <select class="select mobile-nav" id="mobileNav"></select>
+        </div>
+        <nav class="nav" id="nav"></nav>
+        <div></div>
+        <div class="sidebar-foot">
+          <strong>Powered by Defiant Sports</strong><br />
+          defiantsports.io
+        </div>
+      </aside>
+
+      <main class="content">
+        <header class="topbar">
+          <div class="top-title">
+            <h2 id="viewTitle">Overview</h2>
+            <p id="viewSub">World Cup 2026 · Host-city operations · Live where endpoints are connected</p>
+          </div>
+          <div class="top-actions">
+            <span class="pill"><span class="dot" id="liveDot"></span><span id="liveLabel">Live source tracking · not synced</span></span>
+            <select class="select" id="languageSelect" aria-label="Translate">
+              <option value="en">Translate</option>
+              <option value="es">Español</option>
+              <option value="fr">Français</option>
+              <option value="pt">Português</option>
+              <option value="ar">العربية</option>
+            </select>
+            <button class="button" id="refreshBtn" type="button">Refresh</button>
+            <button class="button" id="printBtn" type="button">Print</button>
+          </div>
+        </header>
+
+        <div class="main">
+          <section class="section active" id="overview"></section>
+          <section class="section" id="map"></section>
+          <section class="section" id="stadiums"></section>
+          <section class="section" id="grants"></section>
+          <section class="section" id="business"></section>
+          <section class="section" id="transport"></section>
+          <section class="section" id="safety"></section>
+          <section class="section" id="marathon"></section>
+          <section class="section" id="youth"></section>
+          <section class="section" id="records"></section>
+          <section class="section" id="translate"></section>
+          <section class="section" id="bracket"></section>
+        </div>
+      </main>
+    </div>
+
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-card">
+        <div class="card-head">
+          <div>
+            <span class="label">Detail</span>
+            <h2 id="modalTitle" style="margin: 4px 0 0">Detail</h2>
+          </div>
+          <button class="button" id="closeModal" type="button">Close</button>
+        </div>
+        <div class="card-body" id="modalBody"></div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+      const views = [
+        ["overview", "Overview", "1"],
+        ["map", "Host Map", "2"],
+        ["stadiums", "Stadiums", "3"],
+        ["grants", "Open Grants", "4"],
+        ["business", "Business", "5"],
+        ["transport", "Transport", "6"],
+        ["safety", "Safety", "7"],
+        ["marathon", "Marathon", "8"],
+        ["youth", "Youth", "9"],
+        ["records", "Records", "10"],
+        ["translate", "Translate", "11"],
+        ["bracket", "Bracket", "12"]
+      ];
+
+      const stadiums = [
+        { city: "Atlanta", country: "USA", venue: "Atlanta Stadium", cap: 75000, role: "Group, Round of 32, Round of 16, semi-final", lat: 33.755, lng: -84.401 },
+        { city: "Boston", country: "USA", venue: "Boston Stadium", cap: 65000, role: "Group, Round of 32, quarter-final", lat: 42.091, lng: -70.164 },
+        { city: "Dallas", country: "USA", venue: "Dallas Stadium", cap: 94000, role: "Group, Round of 32, Round of 16, semi-final", lat: 32.748, lng: -97.093 },
+        { city: "Guadalajara", country: "Mexico", venue: "Estadio Guadalajara", cap: 48000, role: "Group stage", lat: 20.682, lng: -103.462 },
+        { city: "Houston", country: "USA", venue: "Houston Stadium", cap: 72000, role: "Group, Round of 32, Round of 16", lat: 29.684, lng: -95.411 },
+        { city: "Kansas City", country: "USA", venue: "Kansas City Stadium", cap: 73000, role: "Group, Round of 32, quarter-final", lat: 39.049, lng: -94.484 },
+        { city: "Los Angeles", country: "USA", venue: "Los Angeles Stadium", cap: 70000, role: "Group, Round of 32, quarter-final", lat: 33.953, lng: -118.339 },
+        { city: "Mexico City", country: "Mexico", venue: "Estadio Azteca Mexico City", cap: 83000, role: "Opening match, group, Round of 32, Round of 16", lat: 19.303, lng: -99.151 },
+        { city: "Miami", country: "USA", venue: "Miami Stadium", cap: 65000, role: "Group, Round of 32, quarter-final, third-place match", lat: 25.958, lng: -80.239 },
+        { city: "Monterrey", country: "Mexico", venue: "Estadio Monterrey", cap: 53500, role: "Group, Round of 32", lat: 25.669, lng: -100.244 },
+        { city: "New York/New Jersey", country: "USA", venue: "New York/New Jersey Stadium", cap: 82500, role: "Group, Round of 32, Round of 16, final", lat: 40.813, lng: -74.874 },
+        { city: "Philadelphia", country: "USA", venue: "Philadelphia Stadium", cap: 69000, role: "Group, Round of 16", lat: 39.501, lng: -76.168 },
+        { city: "San Francisco Bay Area", country: "USA", venue: "San Francisco Bay Area Stadium", cap: 71000, role: "Group, Round of 32", lat: 37.403, lng: -121.970 },
+        { city: "Seattle", country: "USA", venue: "Seattle Stadium", cap: 69000, role: "Group, Round of 32, Round of 16", lat: 47.195, lng: -122.631 },
+        { city: "Toronto", country: "Canada", venue: "Toronto Stadium", cap: 45000, role: "Group, Round of 32", lat: 44.133, lng: -79.119 },
+        { city: "Vancouver", country: "Canada", venue: "BC Place Vancouver", cap: 54000, role: "Group, Round of 32, Round of 16", lat: 49.776, lng: -124.011 }
+      ];
+
+      const grants = [
+        ["Seattle", "Small Sparks Fund", "Open", "Up to $5,000", "Rolling through Oct. 30, 2026"],
+        ["Los Angeles", "LA84 Foundation Small Grant Cycle", "Ongoing", "Year-round small grant cycle", "Verify portal timing"],
+        ["Atlanta", "GA 100 mini-pitch initiative", "Ongoing", "Matching grant up to $100,000", "RFP pathway"],
+        ["U.S. host cities", "Safe Places to Play", "Ongoing", "Project-based", "Monitor pathway"]
+      ];
+
+      const countries = [
+        ["Canada", "Host", "English, French"],
+        ["Mexico", "Host", "Spanish"],
+        ["United States", "Host", "English"],
+        ["Argentina", "Qualified spotlight", "Spanish"],
+        ["Brazil", "Qualified spotlight", "Portuguese"],
+        ["Australia", "Qualified spotlight", "English"],
+        ["Belgium", "Qualified spotlight", "Dutch, French, German"],
+        ["Algeria", "Qualified spotlight", "Arabic, French"],
+        ["Cabo Verde", "Qualified spotlight", "Portuguese, Cape Verdean Creole"]
+      ];
+
+      const state = {
+        view: "overview",
+        city: "Seattle",
+        live: "not synced",
+        grantLive: "not synced",
+        liveSources: [],
+        grantSources: [],
+        liveItems: [],
+        grantItems: [],
+        generatedAt: null,
+        grantGeneratedAt: null
+      };
+      const maps = {};
+      const markerLayers = {};
+
+      const $ = (sel) => document.querySelector(sel);
+      const $$ = (sel) => [...document.querySelectorAll(sel)];
+
+      function renderNav() {
+        $("#nav").innerHTML = views.map(([id, label, index]) => `
+          <button class="${state.view === id ? "active" : ""}" data-view="${id}">
+            <span>${icon(id)}</span><strong>${label}</strong><span class="index">${index}</span>
+          </button>
+        `).join("");
+        $("#mobileNav").innerHTML = views.map(([id, label]) => `<option value="${id}" ${state.view === id ? "selected" : ""}>${label}</option>`).join("");
+      }
+
+      function icon(id) {
+        const icons = { overview: "▦", map: "◇", stadiums: "⌂", grants: "□", business: "▣", transport: "⇄", safety: "△", marathon: "◆", youth: "○", records: "♪", translate: "文", bracket: "⌁" };
+        return icons[id] || "•";
+      }
+
+      function renderKpis() {
+        return `<div class="kpis">
+          ${metric("Host cities", "16", "Canada · Mexico · United States")}
+          ${metric("Highest focus", state.city, "Selected host-city view")}
+          ${metric("Open grants", grants.length, "Open or ongoing only")}
+          ${metric("Live status", state.live === "connected" ? "On" : "Off", state.live)}
+          ${metric("Format", "48", "Teams · Round of 32")}
+        </div>`;
+      }
+
+      function metric(label, value, sub) {
+        return `<article class="card metric"><div class="label">${label}</div><div class="value">${value}</div><div class="sub">${sub}</div></article>`;
+      }
+
+      function renderMapCard() {
+        const city = stadiums.find((s) => s.city === state.city) || stadiums[0];
+        const mapId = state.view === "map" ? "hostMapDetail" : "hostMapOverview";
+        return `<article class="card map-card">
+          <div class="card-head"><strong>Host-City Map</strong><span class="pill">Click a pin for details</span></div>
+          <div class="map" id="${mapId}"></div>
+          <div class="map-note"><span>${city.city} · ${city.venue}</span><span>${city.cap.toLocaleString()} capacity</span></div>
+        </article>`;
+      }
+
+      function renderRightRail() {
+        const top = stadiums.slice().sort((a, b) => b.cap - a.cap).slice(0, 6);
+        const sourceRows = state.liveSources.length
+          ? state.liveSources.slice(0, 4).map((source) => row(source.name, `${source.status} · ${source.latencyMs}ms`)).join("")
+          : `${row("Tournament feeds", state.live)}${row("Grant feeds", state.grantLive)}${row("Static fallback", "no mock data")}`;
+        const latestRows = state.liveItems.length
+          ? state.liveItems.slice(0, 3).map((item) => row(item.source, item.title)).join("")
+          : row("Live articles", state.live === "connected" ? "No RSS items returned" : "Refresh to check");
+        return `<div class="stack">
+          <article class="card">
+            <div class="card-head"><strong>Stadium Capacity</strong><span class="sub">Top venues</span></div>
+            <div class="card-body">${top.map((s) => bar(s.city, s.cap, 94000)).join("")}</div>
+          </article>
+          <article class="card">
+            <div class="card-head"><strong>By Program</strong><span class="sub">Platform lanes</span></div>
+            <div class="card-body">
+              <div class="donut"><span>12<br />Lanes</span></div>
+              ${bar("Fan ops", 6, 12)}
+              ${bar("Culture", 3, 12)}
+              ${bar("Funding", 2, 12)}
+              ${bar("Youth", 1, 12)}
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-head"><strong>Live Sources</strong><span class="pill"><span class="dot ${state.live === "connected" ? "live" : ""}"></span>${state.live}</span></div>
+            <div class="card-body stack">
+              ${sourceRows}
+              ${latestRows}
+            </div>
+          </article>
+        </div>`;
+      }
+
+      function bar(label, value, max) {
+        const width = Math.max(8, Math.round((value / max) * 100));
+        return `<div class="bar-row"><span>${label}</span><div class="track"><span style="--w:${width}%"></span></div><strong>${value.toLocaleString ? value.toLocaleString() : value}</strong></div>`;
+      }
+
+      function row(label, value) {
+        return `<div class="row"><strong>${label}</strong><span class="pill">${value}</span></div>`;
+      }
+
+      function renderOverview() {
+        $("#overview").innerHTML = `
+          ${renderKpis()}
+          <div class="overview-grid">
+            ${renderMapCard()}
+            ${renderRightRail()}
+          </div>
+          ${renderRecent("Recent Host-City Briefs", stadiums.slice(0, 8).map((s) => [s.city, s.country, s.venue, s.role, "Verified stadium record"]))}
+        `;
+      }
+
+      function renderMap() {
+        const city = stadiums.find((s) => s.city === state.city);
+        $("#map").innerHTML = `
+          ${renderKpis()}
+          <div class="overview-grid">
+            ${renderMapCard()}
+            <article class="card">
+              <div class="card-head"><strong>${city.city}</strong><span class="pill">${city.country}</span></div>
+              <div class="card-body stack">
+                ${row("Venue", city.venue)}
+                ${row("Capacity", city.cap.toLocaleString())}
+                ${row("Role", city.role)}
+                <button class="button dark" data-open-city="${city.city}">Open city detail</button>
+              </div>
+            </article>
+          </div>
+        `;
+      }
+
+      function renderStadiums() {
+        $("#stadiums").innerHTML = `${renderKpis()}${renderRecent("Stadium Register", stadiums.map((s) => [s.city, s.country, s.venue, s.cap.toLocaleString(), s.role]))}`;
+      }
+
+      function renderGrants() {
+        const liveGrantRows = state.grantSources.length
+          ? state.grantSources.map((source) => row(source.name, `${source.status} · ${source.message || "checked"}`)).join("")
+          : grants.map((g) => row(`${g[0]} · ${g[1]}`, `${g[2]} · ${g[3]}`)).join("");
+        const grantTrackerRows = state.grantSources.length
+          ? state.grantSources.map((source) => [source.name, source.category || "Open grant", source.status, `${source.latencyMs}ms`, source.checkedAt ? new Date(source.checkedAt).toLocaleString() : "checked"])
+          : grants.map((g) => [g[0], g[1], g[2], g[3], g[4]]);
+        $("#grants").innerHTML = `
+          ${renderKpis()}
+          <div class="two-col">
+            <article class="card"><div class="card-head"><strong>Open Grants</strong><button class="button" id="grantRefresh">Refresh live</button></div><div class="card-body stack">${liveGrantRows}</div></article>
+            <article class="card"><div class="card-head"><strong>Scale Partners</strong><span class="sub">FIFA fund development</span></div><div class="card-body stack">${row("The Defiant Foundation", "program design")}${row("Bulle Consulting", "fund development")}${row("DreamCo Management", "marketing strategy")}</div></article>
+          </div>
+          ${renderRecent("Grant Tracker", grantTrackerRows)}
+        `;
+      }
+
+      function renderBusiness() {
+        $("#business").innerHTML = `${renderKpis()}<div class="three-col">
+          ${simpleCard("Business Exposure", "Local restaurants, retailers, wellness providers, creators, and nonprofits can package watch-party readiness, QR capture, sponsor reporting, and multilingual fan messaging.")}
+          ${simpleCard("Partner Lane", "The Defiant Foundation, Bulle Consulting, and DreamCo Management help organizations scale fund development and World Cup marketing city by city.")}
+          ${simpleCard("Operational Rule", "Keep activations safe, measurable, language-accessible, and sponsor-ready without cluttering the fan journey.")}
+        </div>`;
+      }
+
+      function renderTransport() {
+        const rows = [["Seattle", "Sound Transit and stadium crowd-flow readiness"], ["Los Angeles", "Metro-first stadium movement"], ["New York/New Jersey", "NJ TRANSIT and host committee mobility"], ["Philadelphia", "City event and safety guidance"], ["Dallas", "Transportation and mobility planning"]];
+        $("#transport").innerHTML = `${renderKpis()}${renderRecent("Transportation Advisories", rows.map((r) => [r[0], "Advisory", r[1], "Match-day", "Live agency check when connected"]))}`;
+      }
+
+      function renderSafety() {
+        $("#safety").innerHTML = `${renderKpis()}<div class="three-col">
+          ${simpleCard("Mass Gatherings", "Crowd movement, emergency exits, accessibility, hydration, and venue-entry procedures.")}
+          ${simpleCard("Health Protocols", "Respiratory readiness, stay-home-when-sick guidance, hand hygiene, ventilation awareness, and medical escalation points.")}
+          ${simpleCard("Fan Stewardship", "Clear signage, multilingual alerts, staff escalation, transit dispersal, and incident reporting.")}
+        </div>`;
+      }
+
+      function renderMarathon() {
+        $("#marathon").innerHTML = `${renderKpis()}<div class="two-col">
+          <article class="card"><div class="card-head"><strong>The Marathon Clothing</strong><a class="button dark" href="https://www.themarathonclothing.com/" target="_blank" rel="noopener">Store</a></div><div class="card-body"><h2 style="margin:0 0 12px">The Marathon Continues</h2><p class="muted">A culture-and-commerce homage to Nipsey Hussle, Blacc Sam, and Steven Carless inside the Defiant Sports platform.</p><blockquote style="border-left:4px solid #000;padding-left:14px;margin:20px 0 0;font-size:22px;font-weight:900;letter-spacing:-.04em">“We honor the people that ain't quit, we honor the people that stayed down.”</blockquote></div></article>
+          <article class="card"><div class="card-head"><strong>Legacy Register</strong></div><div class="card-body stack">${row("Nipsey Hussle", "ownership legacy")}${row("Blacc Sam", "family stewardship")}${row("Steven Carless", "culture strategy")}</div></article>
+        </div>`;
+      }
+
+      function renderYouth() {
+        $("#youth").innerHTML = `${renderKpis()}<div class="three-col">${simpleCard("World Cup Access", "Youth from different cultural backgrounds receive soccer learning, match-day context, and safe fan experiences.")}${simpleCard("Futsal", "Compact tournaments for gyms, courts, mini-pitches, and community centers.")}${simpleCard("Mentor Network", "Coaches, translators, nonprofits, safety leads, and city partners operating together.")}</div>`;
+      }
+
+      function renderRecords() {
+        $("#records").innerHTML = `${renderKpis()}<div class="three-col">${simpleCard("Player Narratives", "Source-safe profiles, multilingual press lines, and sponsor-ready story pillars.")}${simpleCard("Culture Campaigns", "Music, creators, watch parties, local artists, and city-specific content.")}${simpleCard("Rights Review", "Controls before using player names, images, team marks, or tournament marks commercially.")}</div>`;
+      }
+
+      function renderTranslate() {
+        $("#translate").innerHTML = `${renderKpis()}${renderRecent("Language Access Matrix", countries.map((c) => [c[0], c[1], c[2], "Dashboard coverage", "Human review for emergency copy"]))}`;
+      }
+
+      function renderBracket() {
+        const rows = [["Group stage", "12 groups of four", "Top two plus eight best third-place teams", "Not final", "Official format"], ["Round of 32", "32 teams", "First knockout round", "Pending", "No invented matchups"], ["Round of 16", "16 teams", "Knockout", "Pending", "No invented winners"], ["Quarter-finals", "8 teams", "Knockout", "Pending", "Official placement later"], ["Semi-finals", "4 teams", "Atlanta and Dallas listed", "Pending", "Venue role"], ["Final", "2 teams", "New York/New Jersey Stadium", "Pending", "Venue role"]];
+        $("#bracket").innerHTML = `${renderKpis()}${renderRecent("Bracket Framework", rows)}`;
+      }
+
+      function simpleCard(title, copy) {
+        return `<article class="card"><div class="card-body"><div class="label">${title}</div><p style="margin-top:12px" class="muted">${copy}</p></div></article>`;
+      }
+
+      function renderRecent(title, rows) {
+        return `<article class="card" style="margin-top:22px"><div class="card-head"><strong>${title}</strong><span class="pill">${rows.length} records</span></div><div class="table-wrap"><table><thead><tr><th>Market</th><th>Type</th><th>Asset</th><th>Status</th><th>Notes</th></tr></thead><tbody>${rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div></article>`;
+      }
+
+      function renderActive() {
+        renderNav();
+        $("#viewTitle").textContent = views.find((v) => v[0] === state.view)?.[1] || "Overview";
+        $$(".section").forEach((s) => s.classList.toggle("active", s.id === state.view));
+        renderOverview();
+        renderMap();
+        renderStadiums();
+        renderGrants();
+        renderBusiness();
+        renderTransport();
+        renderSafety();
+        renderMarathon();
+        renderYouth();
+        renderRecords();
+        renderTranslate();
+        renderBracket();
+        $("#liveLabel").textContent = `Live source tracking · ${state.live}`;
+        $("#liveDot").classList.toggle("live", state.live === "connected");
+        $("#sideStatus").textContent = state.live === "connected" ? "Live source sync active" : "Awaiting live source sync";
+        requestAnimationFrame(initVisibleMaps);
+      }
+
+      function initVisibleMaps() {
+        ["hostMapOverview", "hostMapDetail"].forEach((id) => {
+          const el = document.getElementById(id);
+          if (!el || !window.L) return;
+          if (maps[id]) {
+            maps[id].remove();
+            delete maps[id];
+            delete markerLayers[id];
+          }
+          maps[id] = L.map(id, { zoomControl: true, scrollWheelZoom: false }).setView([38.5, -96], 3);
+          L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+            attribution: "© OpenStreetMap contributors © CARTO",
+            maxZoom: 18
+          }).addTo(maps[id]);
+          markerLayers[id] = L.layerGroup().addTo(maps[id]);
+          stadiums.forEach((s) => {
+            const selected = s.city === state.city;
+            const marker = L.marker([s.lat, s.lng], {
+              icon: L.divIcon({
+                className: "",
+                html: `<span class="host-marker ${selected ? "active" : ""}"></span>`,
+                iconSize: selected ? [17, 17] : [13, 13],
+                iconAnchor: selected ? [8, 8] : [6, 6]
+              })
+            }).addTo(markerLayers[id]);
+            marker.bindTooltip(`${s.city} · ${s.venue}`, { direction: "top" });
+            marker.on("click", () => {
+              state.city = s.city;
+              renderActive();
+            });
+          });
+          maps[id].invalidateSize();
+        });
+      }
+
+      async function refreshLive() {
+        state.live = "checking";
+        state.grantLive = "checking";
+        renderActive();
+        try {
+          const [live, grant] = await Promise.all([fetch("/api/live-feeds"), fetch("/api/grant-feeds")]);
+          state.live = live.ok ? "connected" : "unavailable";
+          state.grantLive = grant.ok ? "connected" : "unavailable";
+          if (live.ok) {
+            const livePayload = await live.json();
+            state.liveSources = livePayload.sources || [];
+            state.liveItems = livePayload.items || [];
+            state.generatedAt = livePayload.generatedAt || null;
+          }
+          if (grant.ok) {
+            const grantPayload = await grant.json();
+            state.grantSources = grantPayload.sources || [];
+            state.grantItems = grantPayload.items || [];
+            state.grantGeneratedAt = grantPayload.generatedAt || null;
+          }
+        } catch (error) {
+          state.live = "unavailable";
+          state.grantLive = "unavailable";
+        }
+        renderActive();
+      }
+
+      function openModal(title, body) {
+        $("#modalTitle").textContent = title;
+        $("#modalBody").innerHTML = body;
+        $("#modal").classList.add("open");
+      }
+
+      document.addEventListener("click", (event) => {
+        const view = event.target.closest("[data-view]");
+        if (view) {
+          state.view = view.dataset.view;
+          renderActive();
+        }
+        const openCity = event.target.closest("[data-open-city]");
+        if (openCity) {
+          const selected = stadiums.find((s) => s.city === openCity.dataset.openCity);
+          openModal(selected.city, `${row("Venue", selected.venue)}${row("Capacity", selected.cap.toLocaleString())}${row("Role", selected.role)}${row("Operational focus", "Transit, safety, business exposure, language access")}`);
+        }
+        if (event.target.id === "grantRefresh") refreshLive();
+      });
+
+      $("#mobileNav").addEventListener("change", (event) => {
+        state.view = event.target.value;
+        renderActive();
+      });
+      $("#refreshBtn").addEventListener("click", refreshLive);
+      $("#printBtn").addEventListener("click", () => window.print());
+      $("#languageSelect").addEventListener("change", (event) => {
+        document.documentElement.lang = event.target.value === "en" ? "en" : event.target.value;
+        document.documentElement.dir = event.target.value === "ar" ? "rtl" : "ltr";
+      });
+      $("#closeModal").addEventListener("click", () => $("#modal").classList.remove("open"));
+      $("#modal").addEventListener("click", (event) => {
+        if (event.target.id === "modal") $("#modal").classList.remove("open");
+      });
+
+      renderActive();
+      refreshLive();
+    </script>
+  </body>
+</html>
