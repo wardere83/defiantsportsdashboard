@@ -31,6 +31,10 @@ Impact view.
   metric (projected fan reach across the tournament).
 - **Bracket card** — group-stage cards, knockout overview, and host-city
   list with confirmed semi-final / 3rd-place / final venues.
+- **URL-aware routing** — every tab is reflected in `location.hash`
+  (e.g., `/#live`, `/#youth`). Refreshing keeps you on the same view,
+  links are shareable, and the browser back/forward walk the tabs you
+  visited.
 - **Apple-style aesthetic** — Inter + JetBrains Mono, restrained green
   accents on a black-and-white base, subtle elevation, hover lift,
   keyboard shortcuts, toast feedback, modal city briefs.
