@@ -1815,12 +1815,44 @@
         $("#modal").classList.add("open");
       }
 
+      // ───────────────── Routing (URL hash) ─────────────────
+      // Persists the active view in location.hash so refresh and
+      // shareable links land on the right tab. Browser back/forward
+      // walk the history stack the user actually built.
+      const VIEW_IDS = new Set(views.map(v => v[0]));
+
+      function viewFromHash() {
+        const v = (location.hash || "").replace(/^#/, "");
+        return VIEW_IDS.has(v) ? v : null;
+      }
+
+      function navigate(view) {
+        if (!VIEW_IDS.has(view) || view === state.view) {
+          state.view = view;
+          renderActive();
+          return;
+        }
+        state.view = view;
+        const hash = "#" + view;
+        if (location.hash !== hash) {
+          history.pushState(null, "", hash);
+        }
+        renderActive();
+      }
+
+      window.addEventListener("hashchange", () => {
+        const v = viewFromHash() || "overview";
+        if (state.view !== v) {
+          state.view = v;
+          renderActive();
+        }
+      });
+
       // ───────────────── Events ─────────────────
       document.addEventListener("click", (e) => {
         const navBtn = e.target.closest("[data-view]");
         if (navBtn) {
-          state.view = navBtn.dataset.view;
-          renderActive();
+          navigate(navBtn.dataset.view);
           return;
         }
         const sortHeader = e.target.closest("th[data-sort]");
@@ -1839,8 +1871,7 @@
           const city = focusRow.dataset.focusCity;
           if (stadiums.some(s => s.city === city)) {
             state.city = city;
-            state.view = "map";
-            renderActive();
+            navigate("map");
             toast(`Focused ${city}`);
           }
           return;
@@ -1867,7 +1898,7 @@
       document.addEventListener("keydown", (e) => {
         if (e.target.matches("input, select, textarea")) return;
         const map = { "1":"overview","2":"live","3":"map","4":"stadiums","5":"transport","6":"safety","7":"youth","8":"bracket" };
-        if (map[e.key]) { state.view = map[e.key]; renderActive(); }
+        if (map[e.key]) { navigate(map[e.key]); }
         if (e.key === "Escape") $("#modal").classList.remove("open");
       });
 
@@ -1883,7 +1914,10 @@
         document.querySelector(".nav").scrollIntoView({ behavior: "smooth" });
       });
 
-      // Init
+      // Init — restore the active view from #hash so refreshes,
+      // shareable links, and back/forward all land where the user expects.
+      const initialView = viewFromHash();
+      if (initialView) state.view = initialView;
       renderActive();
       refreshLive();
       setInterval(refreshLive, 5 * 60 * 1000);
