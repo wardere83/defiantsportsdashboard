@@ -11,12 +11,16 @@ Impact view.
 - **Single-viewport shell** that fits every section in one screen on
   desktop, tablet, and mobile (no outer scroll; long lists scroll inside
   their own cards).
-- **Live FIFA 2026 stream** — animated source ticker with the Defiant
-  Sports logo inlined every 4th item, per-source latency cells, pulsing
-  live indicator, and a dedicated **Live FIFA** tab with verified-source
+- **FIFA 2026 Kickoff KPI** — live-ticking countdown (Days · HH:MM:SS)
+  to the opening match (Estadio Azteca, Mexico City, Jun 11, 2026 ·
+  12:00 CDMX / 18:00 UTC). Auto-switches to "Day N / 39" while the
+  tournament is in progress and "Concluded" after the Final
+  (Jul 19, 2026 · MetLife · NY/NJ).
+- **Live FIFA stream** — animated source ticker with the Defiant Sports
+  logo inlined every 4th item, per-source latency cells, pulsing live
+  indicator, and a dedicated **Live FIFA** tab with verified-source
   status and headlines table. Fallback content is factual FIFA 2026
-  info (opening match, final, format, semi-final venues) — never
-  fabricated live results.
+  info — never fabricated live results.
 - **Interactive stadium register** — search across city/venue/role, sort
   any column, click a row to focus that city on the map.
 - **Animated KPIs** — count-up on render, including the **Impact**

@@ -520,6 +520,24 @@
         color: rgba(255,255,255,.50);
       }
 
+      /* Compact countdown shown inside the "Kickoff" KPI tile */
+      .kpi.countdown-kpi .value {
+        font-family: var(--mono);
+        font-feature-settings: "tnum" 1;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.04em;
+        font-size: 22px;
+      }
+      .kpi.countdown-kpi .live-mark {
+        display: inline-block;
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        background: var(--live);
+        margin-right: 6px;
+        vertical-align: middle;
+        animation: pulse 1.6s ease-in-out infinite;
+      }
+
       /* Map */
       .map-wrap { flex: 1; min-height: 0; position: relative; }
       .map { position: absolute; inset: 0; background: #eef0f2; }
@@ -710,6 +728,7 @@
         .live-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .live-cell:nth-child(2) { border-right: 0; }
         .ticker-logo { height: 24px; max-width: 84px; }
+        .kpi.countdown-kpi .value { font-size: 19px; }
       }
 
       @media (max-width: 980px) {
@@ -780,6 +799,7 @@
         .topbar h2 { font-size: 14px; }
         .ticker-logo { height: 20px; max-width: 72px; padding: 1px 4px; }
         .ticker-item.with-logo { gap: 10px; }
+        .kpi.countdown-kpi .value { font-size: 17px; }
       }
 
       /* Print */
@@ -987,7 +1007,7 @@
             <div class="kpi"><span class="label">Host Cities</span><span class="value" data-count="16">16</span><span class="sub">USA · CAN · MEX</span></div>
             <div class="kpi"><span class="label">Total Capacity</span><span class="value" data-count="${(totalCap/1e6).toFixed(2)}" data-suffix="M">${(totalCap/1e6).toFixed(2)}M</span><span class="sub"><span class="delta">+${stadiums.length} venues</span></span></div>
             <div class="kpi"><span class="label">Impact</span><span class="value" data-count="${projectedReach}" data-suffix="M+">${projectedReach}M+</span><span class="sub">Projected fan reach · 104 matches</span></div>
-            <div class="kpi"><span class="label">Live Feeds</span><span class="value" data-count="${liveCount}">${liveCount}/${liveTotal}</span><span class="sub">${state.live === "connected" ? "Streaming" : state.live}</span></div>
+            <div class="kpi countdown-kpi"><span class="label">FIFA 2026 Kickoff</span><span class="value" id="cdValue">--</span><span class="sub" id="cdSub">Jun 11, 2026 · CDMX</span></div>
             <div class="kpi invert"><span class="label">FIFA 2026</span><span class="value" data-count="48">48</span><span class="sub">Teams · 104 matches</span></div>
           </div>`;
       }
@@ -1016,7 +1036,43 @@
       }
 
       // ───────────────── Live FIFA card ─────────────────
-      const tickerLogo = "./assets/defiant-sports-logo.jpeg";
+      // ───────────────── FIFA 2026 Countdown (KPI tile) ─────────────────
+      // Opening match: Mexico City (Estadio Azteca), Jun 11, 2026 at 12:00 noon.
+      // Mexico City sits on CST (UTC-6) year-round (DST abolished there in 2022),
+      // so 12:00 CDMX = 18:00 UTC.
+      const KICKOFF_UTC = Date.UTC(2026, 5, 11, 18, 0, 0);
+      // Final: MetLife Stadium (NY/NJ), Jul 19, 2026 — 15:00 ET = 19:00 UTC.
+      const FINAL_UTC   = Date.UTC(2026, 6, 19, 19, 0, 0);
+
+      function pad2(n) { return String(n).padStart(2, "0"); }
+
+      function updateCountdown() {
+        const valEl = document.getElementById("cdValue");
+        const subEl = document.getElementById("cdSub");
+        if (!valEl) return;
+        const now = Date.now();
+        const toKick = KICKOFF_UTC - now;
+        if (toKick > 0) {
+          const d = Math.floor(toKick / 86400000);
+          const h = Math.floor((toKick % 86400000) / 3600000);
+          const m = Math.floor((toKick % 3600000) / 60000);
+          const s = Math.floor((toKick % 60000) / 1000);
+          valEl.innerHTML = `<span class="live-mark"></span>${d}d ${pad2(h)}:${pad2(m)}:${pad2(s)}`;
+          if (subEl) subEl.textContent = "Kickoff · Jun 11, 2026 · CDMX";
+          return;
+        }
+        const toFinal = FINAL_UTC - now;
+        if (toFinal > 0) {
+          const dayInto = Math.floor((now - KICKOFF_UTC) / 86400000) + 1;
+          const dToFinal = Math.ceil(toFinal / 86400000);
+          valEl.innerHTML = `<span class="live-mark"></span>Day ${dayInto}/39`;
+          if (subEl) subEl.textContent = `Tournament live · ${dToFinal}d to Final`;
+          return;
+        }
+        const daysSince = Math.floor((now - FINAL_UTC) / 86400000);
+        valEl.textContent = "Concluded";
+        if (subEl) subEl.textContent = `${daysSince}d since the Final · Jul 19`;
+      }
 
       function renderLiveCard() {
         const items = state.liveItems.length
@@ -1033,6 +1089,7 @@
               { source: "CDC",   title: "Travel-health advisories active for all three host nations" },
               { source: "FIFA",  title: "Fan ID enrollment open across host-city kiosks" }
             ];
+        const tickerLogo = "./assets/defiant-sports-logo.jpeg";
         const tickerHtml = items.concat(items).map((i, idx) => {
           const withLogo = idx % 4 === 0;
           const logoImg = withLogo
@@ -1489,6 +1546,7 @@
         requestAnimationFrame(() => {
           initVisibleMaps();
           animateCountUps();
+          updateCountdown();
         });
       }
 
@@ -1659,6 +1717,8 @@
       renderActive();
       refreshLive();
       setInterval(refreshLive, 5 * 60 * 1000);
+      // Tick the FIFA 2026 countdown every second
+      setInterval(updateCountdown, 1000);
     </script>
   </body>
 </html>
