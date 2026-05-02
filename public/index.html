@@ -746,10 +746,12 @@
         color: var(--ink-3);
       }
 
-      /* Pogba Academy hero strip — 5 picture tiles in place of the KPI strip */
+      /* Pogba Academy hero strip — 6 picture tiles in place of the KPI strip.
+         Captions stripped per request; the program cards below already label
+         the offerings, so the tiles read as a clean photo wall. */
       .pogba-strip {
         display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+        grid-template-columns: repeat(6, minmax(0, 1fr));
         gap: 10px;
         align-items: stretch;
       }
@@ -771,32 +773,6 @@
         object-position: center;
         display: block;
       }
-      .pogba-tile .cap {
-        position: absolute;
-        left: 10px; right: 10px; bottom: 8px;
-        color: #fff;
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 0.02em;
-        text-shadow: 0 1px 8px rgba(0,0,0,.7);
-        z-index: 1;
-      }
-      .pogba-tile .cap small {
-        display: block;
-        font-weight: 600;
-        font-size: 9.5px;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        opacity: .85;
-        margin-bottom: 2px;
-      }
-      .pogba-tile::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to bottom, transparent 45%, rgba(0,0,0,.65) 100%);
-        pointer-events: none;
-      }
       @media (max-width: 1100px) {
         .pogba-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         .pogba-tile { aspect-ratio: 16 / 10; max-height: 180px; }
@@ -804,8 +780,6 @@
       @media (max-width: 560px) {
         .pogba-strip { grid-template-columns: 1fr 1fr; gap: 8px; }
         .pogba-tile { aspect-ratio: 5 / 3; max-height: 140px; }
-        .pogba-tile .cap { font-size: 10.5px; left: 8px; right: 8px; bottom: 6px; }
-        .pogba-tile .cap small { font-size: 9px; }
       }
 
       .lede {
@@ -1569,16 +1543,19 @@
           </div>`;
       }
 
-      // Pogba Academy hero strip. The 5 tiles map to real Pogba Academy
+      // Pogba Academy hero strip. The 6 tiles map to real Pogba Academy
       // photos. Drop the source files at the local paths below (and
       // mirror them under public/assets/pogba/) — each <img> falls back
-      // to a Picsum placeholder if the local file is missing.
+      // to a Picsum placeholder if the local file is missing. The strip
+      // is a clean photo wall — no text overlay; the cards below already
+      // label the offerings.
       const POGBA_TILES = [
-        { local: "./assets/pogba/travel.jpg",         src: "https://picsum.photos/seed/pogba-travel/640/480",   kicker: "Programme",  caption: "On the Road" },
-        { local: "./assets/pogba/first-team.jpg",     src: "https://picsum.photos/seed/pogba-first-team/640/480", kicker: "Squad",     caption: "First Team" },
-        { local: "./assets/pogba/elite-athletes.jpg", src: "https://picsum.photos/seed/pogba-elite/640/480",    kicker: "Mentorship", caption: "Meet Elite Athletes" },
-        { local: "./assets/pogba/mundial.jpg",        src: "https://picsum.photos/seed/pogba-mundial/640/480",  kicker: "Tournament", caption: "Mundial de Clubes 2025" },
-        { local: "./assets/pogba/mark.png",           src: "https://picsum.photos/seed/pogba-mark/640/480",     kicker: "Identity",   caption: "Pogba Academy" }
+        { local: "./assets/pogba/travel.jpg",         src: "https://picsum.photos/seed/pogba-travel/640/480",     alt: "Pogba Academy team boarding flight" },
+        { local: "./assets/pogba/first-team.jpg",     src: "https://picsum.photos/seed/pogba-first-team/640/480", alt: "Pogba Academy first team in red kits" },
+        { local: "./assets/pogba/elite-athletes.jpg", src: "https://picsum.photos/seed/pogba-elite/640/480",      alt: "Pogba brothers" },
+        { local: "./assets/pogba/mentorship.jpg",     src: "https://picsum.photos/seed/pogba-mentorship/640/480", alt: "Pogba Academy mentorship moments" },
+        { local: "./assets/pogba/mundial.jpg",        src: "https://picsum.photos/seed/pogba-mundial/640/480",    alt: "Pogba Academy at Mundial de Clubes 2025" },
+        { local: "./assets/pogba/mark.png",           src: "https://picsum.photos/seed/pogba-mark/640/480",       alt: "Pogba Academy mark" }
       ];
 
       function renderPogbaStrip() {
@@ -1586,9 +1563,8 @@
           <div class="pogba-strip">
             ${POGBA_TILES.map(t => `
               <div class="pogba-tile">
-                <img src="${t.local}" alt="${escapeHtml(t.caption)}" loading="lazy"
+                <img src="${t.local}" alt="${escapeHtml(t.alt)}" loading="lazy"
                      onerror="this.onerror=null; this.src='${t.src}';" />
-                <div class="cap"><small>${escapeHtml(t.kicker)}</small>${escapeHtml(t.caption)}</div>
               </div>
             `).join("")}
           </div>`;
