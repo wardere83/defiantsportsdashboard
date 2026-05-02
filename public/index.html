@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html> 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -1310,9 +1310,10 @@
       function renderRightRail() {
         const top = stadiums.slice().sort((a, b) => b.cap - a.cap).slice(0, 5);
         const partners = [
-          ["The Defiant Foundation", "Program design"],
-          ["Bulle Consulting", "Fund development"],
-          ["DreamCo Management", "Marketing strategy"]
+          ["Defiant Sports", "Systemwide Development"],
+          ["Bulle Consulting", "Capacity Building"],
+          ["DreamCo Management", "Multimedia Strategy"],
+          ["Pogba Academy", "Elite Soccer Development"]
         ];
         return `
           <div class="rail-stack grid-rail">
@@ -1327,8 +1328,6 @@
               <div class="card-body">
                 <div class="list">
                   ${partners.map(([k, v]) => listRow(k, `<span class="pill">${v}</span>`)).join("")}
-                  ${listRow("Open grants", `<span class="pill ok dot">${grants.length} active</span>`)}
-                  ${listRow("Languages", `<span class="pill">${countries.length}+ supported</span>`)}
                 </div>
               </div>
             </div>
@@ -1579,7 +1578,7 @@
         { local: "./assets/pogba/first-team.jpg",     src: "https://picsum.photos/seed/pogba-first-team/640/480", kicker: "Squad",     caption: "First Team" },
         { local: "./assets/pogba/elite-athletes.jpg", src: "https://picsum.photos/seed/pogba-elite/640/480",    kicker: "Mentorship", caption: "Meet Elite Athletes" },
         { local: "./assets/pogba/mundial.jpg",        src: "https://picsum.photos/seed/pogba-mundial/640/480",  kicker: "Tournament", caption: "Mundial de Clubes 2025" },
-        { local: "./assets/pogba/mark.jpg",           src: "https://picsum.photos/seed/pogba-mark/640/480",     kicker: "Identity",   caption: "Pogba Academy" }
+        { local: "./assets/pogba/mark.png",           src: "https://picsum.photos/seed/pogba-mark/640/480",     kicker: "Identity",   caption: "Pogba Academy" }
       ];
 
       function renderPogbaStrip() {
