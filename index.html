@@ -1245,9 +1245,9 @@
       function renderRightRail() {
         const top = stadiums.slice().sort((a, b) => b.cap - a.cap).slice(0, 5);
         const partners = [
-          ["The Defiant Foundation", "Program design"],
-          ["Bulle Consulting", "Fund development"],
-          ["DreamCo Management", "Marketing strategy"]
+          ["Defiant Sports", "Systemwide Development"],
+          ["Bulle Consulting", "Capacity Building"],
+          ["DreamCo Management", "Multimedia Strategy"]
         ];
         return `
           <div class="rail-stack grid-rail">
@@ -1262,8 +1262,6 @@
               <div class="card-body">
                 <div class="list">
                   ${partners.map(([k, v]) => listRow(k, `<span class="pill">${v}</span>`)).join("")}
-                  ${listRow("Open grants", `<span class="pill ok dot">${grants.length} active</span>`)}
-                  ${listRow("Languages", `<span class="pill">${countries.length}+ supported</span>`)}
                 </div>
               </div>
             </div>
