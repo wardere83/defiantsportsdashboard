@@ -213,13 +213,74 @@ function cached(cache, setter, sources) {
   });
 }
 
+// Static reference data — keeps the dashboard fully data-driven and
+// makes integration tests and external partner clients possible.
+const hostCities = [
+  { city: "Atlanta", country: "USA", venue: "Atlanta Stadium", cap: 75000, role: "Group · R32 · R16 · Semi-final", lat: 33.755, lng: -84.401 },
+  { city: "Boston", country: "USA", venue: "Boston Stadium", cap: 65000, role: "Group · R32 · Quarter-final", lat: 42.091, lng: -70.164 },
+  { city: "Dallas", country: "USA", venue: "Dallas Stadium", cap: 94000, role: "Group · R32 · R16 · Semi-final", lat: 32.748, lng: -97.093 },
+  { city: "Guadalajara", country: "Mexico", venue: "Estadio Guadalajara", cap: 48000, role: "Group stage", lat: 20.682, lng: -103.462 },
+  { city: "Houston", country: "USA", venue: "Houston Stadium", cap: 72000, role: "Group · R32 · R16", lat: 29.684, lng: -95.411 },
+  { city: "Kansas City", country: "USA", venue: "Kansas City Stadium", cap: 73000, role: "Group · R32 · Quarter-final", lat: 39.049, lng: -94.484 },
+  { city: "Los Angeles", country: "USA", venue: "Los Angeles Stadium", cap: 70000, role: "Group · R32 · Quarter-final", lat: 33.953, lng: -118.339 },
+  { city: "Mexico City", country: "Mexico", venue: "Estadio Azteca", cap: 83000, role: "Opening · Group · R32 · R16", lat: 19.303, lng: -99.151 },
+  { city: "Miami", country: "USA", venue: "Miami Stadium", cap: 65000, role: "Group · R32 · QF · 3rd-place", lat: 25.958, lng: -80.239 },
+  { city: "Monterrey", country: "Mexico", venue: "Estadio Monterrey", cap: 53500, role: "Group · R32", lat: 25.669, lng: -100.244 },
+  { city: "New York/NJ", country: "USA", venue: "MetLife Stadium", cap: 82500, role: "Group · R32 · R16 · Final", lat: 40.813, lng: -74.874 },
+  { city: "Philadelphia", country: "USA", venue: "Philadelphia Stadium", cap: 69000, role: "Group · R16", lat: 39.901, lng: -75.168 },
+  { city: "SF Bay Area", country: "USA", venue: "Bay Area Stadium", cap: 71000, role: "Group · R32", lat: 37.403, lng: -121.970 },
+  { city: "Seattle", country: "USA", venue: "Seattle Stadium", cap: 69000, role: "Group · R32 · R16", lat: 47.595, lng: -122.331 },
+  { city: "Toronto", country: "Canada", venue: "BMO Field", cap: 45000, role: "Group · R32", lat: 43.633, lng: -79.418 },
+  { city: "Vancouver", country: "Canada", venue: "BC Place", cap: 54000, role: "Group · R32 · R16", lat: 49.276, lng: -123.111 },
+];
+
+function impactSummary() {
+  const totalCap = hostCities.reduce((s, x) => s + x.cap, 0);
+  const avgCap = totalCap / hostCities.length;
+  const matches = 104;
+  const projectedReach = Math.round(avgCap * 0.95 * matches);
+  return {
+    hostCities: hostCities.length,
+    countries: 3,
+    teams: 48,
+    matches,
+    totalSeats: totalCap,
+    averageCapacity: Math.round(avgCap),
+    projectedFanReach: projectedReach,
+    projectedFanReachPretty: `${(projectedReach / 1e6).toFixed(1)}M+`,
+    languagesSupported: 5,
+  };
+}
+
 app.disable("x-powered-by");
 
 app.get("/api/health", (_req, res) => {
   res.json({
     ok: true,
     service: "Defiant Sports World Cup 2026 Dashboard",
+    version: "1.1.0",
+    uptimeSec: Math.round(process.uptime()),
+    cache: {
+      live: Boolean(liveFeedCache && liveFeedCache.expiresAt > Date.now()),
+      grants: Boolean(grantFeedCache && grantFeedCache.expiresAt > Date.now()),
+      ttlMs: CACHE_TTL_MS,
+    },
     generatedAt: new Date().toISOString(),
+  });
+});
+
+app.get("/api/host-cities", (_req, res) => {
+  res.json({
+    generatedAt: new Date().toISOString(),
+    count: hostCities.length,
+    cities: hostCities,
+  });
+});
+
+app.get("/api/impact", (_req, res) => {
+  res.json({
+    generatedAt: new Date().toISOString(),
+    ...impactSummary(),
   });
 });
 

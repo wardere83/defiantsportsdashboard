@@ -1,15 +1,58 @@
-# Defiant Sports World Cup 2026 Dashboard
+# Defiant Sports — World Cup 2026 Operations Dashboard
 
-Interactive Defiant Sports dashboard for FIFA World Cup 2026 fan stewardship, host-city operations, grants, business exposure, transportation advisories, safety protocols, cultural partnerships, youth programming, and live source tracking.
+Single-viewport, Apple-style operations dashboard for FIFA World Cup 2026.
+Built for host-city stewardship: live FIFA + CDC source streaming, 16-city
+interactive map, stadium intelligence, transit advisories, safety and
+fan stewardship, youth pipeline, bracket framework, and a venture-grade
+Impact view.
+
+## Highlights
+
+- **Single-viewport shell** that fits every section in one screen on
+  desktop, tablet, and mobile (no outer scroll; long lists scroll inside
+  their own cards).
+- **Live FIFA 2026 stream** — animated source ticker with the Defiant
+  Sports logo inlined every 4th item, per-source latency cells, pulsing
+  live indicator, and a dedicated **Live FIFA** tab with verified-source
+  status and headlines table. Fallback content is factual FIFA 2026
+  info (opening match, final, format, semi-final venues) — never
+  fabricated live results.
+- **Interactive stadium register** — search across city/venue/role, sort
+  any column, click a row to focus that city on the map.
+- **Animated KPIs** — count-up on render, including the **Impact**
+  metric (projected fan reach across the tournament).
+- **Bracket card** — group-stage cards, knockout overview, and host-city
+  list with confirmed semi-final / 3rd-place / final venues.
+- **Apple-style aesthetic** — Inter + JetBrains Mono, restrained green
+  accents on a black-and-white base, subtle elevation, hover lift,
+  keyboard shortcuts, toast feedback, modal city briefs.
+- **Map** — Leaflet + Carto light tiles with custom markers and a
+  selected-state ring.
 
 ## What this package includes
 
-- `public/index.html`: the BulleCloud-style dashboard interface.
-- `public/assets/defiant-sports-logo.jpeg`: Defiant Sports logo.
-- `server.js`: Node/Express server for static hosting and live API endpoints.
-- `/api/live-feeds`: checks verified FIFA and travel-health endpoints in real time.
-- `/api/grant-feeds`: checks open or ongoing grant/program endpoints in real time.
-- `docs/`: deployment and source notes.
+- `index.html` — root copy of the dashboard for static GitHub Pages preview.
+- `public/index.html` — production copy served by the Express app.
+- `assets/defiant-sports-logo.jpeg` — Defiant Sports logo (also mirrored
+  to `public/assets/` so the Express server resolves it the same way).
+- `server.js` — Node/Express server hosting static files plus the live
+  API endpoints.
+- `DEPLOYMENT.md` — deployment guide (env vars, build/start, API surface).
+- `LIVE_SOURCES.md` and `docs/LIVE_SOURCES.md` — verified live source register.
+
+## API endpoints
+
+| Endpoint               | Description                                                       |
+| ---------------------- | ----------------------------------------------------------------- |
+| `GET /api/health`      | Service heartbeat with version, uptime, and cache status.         |
+| `GET /api/host-cities` | Verified register of all 16 host cities and stadium metadata.     |
+| `GET /api/impact`      | Computed impact metrics — fan reach, total seats, matches, etc.   |
+| `GET /api/live-feeds`  | Real-time check of verified FIFA + CDC source endpoints.          |
+| `GET /api/grant-feeds` | Real-time check of verified grant and program endpoints.          |
+
+All live endpoints are cached server-side (default TTL 5 minutes,
+configurable via `CACHE_TTL_MS`). The dashboard never fabricates live
+data — when an endpoint is unreachable the UI reports it explicitly.
 
 ## Local setup
 
@@ -18,49 +61,52 @@ npm install
 npm start
 ```
 
-Then open:
-
-```text
-http://localhost:3000
-```
+Then open <http://localhost:3000>.
 
 ## Development mode
 
 ```bash
-npm run dev
+npm run dev   # node --watch
+npm run check # node --check (syntax)
 ```
 
-## GitHub upload
+## Keyboard shortcuts
 
-1. Create a new GitHub repository.
-2. Upload the contents of this folder, not the ZIP file itself.
-3. Commit the files to `main`.
-4. Deploy from GitHub to a Node-capable runtime that can run `npm install` and `npm start`.
+Aligned with the visible sidebar tabs.
 
-## Important GitHub hosting note
+| Key   | View        |
+| ----- | ----------- |
+| `1`   | Overview    |
+| `2`   | Live FIFA   |
+| `3`   | Host Map    |
+| `4`   | Stadiums    |
+| `5`   | Transport   |
+| `6`   | Safety      |
+| `7`   | Youth       |
+| `8`   | Bracket     |
+| `Esc` | Close modal |
 
-For full live functionality, the app needs a Node.js runtime because the dashboard calls `/api/live-feeds` and `/api/grant-feeds`.
+## Deployment
 
-GitHub Pages is static hosting only. It can serve `public/index.html`, but it cannot run `server.js`. If you use GitHub Pages by itself, the dashboard UI will load, but the live API sections will show unavailable.
+For full functionality the app needs a Node runtime (Render, Railway,
+Fly.io, DigitalOcean App Platform, or a VPS). GitHub Pages can serve
+`public/index.html` for visual review but cannot run the live API
+endpoints.
 
-For the fully functional version, keep the code in GitHub and connect the repository to a Node-capable deployment service such as Render, Railway, Fly.io, DigitalOcean App Platform, or a VPS that pulls from GitHub.
+See `DEPLOYMENT.md` and `docs/LIVE_SOURCES.md` for details.
 
 ## Domains
 
-Primary domain target:
-
 ```text
-defiantsports.io
+defiantsports.io       (primary)
+defiantsports.com      (mirror)
 ```
 
-Pointing/mirror domain:
-
-```text
-defiantsports.com
-```
-
-Configure both domains in your DNS provider or deployment platform to route to the same Node app.
+Configure both domains at your DNS provider or deployment platform to
+route to the same Node app.
 
 ## Live-data policy
 
-The app does not use mock live-feed data. If a verified endpoint is unreachable, blocked, or returns an error, the dashboard reports that state instead of inventing data.
+The app does not use mock live-feed data. If a verified endpoint is
+unreachable, blocked, or returns an error, the dashboard reports that
+state instead of inventing data.

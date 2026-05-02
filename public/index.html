@@ -462,6 +462,23 @@
         padding-left: 10px;
       }
       .ticker-item .sep { color: rgba(255,255,255,.24); }
+
+      /* Branded mark interleaved into the ticker */
+      .ticker-item.with-logo { gap: 12px; }
+      .ticker-item.with-logo .src { padding-left: 12px; }
+      .ticker-logo {
+        display: block;
+        height: 28px;
+        width: auto;
+        max-width: 96px;
+        object-fit: contain;
+        flex: 0 0 auto;
+        border-radius: 4px;
+        background: #fff;
+        padding: 2px 5px;
+        box-shadow: 0 1px 2px rgba(0,0,0,.35);
+      }
+
       @keyframes marquee {
         from { transform: translateX(0); }
         to { transform: translateX(-50%); }
@@ -692,6 +709,7 @@
         }
         .live-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .live-cell:nth-child(2) { border-right: 0; }
+        .ticker-logo { height: 24px; max-width: 84px; }
       }
 
       @media (max-width: 980px) {
@@ -760,6 +778,8 @@
         .kpi .value { font-size: 20px; }
         .live-grid { grid-template-columns: 1fr 1fr; }
         .topbar h2 { font-size: 14px; }
+        .ticker-logo { height: 20px; max-width: 72px; padding: 1px 4px; }
+        .ticker-item.with-logo { gap: 10px; }
       }
 
       /* Print */
@@ -852,14 +872,9 @@
         ["live",      "Live FIFA",  "2", "◉"],
         ["map",       "Host Map",   "3", "◇"],
         ["stadiums",  "Stadiums",   "4", "⌂"],
-        ["grants",    "Grants",     "5", "□"],
-        ["business",  "Business",   "6", "▣"],
         ["transport", "Transport",  "7", "⇄"],
         ["safety",    "Safety",     "8", "△"],
-        ["marathon",  "Marathon",   "9", "◆"],
         ["youth",     "Youth",      "0", "○"],
-        ["records",   "Records",    "-", "♪"],
-        ["translate", "Translate",  "=", "文"],
         ["bracket",   "Bracket",    "[", "⌁"]
       ];
 
@@ -921,7 +936,9 @@
       // ───────────────── State ─────────────────
       const state = {
         view: "overview",
-        city: "Mexico City",
+        city: "New York/NJ",
+        stadiumQuery: "",
+        stadiumSort: { key: "cap", dir: "desc" },
         live: "syncing",
         grantLive: "syncing",
         liveSources: [],
@@ -953,9 +970,7 @@
       function renderNav() {
         $("#nav").innerHTML = views.map(([id, label, key, glyph]) => `
           <button class="${state.view === id ? "active" : ""}" data-view="${id}" type="button">
-            <span class="glyph" aria-hidden="true">${glyph}</span>
             <span>${label}</span>
-            <span class="kbd">${key}</span>
           </button>
         `).join("");
       }
@@ -963,36 +978,75 @@
       // ───────────────── KPIs ─────────────────
       function renderKpis() {
         const totalCap = stadiums.reduce((s, x) => s + x.cap, 0);
-        const focus = stadiums.find(s => s.city === state.city) || stadiums[0];
+        // Impact = projected fan reach across the tournament (avg fill * 104 matches)
+        const projectedReach = Math.round((totalCap / stadiums.length) * 0.95 * 104 / 1e6 * 10) / 10;
         const liveCount = state.liveSources.filter(s => s.status === "live" || s.status === "reachable").length;
         const liveTotal = state.liveSources.length || 4;
         return `
           <div class="kpis grid-kpi">
-            <div class="kpi"><span class="label">Host Cities</span><span class="value">16</span><span class="sub">USA · CAN · MEX</span></div>
-            <div class="kpi"><span class="label">Total Capacity</span><span class="value">${(totalCap/1e6).toFixed(2)}M</span><span class="sub"><span class="delta">+${stadiums.length} venues</span></span></div>
-            <div class="kpi"><span class="label">Focus City</span><span class="value">${focus.city}</span><span class="sub">${focus.cap.toLocaleString()} cap</span></div>
-            <div class="kpi"><span class="label">Live Feeds</span><span class="value">${liveCount}/${liveTotal}</span><span class="sub">${state.live === "connected" ? "Streaming" : state.live}</span></div>
-            <div class="kpi invert"><span class="label">FIFA 2026</span><span class="value">48</span><span class="sub">Teams · 104 matches</span></div>
+            <div class="kpi"><span class="label">Host Cities</span><span class="value" data-count="16">16</span><span class="sub">USA · CAN · MEX</span></div>
+            <div class="kpi"><span class="label">Total Capacity</span><span class="value" data-count="${(totalCap/1e6).toFixed(2)}" data-suffix="M">${(totalCap/1e6).toFixed(2)}M</span><span class="sub"><span class="delta">+${stadiums.length} venues</span></span></div>
+            <div class="kpi"><span class="label">Impact</span><span class="value" data-count="${projectedReach}" data-suffix="M+">${projectedReach}M+</span><span class="sub">Projected fan reach · 104 matches</span></div>
+            <div class="kpi"><span class="label">Live Feeds</span><span class="value" data-count="${liveCount}">${liveCount}/${liveTotal}</span><span class="sub">${state.live === "connected" ? "Streaming" : state.live}</span></div>
+            <div class="kpi invert"><span class="label">FIFA 2026</span><span class="value" data-count="48">48</span><span class="sub">Teams · 104 matches</span></div>
           </div>`;
       }
 
+      // KPI count-up animation (runs after render)
+      function animateCountUps(root = document) {
+        root.querySelectorAll(".kpi .value[data-count]").forEach((el) => {
+          if (el.dataset.animated === "1") return;
+          el.dataset.animated = "1";
+          const target = parseFloat(el.dataset.count);
+          const suffix = el.dataset.suffix || "";
+          if (!isFinite(target)) return;
+          const orig = el.textContent;
+          const duration = 700;
+          const start = performance.now();
+          const decimals = (String(target).split(".")[1] || "").length;
+          function tick(now) {
+            const t = Math.min(1, (now - start) / duration);
+            const eased = 1 - Math.pow(1 - t, 3);
+            const v = (target * eased).toFixed(decimals);
+            el.textContent = (decimals > 0 ? v : Math.round(target * eased)) + suffix;
+            if (t < 1) requestAnimationFrame(tick); else el.textContent = orig;
+          }
+          requestAnimationFrame(tick);
+        });
+      }
+
       // ───────────────── Live FIFA card ─────────────────
+      const tickerLogo = "./assets/defiant-sports-logo.jpeg";
+
       function renderLiveCard() {
         const items = state.liveItems.length
           ? state.liveItems.slice(0, 12)
           : [
-              { source: "FIFA", title: "Awaiting live source sync — refresh to query verified endpoints" },
-              { source: "CDC",  title: "Travel notices feed standing by" },
-              { source: "FIFA", title: "Tournament facts endpoint listed" },
-              { source: "FIFA", title: "Teams endpoint listed" }
+              { source: "FIFA",  title: "Opening match June 11, 2026 · Estadio Azteca, Mexico City" },
+              { source: "FIFA",  title: "Final on July 19, 2026 · MetLife Stadium, NY/NJ" },
+              { source: "FIFA",  title: "48 teams · 16 host cities · USA, Canada, Mexico" },
+              { source: "FIFA",  title: "104 matches over 39 days — largest World Cup ever" },
+              { source: "FIFA",  title: "Round of 32 added for the new 48-team format" },
+              { source: "FIFA",  title: "Atlanta and Dallas confirmed as semi-final venues" },
+              { source: "FIFA",  title: "Miami selected for the third-place match" },
+              { source: "FIFA",  title: "Vancouver and Toronto debut as Canadian World Cup hosts" },
+              { source: "CDC",   title: "Travel-health advisories active for all three host nations" },
+              { source: "FIFA",  title: "Fan ID enrollment open across host-city kiosks" }
             ];
-        const tickerHtml = items.concat(items).map(i => `
-          <span class="ticker-item">
-            <span class="src">${escapeHtml(i.source || "FEED")}</span>
-            <span>${escapeHtml(clean(i.title))}</span>
-          </span>
-          <span class="sep">◆</span>
-        `).join("");
+        const tickerHtml = items.concat(items).map((i, idx) => {
+          const withLogo = idx % 4 === 0;
+          const logoImg = withLogo
+            ? `<img class="ticker-logo" src="${tickerLogo}" alt="Defiant Sports logo" loading="eager" />`
+            : "";
+          return `
+            <span class="ticker-item${withLogo ? " with-logo" : ""}">
+              ${logoImg}
+              <span class="src">${escapeHtml(i.source || "FEED")}</span>
+              <span>${escapeHtml(clean(i.title))}</span>
+            </span>
+            <span class="sep">◆</span>
+          `;
+        }).join("");
 
         const sources = state.liveSources.length ? state.liveSources : [
           { name: "FIFA Fixtures",    status: "syncing", latencyMs: 0 },
@@ -1165,23 +1219,65 @@
       }
 
       function renderStadiums() {
+        const q = state.stadiumQuery.toLowerCase();
+        const { key, dir } = state.stadiumSort;
+        const filtered = stadiums.filter(s =>
+          !q || s.city.toLowerCase().includes(q) || s.country.toLowerCase().includes(q)
+            || s.venue.toLowerCase().includes(q) || s.role.toLowerCase().includes(q)
+        );
+        const sorted = filtered.slice().sort((a, b) => {
+          const av = a[key], bv = b[key];
+          const cmp = typeof av === "number" ? av - bv : String(av).localeCompare(String(bv));
+          return dir === "asc" ? cmp : -cmp;
+        });
+        const arrow = (k) => key === k ? (dir === "asc" ? " ↑" : " ↓") : "";
         $("#stadiums").innerHTML = `
           ${renderKpis()}
           <div class="fill">
             <div class="card">
-              <div class="card-head"><h3>Stadium Register</h3><span class="meta">${stadiums.length} venues</span></div>
+              <div class="card-head">
+                <h3>Stadium Register</h3>
+                <div style="display:flex; gap:8px; align-items:center">
+                  <input class="input" id="stadiumSearch" type="search" placeholder="Search city, venue, role…"
+                    value="${escapeHtml(state.stadiumQuery)}"
+                    style="height:30px; padding:0 10px; border-radius:8px; border:1px solid var(--line); background:var(--white); font-size:12px; min-width:220px"
+                    autocomplete="off" />
+                  <span class="meta">${sorted.length}/${stadiums.length} venues</span>
+                </div>
+              </div>
               <div class="card-body flush"><div class="table-wrap">
                 <table>
-                  <thead><tr><th>City</th><th>Country</th><th>Venue</th><th>Capacity</th><th>Role</th></tr></thead>
+                  <thead><tr>
+                    <th data-sort="city" style="cursor:pointer">City${arrow("city")}</th>
+                    <th data-sort="country" style="cursor:pointer">Country${arrow("country")}</th>
+                    <th data-sort="venue" style="cursor:pointer">Venue${arrow("venue")}</th>
+                    <th data-sort="cap" style="cursor:pointer">Capacity${arrow("cap")}</th>
+                    <th data-sort="role" style="cursor:pointer">Role${arrow("role")}</th>
+                  </tr></thead>
                   <tbody>
-                    ${stadiums.map(s => `
-                      <tr><td><strong>${s.city}</strong></td><td>${s.country}</td><td>${s.venue}</td><td style="font-family:var(--mono)">${s.cap.toLocaleString()}</td><td>${s.role}</td></tr>
+                    ${sorted.map(s => `
+                      <tr data-focus-city="${escapeHtml(s.city)}" style="cursor:pointer">
+                        <td><strong>${s.city}</strong></td>
+                        <td>${s.country}</td>
+                        <td>${s.venue}</td>
+                        <td style="font-family:var(--mono)">${s.cap.toLocaleString()}</td>
+                        <td>${s.role}</td>
+                      </tr>
                     `).join("")}
+                    ${sorted.length === 0 ? `<tr><td colspan="5" style="text-align:center; color:var(--ink-3); padding:24px">No venues match "${escapeHtml(state.stadiumQuery)}"</td></tr>` : ""}
                   </tbody>
                 </table>
               </div></div>
             </div>
           </div>`;
+        const search = $("#stadiumSearch");
+        if (search) {
+          search.addEventListener("input", (e) => {
+            state.stadiumQuery = e.target.value;
+            renderStadiums();
+            const s = $("#stadiumSearch"); if (s) { s.focus(); s.setSelectionRange(s.value.length, s.value.length); }
+          });
+        }
       }
 
       function renderGrants() {
@@ -1274,7 +1370,7 @@
       function renderYouth() {
         $("#youth").innerHTML = `
           ${renderKpis()}
-          <div class="fill grid-3">
+      <div class="fill" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 360px)); gap:12px; justify-content:start; align-content:start;">
             ${simpleCard("World Cup Access", "Youth from different cultural backgrounds receive soccer learning, match-day context, and safe fan experiences.")}
             ${simpleCard("Futsal", "Compact tournaments for gyms, courts, mini-pitches, and community centers.")}
             ${simpleCard("Mentor Network", "Coaches, translators, nonprofits, safety leads, and city partners operating together.")}
@@ -1310,22 +1406,38 @@
       }
 
       function renderBracket() {
-        $("#bracket").innerHTML = `
-          ${renderKpis()}
-          <div class="fill">
-            <div class="card">
-              <div class="card-head"><h3>Bracket Framework</h3><span class="meta">FIFA 2026 · 48 teams</span></div>
-              <div class="card-body flush"><div class="table-wrap">
-                <table>
-                  <thead><tr><th>Stage</th><th>Format</th><th>Notes</th><th>Status</th><th>Source</th></tr></thead>
-                  <tbody>
-                    ${bracketRows.map(r => `<tr><td><strong>${r[0]}</strong></td><td>${r[1]}</td><td>${r[2]}</td><td><span class="pill ${r[3].toLowerCase().includes("confirm")?"ok":"warn"} dot">${r[3]}</span></td><td>${r[4]}</td></tr>`).join("")}
-                  </tbody>
-                </table>
-              </div></div>
-            </div>
-          </div>`;
-      }
+  $("#bracket").innerHTML = `
+    ${renderKpis()}
+    <div class="fill" style="overflow:auto">
+      <div class="card">
+        <div class="card-head"><h3>FIFA World Cup 2026 — Bracket</h3><span class="meta">Jun 11 – Jul 19, 2026 · 48 teams · 104 matches · 16 host cities</span></div>
+        <div class="card-body">
+          <p class="lede"><strong>Format:</strong> 12 groups of 4 → top 2 of each group + 8 best third-placed teams advance to the Round of 32 → R16 → QF → SF → 3rd-place match → Final. Hosts <strong>Canada, Mexico, USA</strong> qualify automatically.</p>
+          <p class="lede" style="margin-top:6px"><strong>Opener:</strong> Mexico vs TBD — Estadio Azteca, Mexico City — Jun 11, 2026 · <strong>Final:</strong> MetLife Stadium, New York/New Jersey — Jul 19, 2026</p>
+          <h4 style="margin:18px 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)">Group Stage — 12 Groups of 4</h4>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:10px;">
+            ${[
+              ["A","Mexico (host)"],["B","Canada (host)"],["C","TBD"],["D","USA (host)"],
+              ["E","TBD"],["F","TBD"],["G","TBD"],["H","TBD"],
+              ["I","TBD"],["J","TBD"],["K","TBD"],["L","TBD"]
+            ].map(g => `<div style="border:1px solid var(--line); border-radius:10px; padding:8px 10px; background:var(--surface)"><strong>Group ${g[0]}</strong><ol style="margin:6px 0 0; padding-left:18px; font-size:12px; color:var(--ink-2)"><li>${g[1]}</li><li>TBD</li><li>TBD</li><li>TBD</li></ol></div>`).join("")}
+          </div>
+          <h4 style="margin:18px 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)">Knockout Stage</h4>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:10px;">
+            ${[
+              ["Round of 32","32 teams · first knockout"],
+              ["Round of 16","16 teams"],
+              ["Quarter-finals","8 teams"],
+              ["Semi-finals","Jul 14 Dallas · Jul 15 Atlanta"],
+              ["3rd-place","Jul 18 · Miami"],
+              ["Final","Jul 19 · MetLife (NY/NJ)"]
+            ].map(r => `<div style="border:1px solid var(--line); border-radius:10px; padding:8px 10px; background:var(--surface)"><strong>${r[0]}</strong><div style="font-size:11.5px; color:var(--ink-3); margin-top:4px">${r[1]}</div></div>`).join("")}
+          </div>
+          <h4 style="margin:18px 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)">Host Cities (16)</h4>
+          <p class="lede"><strong>Mexico:</strong> Mexico City (Estadio Azteca), Guadalajara, Monterrey · <strong>Canada:</strong> Toronto, Vancouver · <strong>USA:</strong> Atlanta, Boston, Dallas, Houston, Kansas City, Los Angeles, Miami, New York/New Jersey, Philadelphia, San Francisco Bay Area, Seattle</p>
+        </div>
+      </div>
+    </div>`;      }
 
       function simpleCard(title, copy) {
         return `
@@ -1374,7 +1486,10 @@
         $("#liveLabel").textContent = isLive ? "Live · streaming" : `Live · ${state.live}`;
         $("#footPing").classList.toggle("live", isLive);
 
-        requestAnimationFrame(initVisibleMaps);
+        requestAnimationFrame(() => {
+          initVisibleMaps();
+          animateCountUps();
+        });
       }
 
       function initVisibleMaps() {
@@ -1479,6 +1594,28 @@
           renderActive();
           return;
         }
+        const sortHeader = e.target.closest("th[data-sort]");
+        if (sortHeader) {
+          const k = sortHeader.dataset.sort;
+          if (state.stadiumSort.key === k) {
+            state.stadiumSort.dir = state.stadiumSort.dir === "asc" ? "desc" : "asc";
+          } else {
+            state.stadiumSort = { key: k, dir: k === "cap" ? "desc" : "asc" };
+          }
+          renderStadiums();
+          return;
+        }
+        const focusRow = e.target.closest("[data-focus-city]");
+        if (focusRow) {
+          const city = focusRow.dataset.focusCity;
+          if (stadiums.some(s => s.city === city)) {
+            state.city = city;
+            state.view = "map";
+            renderActive();
+            toast(`Focused ${city}`);
+          }
+          return;
+        }
         const openCity = e.target.closest("[data-open-city]");
         if (openCity) {
           const s = stadiums.find(x => x.city === openCity.dataset.openCity);
@@ -1501,7 +1638,7 @@
 
       document.addEventListener("keydown", (e) => {
         if (e.target.matches("input, select, textarea")) return;
-        const map = { "1":"overview","2":"live","3":"map","4":"stadiums","5":"grants","6":"business","7":"transport","8":"safety","9":"marathon","0":"youth" };
+        const map = { "1":"overview","2":"live","3":"map","4":"stadiums","5":"transport","6":"safety","7":"youth","8":"bracket" };
         if (map[e.key]) { state.view = map[e.key]; renderActive(); }
         if (e.key === "Escape") $("#modal").classList.remove("open");
       });

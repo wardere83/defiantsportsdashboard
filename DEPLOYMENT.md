@@ -1,33 +1,29 @@
-# GitHub Deployment Guide
+# Deployment Guide
 
 ## Recommended setup
 
-Use GitHub as the source repository, then connect the repository to a Node.js deployment platform.
+Use GitHub as the source of truth and connect the repository to a Node.js
+deployment platform. The app requires Node 20+ because `server.js` powers
+the live API endpoints used by the dashboard.
 
-The app requires Node 20 or newer because `server.js` powers the live endpoints used by the dashboard.
-
-## Commands
-
-Build/start commands:
+## Build / start commands
 
 ```bash
 npm install
 npm start
 ```
 
-Default port:
+Default port: `3000`. Most hosts inject a `PORT` environment variable —
+the server reads it automatically.
 
-```text
-3000
-```
+Optional configuration:
 
-Most hosts inject a `PORT` environment variable. The server automatically uses it.
+| Env var         | Default     | Notes                                       |
+| --------------- | ----------- | ------------------------------------------- |
+| `PORT`          | `3000`      | Listening port.                             |
+| `CACHE_TTL_MS`  | `300000`    | TTL for live + grant feed caches (5 min).   |
 
-## GitHub repository setup
-
-1. Create a GitHub repository.
-2. Upload all project files into the repository root.
-3. Confirm this structure:
+## Repository structure
 
 ```text
 /
@@ -35,41 +31,64 @@ Most hosts inject a `PORT` environment variable. The server automatically uses i
   package-lock.json
   server.js
   README.md
+  DEPLOYMENT.md
+  index.html                       # static preview copy
+  assets/defiant-sports-logo.jpeg  # source logo
   docs/
-    DEPLOYMENT.md
     LIVE_SOURCES.md
   public/
-    index.html
+    index.html                     # served by Express
     assets/
-      defiant-sports-logo.jpeg
+      defiant-sports-logo.jpeg     # mirrored for /public-rooted requests
 ```
-
-4. Commit and push to `main`.
 
 ## Deploying from GitHub
 
-Connect the GitHub repo to a Node-capable platform and use:
+Connect the repo to any Node-capable host and use:
 
 ```text
 Build command: npm install
 Start command: npm start
 ```
 
-The platform should expose the app on its assigned `PORT`; the included server reads `process.env.PORT` automatically.
+The platform exposes the app on its assigned port; the server reads
+`process.env.PORT` automatically.
+
+## API surface
+
+Once deployed, the dashboard hits these endpoints from the browser:
+
+- `GET /api/health` — heartbeat, version, uptime, cache status.
+- `GET /api/host-cities` — verified 16-city register.
+- `GET /api/impact` — computed impact metrics.
+- `GET /api/live-feeds` — real-time FIFA + CDC source check.
+- `GET /api/grant-feeds` — real-time grant and program endpoint check.
+
+Smoke-test after deploy:
+
+```bash
+curl https://your-host/api/health
+curl https://your-host/api/impact
+curl https://your-host/api/live-feeds | head -200
+```
 
 ## Domain mapping
 
-Point these domains to the deployed Node app:
-
 ```text
-defiantsports.io
-defiantsports.com
+defiantsports.io       (primary)
+defiantsports.com      (mirror)
 ```
 
-Use your deployment platform’s custom-domain instructions, then update DNS records where your domains are managed.
+Use your platform’s custom-domain instructions, then update DNS records
+where your domains are managed.
 
 ## Static-only hosting limitation
 
-GitHub Pages cannot run `server.js`. The dashboard page will still display, but live API sections require a Node service.
+GitHub Pages cannot run `server.js`. The dashboard page will still display
+(and the static UI is fully functional in degraded "static" mode), but the
+live API sections will report "unavailable" because the `/api/*` routes
+won't exist.
 
-For static-only GitHub Pages, you would need to move `/api/live-feeds` and `/api/grant-feeds` to a separate backend or serverless service and update the dashboard to call that service.
+For a static-only deployment, move the API endpoints to a serverless
+backend (Cloudflare Workers, Vercel Functions, AWS Lambda) and update the
+`fetch()` URLs in `public/index.html` to point at it.
