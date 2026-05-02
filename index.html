@@ -1553,7 +1553,10 @@
         { local: "./assets/pogba/travel.jpg",         src: "https://picsum.photos/seed/pogba-travel/640/480",     alt: "Pogba Academy team boarding flight" },
         { local: "./assets/pogba/first-team.jpg",     src: "https://picsum.photos/seed/pogba-first-team/640/480", alt: "Pogba Academy first team in red kits" },
         { local: "./assets/pogba/elite-athletes.jpg", src: "https://picsum.photos/seed/pogba-elite/640/480",      alt: "Pogba brothers" },
-        { local: "./assets/pogba/mentorship.jpg",     src: "https://picsum.photos/seed/pogba-mentorship/640/480", alt: "Pogba Academy mentorship moments" },
+        // Mentorship collage: Mathias' faces sit in the upper portion of the
+        // image, so bias the focal point upward to keep them visible at every
+        // breakpoint (the wider tile aspects would otherwise crop them out).
+        { local: "./assets/pogba/mentorship.jpg",     src: "https://picsum.photos/seed/pogba-mentorship/640/480", alt: "Mathias Pogba mentoring youth players", objectPosition: "center 22%" },
         { local: "./assets/pogba/mundial.jpg",        src: "https://picsum.photos/seed/pogba-mundial/640/480",    alt: "Pogba Academy at Mundial de Clubes 2025" },
         { local: "./assets/pogba/mark.png",           src: "https://picsum.photos/seed/pogba-mark/640/480",       alt: "Pogba Academy mark" }
       ];
@@ -1561,12 +1564,14 @@
       function renderPogbaStrip() {
         return `
           <div class="pogba-strip">
-            ${POGBA_TILES.map(t => `
+            ${POGBA_TILES.map(t => {
+              const style = t.objectPosition ? ` style="object-position: ${escapeHtml(t.objectPosition)}"` : "";
+              return `
               <div class="pogba-tile">
-                <img src="${t.local}" alt="${escapeHtml(t.alt)}" loading="lazy"
+                <img src="${t.local}" alt="${escapeHtml(t.alt)}" loading="lazy"${style}
                      onerror="this.onerror=null; this.src='${t.src}';" />
-              </div>
-            `).join("")}
+              </div>`;
+            }).join("")}
           </div>`;
       }
 
