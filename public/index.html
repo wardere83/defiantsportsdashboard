@@ -54,7 +54,8 @@
         line-height: 1.45;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: auto;
       }
       button, input, select { font: inherit; color: inherit; }
       button { cursor: pointer; }
@@ -64,11 +65,16 @@
       .app {
         display: grid;
         grid-template-columns: var(--rail) minmax(0, 1fr);
-        height: 100vh;
-        height: 100dvh;
+        min-height: 100vh;
+        min-height: 100dvh;
       }
 
       .rail {
+        position: sticky;
+        top: 0;
+        align-self: start;
+        height: 100vh;
+        height: 100dvh;
         display: grid;
         grid-template-rows: auto 1fr auto;
         background: var(--white);
@@ -170,20 +176,23 @@
 
       /* ─────────── Top bar ─────────── */
       .content {
-        display: grid;
-        grid-template-rows: var(--topbar) minmax(0, 1fr);
+        display: flex;
+        flex-direction: column;
         min-width: 0;
-        min-height: 0;
         background: var(--bg);
       }
       .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        height: var(--topbar);
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 16px;
         padding: 0 22px;
         border-bottom: 1px solid var(--line);
-        background: rgba(255,255,255,.72);
+        background: rgba(255,255,255,.85);
         backdrop-filter: saturate(180%) blur(14px);
         -webkit-backdrop-filter: saturate(180%) blur(14px);
       }
@@ -256,27 +265,26 @@
 
       /* ─────────── Main view ─────────── */
       .view {
-        min-height: 0;
         min-width: 0;
-        padding: 14px 18px 16px;
-        overflow: hidden;
+        padding: 14px 18px 24px;
       }
-      .section { display: none; height: 100%; min-height: 0; min-width: 0; }
+      .section { display: none; min-width: 0; }
       .section.active { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-      .section .fill { flex: 1 1 auto; min-height: 0; min-width: 0; }
-      .section .fill > .card { height: 100%; }
+      .section .fill { min-width: 0; }
 
-      /* Overview = master grid that fits in one screen */
+      /* Overview = master grid; rows size to content but the map area gets a sensible min-height */
       #overview.section.active {
         display: grid;
         grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
-        grid-template-rows: auto auto minmax(0, 1fr);
+        grid-template-rows: auto auto auto;
         grid-template-areas:
           "kpi    kpi"
           "live   live"
           "map    rail";
         gap: 12px;
       }
+      .grid-map { min-height: 480px; }
+      .grid-rail { min-height: 480px; }
 
       .grid-kpi { grid-area: kpi; }
       .grid-live { grid-area: live; }
@@ -299,6 +307,8 @@
         align-items: center;
         justify-content: space-between;
         gap: 10px;
+        flex-wrap: wrap;
+        row-gap: 4px;
         padding: 11px 14px;
         border-bottom: 1px solid var(--line);
       }
@@ -309,11 +319,13 @@
         letter-spacing: 0.06em;
         text-transform: uppercase;
         color: var(--ink-2);
+        min-width: 0;
       }
       .card-head .meta {
         font-size: 11px;
         color: var(--ink-3);
         letter-spacing: 0.02em;
+        min-width: 0;
       }
       .card-body {
         padding: 12px 14px;
@@ -406,13 +418,17 @@
         align-items: center;
         justify-content: space-between;
         gap: 12px;
+        flex-wrap: wrap;
+        row-gap: 6px;
         padding: 10px 14px;
         border-bottom: 1px solid rgba(255,255,255,.08);
         position: relative;
       }
       .live-head .title {
         display: flex; align-items: center; gap: 10px;
+        flex-wrap: wrap; row-gap: 4px;
         font-weight: 700; letter-spacing: -0.01em; font-size: 13px;
+        min-width: 0;
       }
       .live-head .title .badge {
         display: inline-flex; align-items: center; gap: 6px;
@@ -665,6 +681,71 @@
       .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
       .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 
+      /* Venue cards (Host-Map / Venues view) */
+      .venue-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 10px;
+      }
+      .venue-card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        padding: 14px 14px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        cursor: pointer;
+        transition: transform .15s ease, box-shadow .2s ease, border-color .15s ease;
+      }
+      .venue-card:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--line-2);
+      }
+      .venue-card .country {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .venue-card .city {
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+        line-height: 1.18;
+      }
+      .venue-card .venue {
+        font-size: 12px;
+        color: var(--ink-2);
+        font-weight: 500;
+        line-height: 1.35;
+      }
+      .venue-card .cap {
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid var(--line);
+        font-family: var(--mono);
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--ink);
+        letter-spacing: -0.01em;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+      }
+      .venue-card .cap .cap-lbl {
+        font-family: var(--font);
+        font-weight: 600;
+        font-size: 10px;
+        letter-spacing: 0.10em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+
       .lede {
         font-size: 12.5px;
         color: var(--ink-2);
@@ -890,7 +971,7 @@
       const views = [
         ["overview",  "Overview",   "1", "▦"],
         ["live",      "Live FIFA",  "2", "◉"],
-        ["map",       "Host Map",   "3", "◇"],
+        ["map",       "Venues",     "3", "◇"],
         ["stadiums",  "Stadiums",   "4", "⌂"],
         ["transport", "Transport",  "7", "⇄"],
         ["safety",    "Safety",     "8", "△"],
@@ -1007,7 +1088,7 @@
             <div class="kpi"><span class="label">Host Cities</span><span class="value" data-count="16">16</span><span class="sub">USA · CAN · MEX</span></div>
             <div class="kpi"><span class="label">Total Capacity</span><span class="value" data-count="${(totalCap/1e6).toFixed(2)}" data-suffix="M">${(totalCap/1e6).toFixed(2)}M</span><span class="sub"><span class="delta">+${stadiums.length} venues</span></span></div>
             <div class="kpi"><span class="label">Impact</span><span class="value" data-count="${projectedReach}" data-suffix="M+">${projectedReach}M+</span><span class="sub">Projected fan reach · 104 matches</span></div>
-            <div class="kpi countdown-kpi"><span class="label">FIFA 2026 Kickoff</span><span class="value" id="cdValue">--</span><span class="sub" id="cdSub">Jun 11, 2026 · CDMX</span></div>
+            <div class="kpi countdown-kpi"><span class="label">FIFA World Cup 2026 Countdown</span><span class="value" id="cdValue">--</span><span class="sub" id="cdSub">Kickoff · Jun 11, 2026 · CDMX</span></div>
             <div class="kpi invert"><span class="label">FIFA 2026</span><span class="value" data-count="48">48</span><span class="sub">Teams · 104 matches</span></div>
           </div>`;
       }
@@ -1255,32 +1336,34 @@
       }
 
       function renderMapSection() {
-        const focus = stadiums.find(s => s.city === state.city) || stadiums[0];
+        const sorted = stadiums.slice().sort((a, b) => a.city.localeCompare(b.city));
+        const cards = sorted.map(s => `
+          <div class="venue-card" data-focus-city="${escapeHtml(s.city)}">
+            <span class="country">${escapeHtml(s.country)}</span>
+            <span class="city">${escapeHtml(s.city)}</span>
+            <span class="venue">${escapeHtml(s.venue)}</span>
+            <span class="cap"><span class="cap-lbl">Capacity</span><span>${s.cap.toLocaleString()}</span></span>
+          </div>`).join("");
         $("#map").innerHTML = `
           ${renderKpis()}
-          <div class="fill" style="display:grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr); gap:12px;">
-            ${renderMapCard("detail")}
-            <div class="card">
-              <div class="card-head"><h3>${focus.city}</h3><span class="meta">${focus.country}</span></div>
-              <div class="card-body">
-                <div class="list">
-                  ${listRow("Venue", `<strong>${focus.venue}</strong>`)}
-                  ${listRow("Capacity", focus.cap.toLocaleString())}
-                  ${listRow("Role", focus.role)}
-                  ${listRow("Coordinates", `<span style="font-family:var(--mono); font-size:11px">${focus.lat.toFixed(2)}, ${focus.lng.toFixed(2)}</span>`)}
-                </div>
-                <button class="btn dark" data-open-city="${focus.city}" style="margin-top:14px; width:100%">Open city brief →</button>
-              </div>
+          <div class="card">
+            <div class="card-head">
+              <h3>Host Venues</h3>
+              <span class="meta">${stadiums.length} venues · USA · Canada · Mexico</span>
+            </div>
+            <div class="card-body">
+              <div class="venue-grid">${cards}</div>
             </div>
           </div>`;
       }
 
       function renderStadiums() {
         const q = state.stadiumQuery.toLowerCase();
+        if (state.stadiumSort.key === "role") state.stadiumSort = { key: "cap", dir: "desc" };
         const { key, dir } = state.stadiumSort;
         const filtered = stadiums.filter(s =>
           !q || s.city.toLowerCase().includes(q) || s.country.toLowerCase().includes(q)
-            || s.venue.toLowerCase().includes(q) || s.role.toLowerCase().includes(q)
+            || s.venue.toLowerCase().includes(q)
         );
         const sorted = filtered.slice().sort((a, b) => {
           const av = a[key], bv = b[key];
@@ -1294,8 +1377,8 @@
             <div class="card">
               <div class="card-head">
                 <h3>Stadium Register</h3>
-                <div style="display:flex; gap:8px; align-items:center">
-                  <input class="input" id="stadiumSearch" type="search" placeholder="Search city, venue, role…"
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+                  <input class="input" id="stadiumSearch" type="search" placeholder="Search city, country, venue…"
                     value="${escapeHtml(state.stadiumQuery)}"
                     style="height:30px; padding:0 10px; border-radius:8px; border:1px solid var(--line); background:var(--white); font-size:12px; min-width:220px"
                     autocomplete="off" />
@@ -1309,7 +1392,6 @@
                     <th data-sort="country" style="cursor:pointer">Country${arrow("country")}</th>
                     <th data-sort="venue" style="cursor:pointer">Venue${arrow("venue")}</th>
                     <th data-sort="cap" style="cursor:pointer">Capacity${arrow("cap")}</th>
-                    <th data-sort="role" style="cursor:pointer">Role${arrow("role")}</th>
                   </tr></thead>
                   <tbody>
                     ${sorted.map(s => `
@@ -1318,10 +1400,9 @@
                         <td>${s.country}</td>
                         <td>${s.venue}</td>
                         <td style="font-family:var(--mono)">${s.cap.toLocaleString()}</td>
-                        <td>${s.role}</td>
                       </tr>
                     `).join("")}
-                    ${sorted.length === 0 ? `<tr><td colspan="5" style="text-align:center; color:var(--ink-3); padding:24px">No venues match "${escapeHtml(state.stadiumQuery)}"</td></tr>` : ""}
+                    ${sorted.length === 0 ? `<tr><td colspan="4" style="text-align:center; color:var(--ink-3); padding:24px">No venues match "${escapeHtml(state.stadiumQuery)}"</td></tr>` : ""}
                   </tbody>
                 </table>
               </div></div>
@@ -1512,7 +1593,7 @@
         const crumbs = {
           overview: "Real-time host-city intelligence · FIFA World Cup 2026",
           live: "Verified FIFA · CDC · partner endpoints · streaming when reachable",
-          map: "Interactive 16-city host map · click pins for detail",
+          map: "All 16 host venues · click a card to focus that city on the overview map",
           stadiums: "Verified venue register · 16 host stadiums",
           grants: "Open grants & funding pathways · live status",
           business: "Local-market activation strategy",
@@ -1683,7 +1764,6 @@
                 ${listRow("Venue", `<strong>${s.venue}</strong>`)}
                 ${listRow("Country", s.country)}
                 ${listRow("Capacity", s.cap.toLocaleString())}
-                ${listRow("Role", s.role)}
                 ${listRow("Coordinates", `<span style="font-family:var(--mono)">${s.lat.toFixed(3)}, ${s.lng.toFixed(3)}</span>`)}
                 ${listRow("Operational focus", "Transit · safety · business · language access")}
               </div>`);

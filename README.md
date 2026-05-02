@@ -1,28 +1,32 @@
 # Defiant Sports — World Cup 2026 Operations Dashboard
 
-Single-viewport, Apple-style operations dashboard for FIFA World Cup 2026.
-Built for host-city stewardship: live FIFA + CDC source streaming, 16-city
-interactive map, stadium intelligence, transit advisories, safety and
-fan stewardship, youth pipeline, bracket framework, and a venture-grade
+Apple-style operations dashboard for FIFA World Cup 2026 with a sticky
+sidebar/topbar and a scrollable canvas. Built for host-city stewardship:
+live FIFA + CDC source streaming, 16-city interactive map, host-venue
+register, stadium intelligence, transit advisories, safety and fan
+stewardship, youth pipeline, bracket framework, and a venture-grade
 Impact view.
 
 ## Highlights
 
-- **Single-viewport shell** that fits every section in one screen on
-  desktop, tablet, and mobile (no outer scroll; long lists scroll inside
-  their own cards).
-- **FIFA 2026 Kickoff KPI** — live-ticking countdown (Days · HH:MM:SS)
-  to the opening match (Estadio Azteca, Mexico City, Jun 11, 2026 ·
-  12:00 CDMX / 18:00 UTC). Auto-switches to "Day N / 39" while the
-  tournament is in progress and "Concluded" after the Final
+- **Sticky shell, scrollable canvas** — the sidebar and topbar stay
+  pinned while the main canvas scrolls vertically, so every map detail
+  and section below the fold is reachable on any viewport.
+- **FIFA World Cup 2026 Countdown KPI** — live-ticking countdown
+  (Days · HH:MM:SS) to the opening match (Estadio Azteca, Mexico City,
+  Jun 11, 2026 · 12:00 CDMX / 18:00 UTC). Auto-switches to "Day N / 39"
+  while the tournament is in progress and "Concluded" after the Final
   (Jul 19, 2026 · MetLife · NY/NJ).
 - **Live FIFA stream** — animated source ticker with the Defiant Sports
   logo inlined every 4th item, per-source latency cells, pulsing live
   indicator, and a dedicated **Live FIFA** tab with verified-source
   status and headlines table. Fallback content is factual FIFA 2026
   info — never fabricated live results.
-- **Interactive stadium register** — search across city/venue/role, sort
-  any column, click a row to focus that city on the map.
+- **Venues view** — every host venue rendered as an aligned compact
+  card grid (city, country, venue name, capacity). Click a card to
+  focus that city on the overview map.
+- **Interactive stadium register** — search across city/country/venue,
+  sort any column, click a row to focus that city on the overview map.
 - **Animated KPIs** — count-up on render, including the **Impact**
   metric (projected fan reach across the tournament).
 - **Bracket card** — group-stage cards, knockout overview, and host-city
@@ -30,8 +34,8 @@ Impact view.
 - **Apple-style aesthetic** — Inter + JetBrains Mono, restrained green
   accents on a black-and-white base, subtle elevation, hover lift,
   keyboard shortcuts, toast feedback, modal city briefs.
-- **Map** — Leaflet + Carto light tiles with custom markers and a
-  selected-state ring.
+- **Overview map** — Leaflet + Carto light tiles with custom markers
+  and a selected-state ring (kept on the Overview view).
 
 ## What this package includes
 
@@ -82,7 +86,7 @@ Aligned with the visible sidebar tabs.
 | ----- | ----------- |
 | `1`   | Overview    |
 | `2`   | Live FIFA   |
-| `3`   | Host Map    |
+| `3`   | Venues      |
 | `4`   | Stadiums    |
 | `5`   | Transport   |
 | `6`   | Safety      |
