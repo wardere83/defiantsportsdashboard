@@ -462,6 +462,23 @@
         padding-left: 10px;
       }
       .ticker-item .sep { color: rgba(255,255,255,.24); }
+
+      /* Branded mark interleaved into the ticker */
+      .ticker-item.with-logo { gap: 12px; }
+      .ticker-item.with-logo .src { padding-left: 12px; }
+      .ticker-logo {
+        display: block;
+        height: 28px;
+        width: auto;
+        max-width: 96px;
+        object-fit: contain;
+        flex: 0 0 auto;
+        border-radius: 4px;
+        background: #fff;
+        padding: 2px 5px;
+        box-shadow: 0 1px 2px rgba(0,0,0,.35);
+      }
+
       @keyframes marquee {
         from { transform: translateX(0); }
         to { transform: translateX(-50%); }
@@ -692,6 +709,7 @@
         }
         .live-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .live-cell:nth-child(2) { border-right: 0; }
+        .ticker-logo { height: 24px; max-width: 84px; }
       }
 
       @media (max-width: 980px) {
@@ -760,6 +778,8 @@
         .kpi .value { font-size: 20px; }
         .live-grid { grid-template-columns: 1fr 1fr; }
         .topbar h2 { font-size: 14px; }
+        .ticker-logo { height: 20px; max-width: 72px; padding: 1px 4px; }
+        .ticker-item.with-logo { gap: 10px; }
       }
 
       /* Print */
@@ -996,22 +1016,37 @@
       }
 
       // ───────────────── Live FIFA card ─────────────────
+      const tickerLogo = "./assets/defiant-sports-logo.jpeg";
+
       function renderLiveCard() {
         const items = state.liveItems.length
           ? state.liveItems.slice(0, 12)
           : [
-              { source: "FIFA", title: "Awaiting live source sync — refresh to query verified endpoints" },
-              { source: "CDC",  title: "Travel notices feed standing by" },
-              { source: "FIFA", title: "Tournament facts endpoint listed" },
-              { source: "FIFA", title: "Teams endpoint listed" }
+              { source: "FIFA",  title: "Opening match June 11, 2026 · Estadio Azteca, Mexico City" },
+              { source: "FIFA",  title: "Final on July 19, 2026 · MetLife Stadium, NY/NJ" },
+              { source: "FIFA",  title: "48 teams · 16 host cities · USA, Canada, Mexico" },
+              { source: "FIFA",  title: "104 matches over 39 days — largest World Cup ever" },
+              { source: "FIFA",  title: "Round of 32 added for the new 48-team format" },
+              { source: "FIFA",  title: "Atlanta and Dallas confirmed as semi-final venues" },
+              { source: "FIFA",  title: "Miami selected for the third-place match" },
+              { source: "FIFA",  title: "Vancouver and Toronto debut as Canadian World Cup hosts" },
+              { source: "CDC",   title: "Travel-health advisories active for all three host nations" },
+              { source: "FIFA",  title: "Fan ID enrollment open across host-city kiosks" }
             ];
-        const tickerHtml = items.concat(items).map(i => `
-          <span class="ticker-item">
-            <span class="src">${escapeHtml(i.source || "FEED")}</span>
-            <span>${escapeHtml(clean(i.title))}</span>
-          </span>
-          <span class="sep">◆</span>
-        `).join("");
+        const tickerHtml = items.concat(items).map((i, idx) => {
+          const withLogo = idx % 4 === 0;
+          const logoImg = withLogo
+            ? `<img class="ticker-logo" src="${tickerLogo}" alt="Defiant Sports logo" loading="eager" />`
+            : "";
+          return `
+            <span class="ticker-item${withLogo ? " with-logo" : ""}">
+              ${logoImg}
+              <span class="src">${escapeHtml(i.source || "FEED")}</span>
+              <span>${escapeHtml(clean(i.title))}</span>
+            </span>
+            <span class="sep">◆</span>
+          `;
+        }).join("");
 
         const sources = state.liveSources.length ? state.liveSources : [
           { name: "FIFA Fixtures",    status: "syncing", latencyMs: 0 },
