@@ -1638,7 +1638,7 @@
 
       document.addEventListener("keydown", (e) => {
         if (e.target.matches("input, select, textarea")) return;
-        const map = { "1":"overview","2":"live","3":"map","4":"stadiums","5":"grants","6":"business","7":"transport","8":"safety","9":"marathon","0":"youth" };
+        const map = { "1":"overview","2":"live","3":"map","4":"stadiums","5":"transport","6":"safety","7":"youth","8":"bracket" };
         if (map[e.key]) { state.view = map[e.key]; renderActive(); }
         if (e.key === "Escape") $("#modal").classList.remove("open");
       });
