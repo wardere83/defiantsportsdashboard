@@ -872,14 +872,9 @@
         ["live",      "Live FIFA",  "2", "◉"],
         ["map",       "Host Map",   "3", "◇"],
         ["stadiums",  "Stadiums",   "4", "⌂"],
-        ["grants",    "Grants",     "5", "□"],
-        ["business",  "Business",   "6", "▣"],
         ["transport", "Transport",  "7", "⇄"],
         ["safety",    "Safety",     "8", "△"],
-        ["marathon",  "Marathon",   "9", "◆"],
         ["youth",     "Youth",      "0", "○"],
-        ["records",   "Records",    "-", "♪"],
-        ["translate", "Translate",  "=", "文"],
         ["bracket",   "Bracket",    "[", "⌁"]
       ];
 
@@ -975,9 +970,7 @@
       function renderNav() {
         $("#nav").innerHTML = views.map(([id, label, key, glyph]) => `
           <button class="${state.view === id ? "active" : ""}" data-view="${id}" type="button">
-            <span class="glyph" aria-hidden="true">${glyph}</span>
             <span>${label}</span>
-            <span class="kbd">${key}</span>
           </button>
         `).join("");
       }
@@ -1377,7 +1370,7 @@
       function renderYouth() {
         $("#youth").innerHTML = `
           ${renderKpis()}
-          <div class="fill grid-3">
+      <div class="fill" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 360px)); gap:12px; justify-content:start; align-content:start;">
             ${simpleCard("World Cup Access", "Youth from different cultural backgrounds receive soccer learning, match-day context, and safe fan experiences.")}
             ${simpleCard("Futsal", "Compact tournaments for gyms, courts, mini-pitches, and community centers.")}
             ${simpleCard("Mentor Network", "Coaches, translators, nonprofits, safety leads, and city partners operating together.")}
@@ -1413,22 +1406,38 @@
       }
 
       function renderBracket() {
-        $("#bracket").innerHTML = `
-          ${renderKpis()}
-          <div class="fill">
-            <div class="card">
-              <div class="card-head"><h3>Bracket Framework</h3><span class="meta">FIFA 2026 · 48 teams</span></div>
-              <div class="card-body flush"><div class="table-wrap">
-                <table>
-                  <thead><tr><th>Stage</th><th>Format</th><th>Notes</th><th>Status</th><th>Source</th></tr></thead>
-                  <tbody>
-                    ${bracketRows.map(r => `<tr><td><strong>${r[0]}</strong></td><td>${r[1]}</td><td>${r[2]}</td><td><span class="pill ${r[3].toLowerCase().includes("confirm")?"ok":"warn"} dot">${r[3]}</span></td><td>${r[4]}</td></tr>`).join("")}
-                  </tbody>
-                </table>
-              </div></div>
-            </div>
-          </div>`;
-      }
+  $("#bracket").innerHTML = `
+    ${renderKpis()}
+    <div class="fill" style="overflow:auto">
+      <div class="card">
+        <div class="card-head"><h3>FIFA World Cup 2026 — Bracket</h3><span class="meta">Jun 11 – Jul 19, 2026 · 48 teams · 104 matches · 16 host cities</span></div>
+        <div class="card-body">
+          <p class="lede"><strong>Format:</strong> 12 groups of 4 → top 2 of each group + 8 best third-placed teams advance to the Round of 32 → R16 → QF → SF → 3rd-place match → Final. Hosts <strong>Canada, Mexico, USA</strong> qualify automatically.</p>
+          <p class="lede" style="margin-top:6px"><strong>Opener:</strong> Mexico vs TBD — Estadio Azteca, Mexico City — Jun 11, 2026 · <strong>Final:</strong> MetLife Stadium, New York/New Jersey — Jul 19, 2026</p>
+          <h4 style="margin:18px 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)">Group Stage — 12 Groups of 4</h4>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:10px;">
+            ${[
+              ["A","Mexico (host)"],["B","Canada (host)"],["C","TBD"],["D","USA (host)"],
+              ["E","TBD"],["F","TBD"],["G","TBD"],["H","TBD"],
+              ["I","TBD"],["J","TBD"],["K","TBD"],["L","TBD"]
+            ].map(g => `<div style="border:1px solid var(--line); border-radius:10px; padding:8px 10px; background:var(--surface)"><strong>Group ${g[0]}</strong><ol style="margin:6px 0 0; padding-left:18px; font-size:12px; color:var(--ink-2)"><li>${g[1]}</li><li>TBD</li><li>TBD</li><li>TBD</li></ol></div>`).join("")}
+          </div>
+          <h4 style="margin:18px 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)">Knockout Stage</h4>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:10px;">
+            ${[
+              ["Round of 32","32 teams · first knockout"],
+              ["Round of 16","16 teams"],
+              ["Quarter-finals","8 teams"],
+              ["Semi-finals","Jul 14 Dallas · Jul 15 Atlanta"],
+              ["3rd-place","Jul 18 · Miami"],
+              ["Final","Jul 19 · MetLife (NY/NJ)"]
+            ].map(r => `<div style="border:1px solid var(--line); border-radius:10px; padding:8px 10px; background:var(--surface)"><strong>${r[0]}</strong><div style="font-size:11.5px; color:var(--ink-3); margin-top:4px">${r[1]}</div></div>`).join("")}
+          </div>
+          <h4 style="margin:18px 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)">Host Cities (16)</h4>
+          <p class="lede"><strong>Mexico:</strong> Mexico City (Estadio Azteca), Guadalajara, Monterrey · <strong>Canada:</strong> Toronto, Vancouver · <strong>USA:</strong> Atlanta, Boston, Dallas, Houston, Kansas City, Los Angeles, Miami, New York/New Jersey, Philadelphia, San Francisco Bay Area, Seattle</p>
+        </div>
+      </div>
+    </div>`;      }
 
       function simpleCard(title, copy) {
         return `
