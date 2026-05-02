@@ -90,7 +90,7 @@ Aligned with the visible sidebar tabs.
 | `4`   | Stadiums    |
 | `5`   | Transport   |
 | `6`   | Safety      |
-| `7`   | Youth       |
+| `7`   | Pogba Academy |
 | `8`   | Bracket     |
 | `Esc` | Close modal |
 
