@@ -807,13 +807,31 @@
         .marathon-grid { grid-template-columns: 1fr; }
       }
 
-      /* Hide the Google Translate banner + spinner so the dashboard
-         stays clean while the rest of the page is translated. */
+      /* Suppress every translation-engine UI artifact so no third-party
+         branding, toolbar, banner, balloon, tooltip, or attribution
+         leaks into the dashboard. The translation itself still applies
+         to the page text. */
+      .goog-te-banner-frame,
       .goog-te-banner-frame.skiptranslate,
-      .goog-te-spinner-pos { display: none !important; }
-      body { top: 0 !important; }
-      .goog-tooltip, .goog-tooltip:hover { display: none !important; }
+      .goog-te-balloon-frame,
+      .goog-te-menu-frame,
+      .goog-te-spinner-pos,
+      .goog-te-ftab,
+      iframe.skiptranslate,
+      .skiptranslate iframe { display: none !important; visibility: hidden !important; }
+      .goog-te-gadget,
+      .goog-logo-link,
+      .goog-te-gadget-icon,
+      .goog-te-gadget span,
+      .goog-te-gadget a { display: none !important; visibility: hidden !important; height: 0 !important; }
+      .goog-tooltip,
+      .goog-tooltip:hover { display: none !important; }
       .goog-text-highlight { background: none !important; box-shadow: none !important; }
+      body { top: 0 !important; position: static !important; }
+      /* Keep the mount point alive (the widget needs it to initialise)
+         but pull anything it tries to inject directly into <body>
+         out of the visible flow. */
+      body > .skiptranslate { display: none !important; }
 
       /* Map */
       .map-wrap { flex: 1; min-height: 0; position: relative; }
@@ -1264,7 +1282,7 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <!-- Google Translate widget (hidden); the topbar language select drives it -->
+    <!-- Translation engine mount point (hidden); the topbar language select drives it -->
     <div id="google_translate_element" aria-hidden="true" style="position:absolute; left:-9999px; top:-9999px;"></div>
     <script>
       function googleTranslateElementInit() {
