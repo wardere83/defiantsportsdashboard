@@ -1382,7 +1382,7 @@
     </script>
     <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
     <script>
       // ───────────────── Data ─────────────────
       const views = [
@@ -2376,6 +2376,7 @@
           startNewsRotation();
           startMarathonQuoteRotator();
           startHeadlineRotation();
+          retranslateIfNeeded();
         });
       }
 
@@ -2588,13 +2589,35 @@
       // the translation across all dynamic content. Far more reliable
       // than dispatching a fake change event into Google's hidden combo.
       function readGoogtrans() {
-        const m = document.cookie.match(/(?:^|;\s*)googtrans=\/[a-z]+\/([a-z]+)/i);
+        // Match codes like "es", "fr", "ar", "ti", "so", "zh-TW", "tl"…
+        const m = document.cookie.match(/(?:^|;\s*)googtrans=\/[A-Za-z-]+\/([A-Za-z-]+)/);
         return m ? m[1] : "en";
+      }
+
+      // After every SPA render, if a non-English language is active,
+      // make sure the just-rendered DOM gets translated. Google's
+      // mutation observer normally handles this but the safety net is
+      // to dispatch a change on its hidden combo so the newly inserted
+      // nodes are flipped without user interaction.
+      function retranslateIfNeeded() {
+        const lang = readGoogtrans();
+        if (!lang || lang === "en") return;
+        let attempts = 0;
+        const tick = () => {
+          const goog = document.querySelector(".goog-te-combo");
+          if (goog) {
+            if (goog.value !== lang) goog.value = lang;
+            goog.dispatchEvent(new Event("change"));
+            return;
+          }
+          if (++attempts < 30) setTimeout(tick, 200);
+        };
+        tick();
       }
       function setGoogtrans(lang) {
         const host = location.hostname;
         const expires = new Date(Date.now() + 365 * 24 * 3600 * 1000).toUTCString();
-        const clear = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        const clear = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax;";
         // Clear any existing cookie on both / and .domain so we start clean
         document.cookie = clear;
         if (host && host !== "localhost") {
@@ -2602,7 +2625,7 @@
           document.cookie = clear + " domain=." + host + ";";
         }
         if (lang && lang !== "en") {
-          const value = "googtrans=/en/" + lang + "; expires=" + expires + "; path=/;";
+          const value = "googtrans=/en/" + lang + "; expires=" + expires + "; path=/; SameSite=Lax;";
           document.cookie = value;
           if (host && host !== "localhost") {
             document.cookie = value + " domain=" + host + ";";
@@ -2665,6 +2688,15 @@
       liveAutoRefreshTimer = setInterval(refreshLive, 5 * 60 * 1000);
       // Tick the FIFA 2026 countdown every second
       setInterval(updateCountdown, 1000);
+
+      // Leaflet is loaded with defer so it can race with the first
+      // renderActive(). When the window finishes loading (Leaflet is
+      // guaranteed available by then), re-init any visible map and
+      // re-trigger any pending translation pass.
+      window.addEventListener("load", () => {
+        if (window.L) initVisibleMaps();
+        retranslateIfNeeded();
+      });
     </script>
   </body>
 </html>
