@@ -51,6 +51,13 @@ Impact view.
   Beauty, FUBU), and **Marathon Mindset** (cultural stewardship
   cues). Curated context that ties the dashboard to the broader
   legacy of Black entrepreneurship in America.
+- **Branding** — dedicated tab pitching brand partnerships with the
+  Defiant Sports athlete roster: hero quote, "why athlete branding
+  works" 6-card grid, "what Defiant Sports brings" 6-card grid, a
+  movement section calling out social / systemic / industry change,
+  three partnership lanes (Spotlight, Movement, Legacy), and a CTA
+  block linking to Defiant Sports + The Defiant Foundation +
+  partnerships email.
 - **Marathon Clothing** — dedicated tab for the Crenshaw apparel brand:
   hero quote ("The Marathon Continues"), brand story, Nipsey hero
   image, an inline looping Nipsey music video on the side rail, and
@@ -115,13 +122,14 @@ Aligned with the visible sidebar tabs.
 | Key   | View              |
 | ----- | ----------------- |
 | `1`   | Overview          |
-| `2`   | Venues            |
-| `3`   | Stadiums          |
-| `4`   | Transport         |
-| `5`   | Safety            |
-| `6`   | Pogba Academy     |
-| `7`   | Bracket           |
-| `8`   | Marathon Clothing |
+| `2`   | Branding          |
+| `3`   | Venues            |
+| `4`   | Stadiums          |
+| `5`   | Transport         |
+| `6`   | Safety            |
+| `7`   | Pogba Academy     |
+| `8`   | Bracket           |
+| `9`   | Marathon Clothing |
 | `Esc` | Close modal       |
 
 ## Deployment
