@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Defiant Sports — World Cup 2026 Operations</title>
+    <title>Defiant Sports, World Cup 2026 Operations</title>
     <meta
       name="description"
       content="Defiant Sports operations intelligence for FIFA World Cup 2026: live fixtures, host-city stewardship, grants, transportation, safety, and cultural programming."
@@ -339,7 +339,7 @@
       }
       .card-body.flush { padding: 0; }
 
-      /* Headline strip — five rotating tabs above the live FIFA card.
+      /* Headline strip, five rotating tabs above the live FIFA card.
          Light surfaces, slow rotation: a curated cultural-context layer
          that reads as different from the dark, fast live news panels. */
       .headline-strip {
@@ -413,7 +413,7 @@
         animation: news-pop .55s cubic-bezier(.2,.8,.2,1);
       }
 
-      /* KPI strip (legacy class — left in place for any future re-use) */
+      /* KPI strip (legacy class, left in place for any future re-use) */
       .kpis {
         display: grid;
         grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -792,7 +792,7 @@
         object-position: center;
         display: block;
       }
-      /* Translate tab — flag-card language picker */
+      /* Translate tab, flag-card language picker */
       .lang-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
@@ -938,7 +938,7 @@
          invisible toolbar, anywhere on the page. */
       body { top: 0 !important; position: static !important; margin-top: 0 !important; }
       html { margin-top: 0 !important; }
-      /* Last line of defence — strip anything anchored directly into
+      /* Last line of defence, strip anything anchored directly into
          <body> by the engine. */
       body > .skiptranslate { display: none !important; }
 
@@ -1134,7 +1134,7 @@
         color: var(--ink-3);
       }
 
-      /* Pogba Academy hero strip — 6 picture tiles in place of the KPI strip.
+      /* Pogba Academy hero strip, 6 picture tiles in place of the KPI strip.
          Captions stripped per request; the program cards below already label
          the offerings, so the tiles read as a clean photo wall. */
       .pogba-strip {
@@ -1522,7 +1522,7 @@
       }
       function clean(v) { return String(v ?? "").replace(/\s+/g, " ").trim(); }
       function prettyStatus(s) {
-        if (!s) return "—";
+        if (!s) return "…";
         return s;
       }
 
@@ -1537,50 +1537,50 @@
 
       // ───────────────── KPIs ─────────────────
       // Five rotating headline tabs that sit above the live FIFA Source
-      // Stream. Each tab celebrates Black entrepreneurship — Black Wall
+      // Stream. Each tab celebrates Black entrepreneurship, Black Wall
       // Street, founders' wisdom, modern mavericks, milestones, and the
       // Marathon mindset that ties Defiant Sports to that legacy.
       const HEADLINE_FEEDS = {
         hlBws: [
           "Greenwood, Tulsa: 35 blocks of Black wealth, 1921",
           "100+ Black-owned businesses at its peak",
-          "Tulsa Race Massacre, 1921 — burned in 18 hours",
+          "Tulsa Race Massacre, 1921, burned in 18 hours",
           "Rebuilt: 242 Black-owned businesses by 1942",
           "Median income above many white communities",
           "Proof of Black economic power and resilience"
         ],
         hlQuotes: [
-          "\"I made my own opportunity.\" — Madam C.J. Walker",
-          "\"Cast down your bucket where you are.\" — Booker T. Washington",
-          "\"Up, you mighty race!\" — Marcus Garvey",
-          "\"A race that cannot save cannot progress.\" — Marcus Garvey",
-          "\"Knowledge makes a man unfit to be a slave.\" — Frederick Douglass",
-          "\"Once you learn to read, you're forever free.\" — Frederick Douglass"
+          "\"I made my own opportunity.\" Madam C.J. Walker",
+          "\"Cast down your bucket where you are.\" Booker T. Washington",
+          "\"Up, you mighty race!\" Marcus Garvey",
+          "\"A race that cannot save cannot progress.\" Marcus Garvey",
+          "\"Knowledge makes a man unfit to be a slave.\" Frederick Douglass",
+          "\"Once you learn to read, you're forever free.\" Frederick Douglass"
         ],
         hlModern: [
-          "\"I'm not a businessman, I'm a business, man.\" — Jay-Z",
-          "\"Stay focused. Stay solid.\" — Nipsey Hussle",
-          "\"Vision and patience for the long game.\" — Nipsey Hussle",
-          "\"The dream is to own.\" — Daymond John",
-          "\"Equity is the path to real freedom.\" — Robert F. Smith",
-          "\"Stop consuming, start owning.\" — Killer Mike"
+          "\"I'm not a businessman, I'm a business, man.\" Jay-Z",
+          "\"Stay focused. Stay solid.\" Nipsey Hussle",
+          "\"Vision and patience for the long game.\" Nipsey Hussle",
+          "\"The dream is to own.\" Daymond John",
+          "\"Equity is the path to real freedom.\" Robert F. Smith",
+          "\"Stop consuming, start owning.\" Killer Mike"
         ],
         hlMilestones: [
-          "Madam C.J. Walker — first self-made woman millionaire",
-          "Reginald F. Lewis — first Black Wall Street billionaire",
+          "Madam C.J. Walker, first self-made woman millionaire",
+          "Reginald F. Lewis, first Black Wall Street billionaire",
           "Robert L. Johnson founded BET in 1980",
           "Robert F. Smith cleared Morehouse 2019's $34M debt",
-          "Tyler Perry Studios — 330 acres, largest Black-owned",
+          "Tyler Perry Studios, 330 acres, largest Black-owned",
           "Rihanna's Fenty Beauty: $570M+ in 8 months",
-          "FUBU — Black streetwear from Hollis, Queens"
+          "FUBU, Black streetwear from Hollis, Queens"
         ],
         hlMarathon: [
-          "The Marathon Continues — Crenshaw to the world",
+          "The Marathon Continues, Crenshaw to the world",
           "From Greenwood to Crenshaw: ownership is freedom",
           "Build local. Own your block. Finish strong.",
           "Stewardship over consumption",
           "Every drop is a milestone",
-          "Leverage and ownership — not just hustle"
+          "Leverage and ownership, not just hustle"
         ]
       };
 
@@ -1611,23 +1611,23 @@
           <div class="headline-strip grid-kpi">
             <div class="headline-tab headline-tab--bws">
               <span class="hl-label">Black Wall Street</span>
-              <div class="hl-text" id="hlBws">—</div>
+              <div class="hl-text" id="hlBws">…</div>
             </div>
             <div class="headline-tab headline-tab--quotes">
               <span class="hl-label">Founders' Wisdom</span>
-              <div class="hl-text" id="hlQuotes">—</div>
+              <div class="hl-text" id="hlQuotes">…</div>
             </div>
             <div class="headline-tab headline-tab--modern">
               <span class="hl-label">Modern Mavericks</span>
-              <div class="hl-text" id="hlModern">—</div>
+              <div class="hl-text" id="hlModern">…</div>
             </div>
             <div class="headline-tab headline-tab--milestones">
               <span class="hl-label">Milestones</span>
-              <div class="hl-text" id="hlMilestones">—</div>
+              <div class="hl-text" id="hlMilestones">…</div>
             </div>
             <div class="headline-tab headline-tab--marathon">
               <span class="hl-label">Marathon Mindset</span>
-              <div class="hl-text" id="hlMarathon">—</div>
+              <div class="hl-text" id="hlMarathon">…</div>
             </div>
           </div>`;
       }
@@ -1661,7 +1661,7 @@
       // Mexico City sits on CST (UTC-6) year-round (DST abolished there in 2022),
       // so 12:00 CDMX = 18:00 UTC.
       const KICKOFF_UTC = Date.UTC(2026, 5, 11, 18, 0, 0);
-      // Final: MetLife Stadium (NY/NJ), Jul 19, 2026 — 15:00 ET = 19:00 UTC.
+      // Final: MetLife Stadium (NY/NJ), Jul 19, 2026, 15:00 ET = 19:00 UTC.
       const FINAL_UTC   = Date.UTC(2026, 6, 19, 19, 0, 0);
 
       function pad2(n) { return String(n).padStart(2, "0"); }
@@ -1702,38 +1702,38 @@
       // FIFA RSS doesn't fit cleanly into Fixtures/Facts/Travel).
       const NEWS_FEEDS = {
         newsFixtures: [
-          "Jun 11 · Estadio Azteca, Mexico City — Opening Match · 12:00 CDMX",
-          "Jun 12 · MetLife Stadium, NY/NJ — Group Stage · 15:00 ET",
-          "Jun 13 · BMO Field, Toronto — Group Stage · 18:00 ET",
-          "Jun 14 · BC Place, Vancouver — Group Stage · 16:00 PT",
-          "Jun 15 · Atlanta Stadium — Group Stage · 19:00 ET",
-          "Jun 16 · Dallas Stadium — Group Stage · 18:00 CT",
-          "Jul 14 · Atlanta Stadium — Semi-final",
-          "Jul 15 · Dallas Stadium — Semi-final",
-          "Jul 18 · Miami Stadium — Third-place match",
-          "Jul 19 · MetLife Stadium, NY/NJ — Final · 15:00 ET"
+          "Jun 11 · Estadio Azteca, Mexico City, Opening Match · 12:00 CDMX",
+          "Jun 12 · MetLife Stadium, NY/NJ, Group Stage · 15:00 ET",
+          "Jun 13 · BMO Field, Toronto, Group Stage · 18:00 ET",
+          "Jun 14 · BC Place, Vancouver, Group Stage · 16:00 PT",
+          "Jun 15 · Atlanta Stadium, Group Stage · 19:00 ET",
+          "Jun 16 · Dallas Stadium, Group Stage · 18:00 CT",
+          "Jul 14 · Atlanta Stadium, Semi-final",
+          "Jul 15 · Dallas Stadium, Semi-final",
+          "Jul 18 · Miami Stadium, Third-place match",
+          "Jul 19 · MetLife Stadium, NY/NJ, Final · 15:00 ET"
         ],
         newsTeams: [
-          "Mexico — Host nation · automatic qualification",
-          "Canada — Host nation · automatic qualification",
-          "United States — Host nation · automatic qualification",
-          "Argentina — Defending world champions (2022)",
-          "France — 2022 finalist · 2018 champion",
-          "Brazil — Five-time world champions",
-          "England — 2022 quarter-finalist",
-          "Spain — 2010 champion",
-          "Germany — Four-time world champions",
-          "Australia — Asian qualifier",
-          "Belgium — 2018 third-place",
-          "Portugal — 2022 quarter-finalist"
+          "Mexico, Host nation · automatic qualification",
+          "Canada, Host nation · automatic qualification",
+          "United States, Host nation · automatic qualification",
+          "Argentina, Defending world champions (2022)",
+          "France, 2022 finalist · 2018 champion",
+          "Brazil, Five-time world champions",
+          "England, 2022 quarter-finalist",
+          "Spain, 2010 champion",
+          "Germany, Four-time world champions",
+          "Australia, Asian qualifier",
+          "Belgium, 2018 third-place",
+          "Portugal, 2022 quarter-finalist"
         ],
         newsFacts: [
-          "48 teams compete — the largest World Cup ever",
-          "104 matches across 39 days — the longest World Cup ever",
+          "48 teams compete, the largest World Cup ever",
+          "104 matches across 39 days, the longest World Cup ever",
           "16 host cities across 3 host nations",
           "First tri-nation hosting in World Cup history",
           "12 groups of 4 teams in the new format",
-          "Round of 32 added — eliminates two best 3rd-place teams",
+          "Round of 32 added, eliminates two best 3rd-place teams",
           "Estadio Azteca: only stadium to host three World Cup openers",
           "MetLife Stadium hosts the Final on July 19, 2026",
           "Atlanta and Dallas confirmed as semi-final venues",
@@ -1743,14 +1743,14 @@
         ],
         newsTravel: [
           "ESTA required for visa-waiver country visitors",
-          "B-2 visitor visa for non-VWP countries — apply at US embassies",
+          "B-2 visitor visa for non-VWP countries, apply at US embassies",
           "CDC: routine travel vaccinations recommended for all visitors",
           "Customs and Border Protection wait times posted at CBP.gov",
           "Inbound testing waivers active for FIFA-accredited personnel",
           "TSA PreCheck and Global Entry recommended for stadium-day travel",
           "Mobile Passport Control available at major US international airports",
           "Border-city ground crossings: USA-Canada and USA-Mexico both open",
-          "Real ID required for domestic flights — verify before travel",
+          "Real ID required for domestic flights, verify before travel",
           "Match-day shuttle networks active in every host city"
         ]
       };
@@ -1787,7 +1787,7 @@
               { source: "FIFA",  title: "Opening match June 11, 2026 · Estadio Azteca, Mexico City" },
               { source: "FIFA",  title: "Final on July 19, 2026 · MetLife Stadium, NY/NJ" },
               { source: "FIFA",  title: "48 teams · 16 host cities · USA, Canada, Mexico" },
-              { source: "FIFA",  title: "104 matches over 39 days — largest World Cup ever" },
+              { source: "FIFA",  title: "104 matches over 39 days, largest World Cup ever" },
               { source: "FIFA",  title: "Round of 32 added for the new 48-team format" },
               { source: "FIFA",  title: "Atlanta and Dallas confirmed as semi-final venues" },
               { source: "FIFA",  title: "Miami selected for the third-place match" },
@@ -1813,14 +1813,14 @@
 
         const generated = state.generatedAt
           ? new Date(state.generatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
-          : "—";
+          : "…";
 
         return `
           <div class="live-card grid-live">
             <div class="live-head">
               <div class="title">
                 <span class="badge">LIVE</span>
-                <span>FIFA World Cup 2026 — Source Stream</span>
+                <span>FIFA World Cup 2026, Source Stream</span>
               </div>
               <div class="meta">last sync · ${generated}</div>
             </div>
@@ -1828,19 +1828,19 @@
             <div class="live-grid">
               <div class="news-panel news-panel--fixtures">
                 <div class="news-label">FIFA Fixtures</div>
-                <div class="news-content" id="newsFixtures">—</div>
+                <div class="news-content" id="newsFixtures">…</div>
               </div>
               <div class="news-panel news-panel--teams">
                 <div class="news-label">FIFA Teams</div>
-                <div class="news-content" id="newsTeams">—</div>
+                <div class="news-content" id="newsTeams">…</div>
               </div>
               <div class="news-panel news-panel--facts">
                 <div class="news-label">Tournament Facts</div>
-                <div class="news-content" id="newsFacts">—</div>
+                <div class="news-content" id="newsFacts">…</div>
               </div>
               <div class="news-panel news-panel--travel">
                 <div class="news-label">US Travel</div>
-                <div class="news-content" id="newsTravel">—</div>
+                <div class="news-content" id="newsTravel">…</div>
               </div>
             </div>
           </div>`;
@@ -1938,7 +1938,7 @@
                   <tr>
                     <td><span class="pill">${escapeHtml(i.source || "feed")}</span></td>
                     <td><strong>${escapeHtml(clean(i.title))}</strong>${i.url ? `<br /><a href="${escapeHtml(i.url)}" target="_blank" rel="noopener" style="color:var(--ink-3); font-size:11px">open source ↗</a>` : ""}</td>
-                    <td style="font-family:var(--mono); font-size:11px; color:var(--ink-3)">${i.publishedAt ? new Date(i.publishedAt).toLocaleString() : "—"}</td>
+                    <td style="font-family:var(--mono); font-size:11px; color:var(--ink-3)">${i.publishedAt ? new Date(i.publishedAt).toLocaleString() : "…"}</td>
                   </tr>`).join("")}
               </tbody>
             </table>`
@@ -2073,7 +2073,7 @@
           <div class="fill grid-3">
             ${simpleCard("Business Exposure", "Local restaurants, retailers, wellness providers, creators, and nonprofits package watch-party readiness, QR capture, sponsor reporting, and multilingual fan messaging.")}
             ${simpleCard("Partner Lane", "The Defiant Foundation, Bulle Consulting, and DreamCo Management help organizations scale fund development and World Cup marketing city by city.")}
-            ${simpleCard("Operating Rule", "Keep activations safe, measurable, language-accessible, and sponsor-ready — without cluttering the fan journey.")}
+            ${simpleCard("Operating Rule", "Keep activations safe, measurable, language-accessible, and sponsor-ready, without cluttering the fan journey.")}
           </div>`;
       }
 
@@ -2114,7 +2114,7 @@
         "It's not about how you start, it's about how you finish.",
         "All money in, no money out.",
         "Stay focused. Stay solid. Build your foundation.",
-        "Hard work pays off — there are no shortcuts.",
+        "Hard work pays off, there are no shortcuts.",
         "When you write your own story, you can put a happy ending."
       ];
 
@@ -2143,7 +2143,7 @@
           <div class="marathon-hero">
             <div class="kicker">The Marathon Clothing · Crenshaw, Los Angeles</div>
             <blockquote>"The Marathon Continues. We honor the people that ain't quit, we honor the people that stayed down."</blockquote>
-            <cite>— Nipsey Hussle (Ermias Asghedom · 1985–2019)</cite>
+            <cite>Nipsey Hussle (Ermias Asghedom · 1985-2019)</cite>
           </div>
 
           <div class="marathon-grid">
@@ -2158,7 +2158,7 @@
                     <strong>The Marathon Clothing</strong> is the smart-store apparel brand founded by
                     <strong>Nipsey Hussle</strong>, his brother <strong>Blacc Sam</strong>, and longtime collaborator
                     <strong>Steve Carless</strong>. Opened on Slauson Avenue in South Los Angeles in 2017, the
-                    flagship store reimagined the corner shop as community ownership infrastructure — every
+                    flagship store reimagined the corner shop as community ownership infrastructure, every
                     drop is a milestone in a longer race.
                   </p>
                   <p class="lede" style="margin-top:10px">
@@ -2175,7 +2175,7 @@
                 </div>
                 <div class="card-body flush">
                   <div class="nipsey-hero">
-                    <img src="./assets/marathon/Nip.webp" alt="Nipsey Hussle — The Marathon Clothing"
+                    <img src="./assets/marathon/Nip.webp" alt="Nipsey Hussle, The Marathon Clothing"
                          loading="lazy"
                          onerror="this.onerror=null; this.src='https://picsum.photos/seed/nipsey-hussle-tribute/1280/720';" />
                   </div>
@@ -2231,9 +2231,9 @@
 
       // Pogba Academy hero strip. The 6 tiles map to real Pogba Academy
       // photos. Drop the source files at the local paths below (and
-      // mirror them under public/assets/pogba/) — each <img> falls back
+      // mirror them under public/assets/pogba/), each <img> falls back
       // to a Picsum placeholder if the local file is missing. The strip
-      // is a clean photo wall — no text overlay; the cards below already
+      // is a clean photo wall, no text overlay; the cards below already
       // label the offerings.
       const POGBA_TILES = [
         { local: "./assets/pogba/travel.jpg",         src: "https://picsum.photos/seed/pogba-travel/640/480",     alt: "Pogba Academy team boarding flight" },
@@ -2276,8 +2276,8 @@
         $("#branding").innerHTML = `
           <div class="marathon-hero">
             <div class="kicker">Defiant Sports · Athlete Branding</div>
-            <blockquote>The voice of an athlete moves markets — and movements.</blockquote>
-            <cite>— Partner with the world-class roster behind Defiant Sports</cite>
+            <blockquote>The voice of an athlete moves markets, and movements.</blockquote>
+            <cite>Partner with the world-class roster behind Defiant Sports</cite>
           </div>
 
           <div class="card">
@@ -2294,12 +2294,12 @@
                 carries your message, the message arrives <strong>pre-credentialed</strong>.
               </p>
               <div class="grid-3" style="margin-top:14px">
-                ${simpleCard("Authentic Reach", "Direct line to global communities — fans follow the athlete, the message rides along, and engagement compounds across owned, earned, and paid surfaces.")}
+                ${simpleCard("Authentic Reach", "Direct line to global communities, fans follow the athlete, the message rides along, and engagement compounds across owned, earned, and paid surfaces.")}
                 ${simpleCard("Cultural Credibility", "Athletes operate at the intersection of sport, music, fashion, and social movement. A partnership lands inside conversations consumers actually trust.")}
                 ${simpleCard("Performance Halo", "Championship-level discipline transfers to the brand. Excellence on the field becomes a proof point for the product.")}
-                ${simpleCard("Long-Form Loyalty", "Athlete relationships outlast quarterly campaigns. Fans subscribe to the journey, not the spot — partners benefit for seasons, not weeks.")}
+                ${simpleCard("Long-Form Loyalty", "Athlete relationships outlast quarterly campaigns. Fans subscribe to the journey, not the spot, partners benefit for seasons, not weeks.")}
                 ${simpleCard("Multigenerational Pull", "From Gen Alpha to boomers, athletes are one of the few cultural figures whose appeal scales across age cohorts simultaneously.")}
-                ${simpleCard("Measurable Lift", "Reach, engagement rate, search volume, foot traffic, and product velocity move in lockstep with athlete-led activations — and we report on every layer.")}
+                ${simpleCard("Measurable Lift", "Reach, engagement rate, search volume, foot traffic, and product velocity move in lockstep with athlete-led activations, and we report on every layer.")}
               </div>
             </div>
           </div>
@@ -2311,16 +2311,16 @@
             </div>
             <div class="card-body">
               <p class="lede">
-                Defiant Sports is a curated platform — every athlete on the roster is
+                Defiant Sports is a curated platform, every athlete on the roster is
                 vetted not just for athletic excellence but for <strong>vision, voice,
                 and value alignment</strong>. We pair brands with athletes whose audience,
                 cause, and trajectory map cleanly onto the partner's growth thesis.
               </p>
               <div class="grid-3" style="margin-play:14px">
-                ${simpleCard("World-Class Roster", "Defending champions, Olympic medalists, and rising stars — all signed against character standards as much as performance benchmarks.")}
+                ${simpleCard("World-Class Roster", "Defending champions, Olympic medalists, and rising stars, all signed against character standards as much as performance benchmarks.")}
                 ${simpleCard("Strategic Storytelling", "We do not bolt logos onto athletes. We design narrative arcs that frame the brand as a co-author of the athlete's chapter.")}
-                ${simpleCard("Multi-Surface Activation", "Owned content, broadcast appearances, training programs, community events, retail moments — sequenced for compounding momentum.")}
-                ${simpleCard("Rights & IP Stewardship", "Clean clearances, proper image rights, contract guardrails — partners ship faster because compliance is handled upstream.")}
+                ${simpleCard("Multi-Surface Activation", "Owned content, broadcast appearances, training programs, community events, retail moments, sequenced for compounding momentum.")}
+                ${simpleCard("Rights & IP Stewardship", "Clean clearances, proper image rights, contract guardrails, partners ship faster because compliance is handled upstream.")}
                 ${simpleCard("Operations & Production", "Defiant Sports captures, edits, and ships the work. Partners get launch-ready assets, not a creative briefing meeting.")}
                 ${simpleCard("Reporting & ROI", "Every partnership ships with a measurement plan: engagement, sentiment, brand-lift, conversion, sell-through. We are accountable to outcomes.")}
               </div>
@@ -2329,21 +2329,20 @@
 
           <div class="card">
             <div class="card-head">
-              <h3>Beyond marketing — movement</h3>
+              <h3>Beyond marketing, movement</h3>
               <span class="meta">Social · Systemic · Industry change</span>
             </div>
             <div class="card-body">
               <p class="lede">
                 The athletes we partner with are a <strong>driving force in social,
                 systemic, and industry change</strong>. Their leadership and vision are
-                grounded in creating greater value for societies across the globe —
-                not in selling units. Brands that align with that mission inherit the
+                grounded in creating greater value for societies across the globe,                 not in selling units. Brands that align with that mission inherit the
                 halo and the trust that comes with it.
               </p>
               <div class="grid-3" style="margin-top:14px">
                 ${simpleCard("Social Change", "Community-first activations: youth access programs, local-first content, mentor networks, equitable entry points to elite training pipelines.")}
                 ${simpleCard("Systemic Change", "Athletes leveraging their platforms to push policy, funding, and structural decisions that level the field for the next generation.")}
-                ${simpleCard("Industry Change", "Pioneering ownership, equity-stake partnerships, and player-owned media that shift power toward athletes — and toward the brands that backed them early.")}
+                ${simpleCard("Industry Change", "Pioneering ownership, equity-stake partnerships, and player-owned media that shift power toward athletes, and toward the brands that backed them early.")}
               </div>
             </div>
           </div>
@@ -2355,8 +2354,8 @@
             </div>
             <div class="card-body">
               <div class="list">
-                ${listRow("Spotlight", "<span>Single-athlete activation across a defined window — campaign film, three-asset content series, owned-channel push, retail moment. <strong>Best for product launches.</strong></span>")}
-                ${listRow("Movement", "<span>Multi-athlete narrative arc spanning a season — anchored content drops, broadcast tie-ins, community events, owned and earned amplification. <strong>Best for category positioning.</strong></span>")}
+                ${listRow("Spotlight", "<span>Single-athlete activation across a defined window, campaign film, three-asset content series, owned-channel push, retail moment. <strong>Best for product launches.</strong></span>")}
+                ${listRow("Movement", "<span>Multi-athlete narrative arc spanning a season, anchored content drops, broadcast tie-ins, community events, owned and earned amplification. <strong>Best for category positioning.</strong></span>")}
                 ${listRow("Legacy", "<span>Enterprise-wide partnership: roster-level rights, co-branded programs, year-round content, equity-stake conversations, foundation-aligned community work. <strong>Best for category leadership.</strong></span>")}
               </div>
             </div>
@@ -2369,8 +2368,8 @@
             <div class="card-body">
               <p class="lede">
                 If your brand wants to partner with athletes who are already moving the
-                world — and operate with a team that engineers the partnership end to
-                end — Defiant Sports is the lane. The marathon continues; the partner
+                world, and operate with a team that engineers the partnership end to
+                end, Defiant Sports is the lane. The marathon continues; the partner
                 list is short on purpose.
               </p>
               <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px">
@@ -2430,7 +2429,7 @@
               </div>
               <div class="card-body">
                 <p class="lede">
-                  Pick a language to translate the entire experience — the headline strip, the live FIFA card,
+                  Pick a language to translate the entire experience, the headline strip, the live FIFA card,
                   every venue card, the bracket, the Marathon Clothing tab, modals, and the language matrix
                   below. The dashboard reloads briefly so the translation engine can apply the new locale
                   cleanly across every dynamic surface.
@@ -2446,11 +2445,11 @@
     ${renderKpis()}
     <div class="fill" style="overflow:auto">
       <div class="card">
-        <div class="card-head"><h3>FIFA World Cup 2026 — Bracket</h3><span class="meta">Jun 11 – Jul 19, 2026 · 48 teams · 104 matches · 16 host cities</span></div>
+        <div class="card-head"><h3>FIFA World Cup 2026, Bracket</h3><span class="meta">Jun 11 to Jul 19, 2026 · 48 teams · 104 matches · 16 host cities</span></div>
         <div class="card-body">
           <p class="lede"><strong>Format:</strong> 12 groups of 4 → top 2 of each group + 8 best third-placed teams advance to the Round of 32 → R16 → QF → SF → 3rd-place match → Final. Hosts <strong>Canada, Mexico, USA</strong> qualify automatically.</p>
-          <p class="lede" style="margin-top:6px"><strong>Opener:</strong> Mexico vs TBD — Estadio Azteca, Mexico City — Jun 11, 2026 · <strong>Final:</strong> MetLife Stadium, New York/New Jersey — Jul 19, 2026</p>
-          <h4 style="margin:18px 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)">Group Stage — 12 Groups of 4</h4>
+          <p class="lede" style="margin-top:6px"><strong>Opener:</strong> Mexico vs TBD, Estadio Azteca, Mexico City, Jun 11, 2026 · <strong>Final:</strong> MetLife Stadium, New York/New Jersey, Jul 19, 2026</p>
+          <h4 style="margin:18px 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)">Group Stage, 12 Groups of 4</h4>
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:10px;">
             ${[
               ["A","Mexico (host)"],["B","Canada (host)"],["C","TBD"],["D","USA (host)"],
@@ -2546,7 +2545,7 @@
           const p = video.play();
           if (p && typeof p.catch === "function") {
             p.catch(() => {
-              // Browser blocked autoplay — wait for any user gesture
+              // Browser blocked autoplay, wait for any user gesture
               // anywhere on the page, then try again.
               const wake = () => {
                 video.play().catch(() => {});
@@ -2645,7 +2644,7 @@
           if (state.live === "connected") {
             toast("Live sources synced.");
           } else {
-            // No backend reachable — quietly fall back; don't re-poll.
+            // No backend reachable, quietly fall back; don't re-poll.
             liveApiAvailable = false;
             if (liveAutoRefreshTimer) { clearInterval(liveAutoRefreshTimer); liveAutoRefreshTimer = null; }
           }
@@ -2821,7 +2820,7 @@
         document.documentElement.lang = lang;
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
         // Set the cookie so future page loads also stay translated, then
-        // try to flip the language IN PLACE — no reload, no browser tab
+        // try to flip the language IN PLACE, no reload, no browser tab
         // spinner. Polls briefly for the translation engine's hidden
         // combo to be present, then dispatches a change.
         setGoogtrans(lang);
@@ -2835,14 +2834,14 @@
           }
           if (++attempts < 40) { setTimeout(trySet, 150); return; }
           // Engine never showed up (script blocked / very slow network)
-          // — fall back to a reload so the cookie still takes effect.
+          //, fall back to a reload so the cookie still takes effect.
           location.reload();
         };
         trySet();
       }
 
       $("#languageSelect").addEventListener("change", (e) => {
-        // No toast — page reload speaks for itself; the brand area
+        // No toast, page reload speaks for itself; the brand area
         // shouldn't flash a status indicator on language change.
         setPageLanguage(e.target.value);
       });
@@ -2851,7 +2850,7 @@
         document.querySelector(".nav").scrollIntoView({ behavior: "smooth" });
       });
 
-      // Init — restore the active view from #hash so refreshes,
+      // Init, restore the active view from #hash so refreshes,
       // shareable links, and back/forward all land where the user expects.
       const initialView = viewFromHash();
       if (initialView) state.view = initialView;
