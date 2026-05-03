@@ -530,32 +530,47 @@
         position: relative;
         padding: 10px 0;
         overflow: hidden;
+        direction: ltr; /* keep marquee flowing LTR even on RTL pages */
         mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
         -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
       }
       .ticker-track {
         display: inline-flex;
+        align-items: center;
         gap: 28px;
         white-space: nowrap;
         animation: marquee 60s linear infinite;
         padding-left: 100%;
+        direction: ltr;
       }
       .ticker-track:hover { animation-play-state: paused; }
       .ticker-item {
-        display: inline-flex; align-items: center; gap: 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
         font-size: 12.5px;
+        line-height: 1.2;
         color: rgba(255,255,255,.92);
+        flex-shrink: 0;
       }
       .ticker-item .src {
         font-family: var(--mono);
         font-size: 10.5px;
+        line-height: 1.2;
         color: rgba(255,255,255,.55);
         text-transform: uppercase;
         letter-spacing: 0.08em;
         border-left: 2px solid rgba(255,255,255,.18);
         padding-left: 10px;
+        align-self: center;
+        flex-shrink: 0;
       }
-      .ticker-item .sep { color: rgba(255,255,255,.24); }
+      .ticker-item .sep {
+        color: rgba(255,255,255,.24);
+        align-self: center;
+        line-height: 1.2;
+      }
+      .ticker-logo { vertical-align: middle; }
 
       /* Branded mark interleaved into the ticker */
       .ticker-item.with-logo { gap: 12px; }
@@ -873,9 +888,15 @@
       }
 
       /* Suppress every translation-engine UI artifact so no third-party
-         branding, toolbar, banner, balloon, tooltip, or attribution
-         leaks into the dashboard. The translation itself still applies
-         to the page text. */
+         branding, toolbar, banner, balloon, tooltip, spinner, or
+         attribution leaks into the dashboard. The translation itself
+         still applies to the page text. */
+      [class*="goog-te-spinner"],
+      [class*="goog-te-banner"],
+      [class*="goog-te-balloon"],
+      [class*="goog-te-menu-frame"],
+      [class*="goog-te-ftab"],
+      [id*="goog-gt-tt"],
       .goog-te-banner-frame,
       .goog-te-banner-frame.skiptranslate,
       .goog-te-balloon-frame,
@@ -885,21 +906,40 @@
       .goog-te-spinner-frame,
       .goog-te-spinner-anim,
       iframe.goog-te-spinner-frame,
+      iframe.goog-te-banner-frame,
+      iframe.goog-te-menu-frame,
       .goog-te-ftab,
       iframe.skiptranslate,
-      .skiptranslate iframe { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
+      iframe[id^="goog-gt-"],
+      iframe[name="googtrans"],
+      iframe[src*="translate.google"],
+      iframe[src*="translate.googleapis"],
+      .skiptranslate iframe {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        position: fixed !important;
+        top: -9999px !important;
+        left: -9999px !important;
+      }
       .goog-te-gadget,
       .goog-logo-link,
       .goog-te-gadget-icon,
       .goog-te-gadget span,
       .goog-te-gadget a { display: none !important; visibility: hidden !important; height: 0 !important; }
       .goog-tooltip,
-      .goog-tooltip:hover { display: none !important; }
+      .goog-tooltip:hover,
+      .goog-tooltip-popup { display: none !important; }
       .goog-text-highlight { background: none !important; box-shadow: none !important; }
-      body { top: 0 !important; position: static !important; }
-      /* Keep the mount point alive (the widget needs it to initialise)
-         but pull anything it tries to inject directly into <body>
-         out of the visible flow. */
+      /* Lock the body so no Google rule can shove it down for an
+         invisible toolbar, anywhere on the page. */
+      body { top: 0 !important; position: static !important; margin-top: 0 !important; }
+      html { margin-top: 0 !important; }
+      /* Last line of defence — strip anything anchored directly into
+         <body> by the engine. */
       body > .skiptranslate { display: none !important; }
 
       /* Map */
@@ -2376,8 +2416,39 @@
           startNewsRotation();
           startMarathonQuoteRotator();
           startHeadlineRotation();
+          ensureVideoPlays();
           retranslateIfNeeded();
         });
+      }
+
+      // The Nip Forever <video> already has muted+autoplay+loop, but
+      // some browsers (and some laptop power-saver modes) still refuse
+      // to autoplay on first paint. This helper explicitly invokes
+      // .play() once the video element is in the DOM, and on first user
+      // interaction if the browser blocks the programmatic call too.
+      function ensureVideoPlays() {
+        const video = document.querySelector(".nip-video");
+        if (!video) return;
+        const tryPlay = () => {
+          const p = video.play();
+          if (p && typeof p.catch === "function") {
+            p.catch(() => {
+              // Browser blocked autoplay — wait for any user gesture
+              // anywhere on the page, then try again.
+              const wake = () => {
+                video.play().catch(() => {});
+                document.removeEventListener("click", wake);
+                document.removeEventListener("keydown", wake);
+                document.removeEventListener("touchstart", wake);
+              };
+              document.addEventListener("click", wake, { once: true });
+              document.addEventListener("keydown", wake, { once: true });
+              document.addEventListener("touchstart", wake, { once: true });
+            });
+          }
+        };
+        if (video.readyState >= 2) tryPlay();
+        else video.addEventListener("loadeddata", tryPlay, { once: true });
       }
 
       function initVisibleMaps() {
