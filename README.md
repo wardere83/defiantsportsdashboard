@@ -37,6 +37,11 @@ Impact view.
   sort any column, click a row to focus that city on the overview map.
 - **Animated KPIs** — count-up on render, including the **Impact**
   metric (projected fan reach across the tournament).
+- **Marathon Clothing** — dedicated tab for the Crenshaw apparel brand:
+  hero quote ("The Marathon Continues"), founders panel (Nipsey Hussle,
+  Blacc Sam, Steve Carless), interactive drop tiles linking to
+  themarathonclothing.com, an inline Nipsey music video on the side
+  rail, and a 6-second pop-in quote rotator.
 - **Bracket card** — group-stage cards, knockout overview, and host-city
   list with confirmed semi-final / 3rd-place / final venues.
 - **URL-aware routing** — every tab is reflected in `location.hash`
@@ -94,16 +99,17 @@ npm run check # node --check (syntax)
 
 Aligned with the visible sidebar tabs.
 
-| Key   | View          |
-| ----- | ------------- |
-| `1`   | Overview      |
-| `2`   | Venues        |
-| `3`   | Stadiums      |
-| `4`   | Transport     |
-| `5`   | Safety        |
-| `6`   | Pogba Academy |
-| `7`   | Bracket       |
-| `Esc` | Close modal   |
+| Key   | View              |
+| ----- | ----------------- |
+| `1`   | Overview          |
+| `2`   | Venues            |
+| `3`   | Stadiums          |
+| `4`   | Transport         |
+| `5`   | Safety            |
+| `6`   | Pogba Academy     |
+| `7`   | Bracket           |
+| `8`   | Marathon Clothing |
+| `Esc` | Close modal       |
 
 ## Deployment
 
