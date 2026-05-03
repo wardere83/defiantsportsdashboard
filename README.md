@@ -35,12 +35,20 @@ Impact view.
   focus that city on the overview map.
 - **Interactive stadium register** — search across city/country/venue,
   sort any column, click a row to focus that city on the overview map.
-- **Animated KPIs** — count-up on render, including the **Impact**
-  metric (projected fan reach across the tournament).
+- **Headline strip** — five rotating tabs above the live FIFA card,
+  each with its own colour stripe, that pop a new headline every ~7
+  seconds: **Black Wall Street** (Greenwood / Tulsa facts),
+  **Founders' Wisdom** (Madam C.J. Walker, Booker T. Washington,
+  Marcus Garvey, Frederick Douglass), **Modern Mavericks** (Jay-Z,
+  Nipsey Hussle, Daymond John, Robert F. Smith, Killer Mike),
+  **Milestones** (Reginald F. Lewis, BET, Tyler Perry Studios, Fenty
+  Beauty, FUBU), and **Marathon Mindset** (cultural stewardship
+  cues). Curated context that ties the dashboard to the broader
+  legacy of Black entrepreneurship in America.
 - **Marathon Clothing** — dedicated tab for the Crenshaw apparel brand:
-  hero quote ("The Marathon Continues"), brand story, interactive drop
-  tiles linking to themarathonclothing.com, an inline Nipsey music
-  video on the side rail, and a 6-second pop-in quote rotator.
+  hero quote ("The Marathon Continues"), brand story, Nipsey hero
+  image, an inline looping Nipsey music video on the side rail, and
+  a Marathon Quotes rotator.
 - **Bracket card** — group-stage cards, knockout overview, and host-city
   list with confirmed semi-final / 3rd-place / final venues.
 - **URL-aware routing** — every tab is reflected in `location.hash`
