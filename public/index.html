@@ -1220,9 +1220,6 @@
             <div class="crumb" id="viewCrumb">Real-time host-city intelligence · FIFA World Cup 2026</div>
           </div>
           <div class="top-actions">
-            <span class="live-chip off" id="liveChip" title="Live source status">
-              <span class="dot"></span><span id="liveLabel">Live · syncing</span>
-            </span>
             <select class="select" id="languageSelect" aria-label="Translate">
               <option value="en">EN</option>
               <option value="es">ES</option>
@@ -2228,11 +2225,10 @@
         }[state.view];
         if (r) r();
 
-        const chip = $("#liveChip");
+        // Topbar live-source chip was removed; only the sidebar foot ping
+        // still reflects connection status.
         const isLive = state.live === "connected";
-        chip.classList.toggle("off", !isLive);
-        $("#liveLabel").textContent = isLive ? "Live · streaming" : `Live · ${state.live}`;
-        $("#footPing").classList.toggle("live", isLive);
+        $("#footPing")?.classList.toggle("live", isLive);
 
         requestAnimationFrame(() => {
           initVisibleMaps();
