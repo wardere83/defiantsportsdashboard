@@ -28,8 +28,14 @@ Impact view.
   pop-in animation. Fallback content is factual; never fabricated.
 - **Donate button** in the topbar links to the Defiant Foundation
   donation page (`thedefiantfoundation.org/donate`).
-- **Translate dropdown** drives a hidden Google Translate widget so the
-  whole page is translated to ES / FR / PT / AR with a single click.
+- **Translation across 11 languages** — topbar dropdown and a dedicated
+  **Translate** tab (with flag-card buttons) translate the whole
+  dashboard via the `googtrans` cookie + reload flow. Supported:
+  English 🇺🇸, Español 🇪🇸, Français 🇫🇷, Português 🇵🇹, العربية 🇸🇦,
+  ትግርኛ 🇪🇷, Soomaali 🇸🇴, 繁體中文 🇹🇼, 한국어 🇰🇷, Tiếng Việt 🇻🇳,
+  Tagalog 🇵🇭. Every translation-engine UI artifact (banner, balloon,
+  tooltip, attribution) is buried via CSS so the dashboard chrome
+  stays clean.
 - **Venues view** — every host venue rendered as an aligned compact
   card grid (city, country, venue name, capacity). Click a card to
   focus that city on the overview map.
@@ -116,6 +122,7 @@ Aligned with the visible sidebar tabs.
 | `6`   | Pogba Academy     |
 | `7`   | Bracket           |
 | `8`   | Marathon Clothing |
+| `9`   | Translate         |
 | `Esc` | Close modal       |
 
 ## Deployment
