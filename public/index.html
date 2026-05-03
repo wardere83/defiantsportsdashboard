@@ -554,6 +554,75 @@
         animation: pulse 1.6s ease-in-out infinite;
       }
 
+      /* Broadcast-style news panels inside the live FIFA card */
+      .news-panel {
+        padding: 12px 14px 10px;
+        border-right: 1px solid rgba(255,255,255,.08);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        position: relative;
+        overflow: hidden;
+        min-height: 84px;
+      }
+      .news-panel:last-child { border-right: 0; }
+      .news-panel::before {
+        content: "";
+        position: absolute;
+        left: 0; top: 0; bottom: 0;
+        width: 3px;
+        background: var(--accent-color, var(--live));
+      }
+      .news-panel--fixtures { --accent-color: #ff3b30; }
+      .news-panel--teams    { --accent-color: #f5b400; }
+      .news-panel--facts    { --accent-color: #1d4ed8; }
+      .news-panel--travel   { --accent-color: #00a650; }
+
+      .news-label {
+        font-family: var(--mono);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,.78);
+        display: flex; align-items: center; gap: 7px;
+      }
+      .news-label::before {
+        content: "";
+        width: 6px; height: 6px; border-radius: 50%;
+        background: var(--accent-color, var(--live));
+        box-shadow: 0 0 8px var(--accent-color, var(--live));
+        animation: pulse 1.6s ease-in-out infinite;
+      }
+
+      .news-content {
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255,255,255,.96);
+        line-height: 1.35;
+        letter-spacing: -0.005em;
+        min-height: 2.7em;
+        display: flex;
+        align-items: center;
+      }
+      .news-content.popping {
+        animation: news-pop .55s cubic-bezier(.2,.8,.2,1);
+      }
+
+      @keyframes news-pop {
+        0%   { opacity: 0; transform: translateY(10px); }
+        60%  { opacity: 1; transform: translateY(-2px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Hide the Google Translate banner + spinner so the dashboard
+         stays clean while the rest of the page is translated. */
+      .goog-te-banner-frame.skiptranslate,
+      .goog-te-spinner-pos { display: none !important; }
+      body { top: 0 !important; }
+      .goog-tooltip, .goog-tooltip:hover { display: none !important; }
+      .goog-text-highlight { background: none !important; box-shadow: none !important; }
+
       /* Map */
       .map-wrap { flex: 1; min-height: 0; position: relative; }
       .map { position: absolute; inset: 0; background: #eef0f2; }
@@ -970,14 +1039,13 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
               Refresh
             </button>
-            <button class="btn dark" id="printBtn" type="button">Export</button>
+            <a class="btn dark" id="donateBtn" href="https://thedefiantfoundation.org/donate/" target="_blank" rel="noopener noreferrer">Donate</a>
           </div>
         </header>
 
         <div class="view">
           <section class="section" id="overview"></section>
           <section class="section" id="map"></section>
-          <section class="section" id="live"></section>
           <section class="section" id="stadiums"></section>
           <section class="section" id="grants"></section>
           <section class="section" id="business"></section>
@@ -1004,13 +1072,26 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+    <!-- Google Translate widget (hidden); the topbar language select drives it -->
+    <div id="google_translate_element" aria-hidden="true" style="position:absolute; left:-9999px; top:-9999px;"></div>
+    <script>
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: "en",
+          includedLanguages: "en,es,fr,pt,ar",
+          layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+          autoDisplay: false
+        }, "google_translate_element");
+      }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
       // ───────────────── Data ─────────────────
       const views = [
         ["overview",  "Overview",   "1", "▦"],
-        ["live",      "Live FIFA",  "2", "◉"],
-        ["map",       "Venues",     "3", "◇"],
+        ["map",       "Venues",     "2", "◇"],
         ["stadiums",  "Stadiums",   "4", "⌂"],
         ["transport", "Transport",  "7", "⇄"],
         ["safety",    "Safety",     "8", "△"],
@@ -1194,7 +1275,93 @@
         if (subEl) subEl.textContent = `${daysSince}d since the Final · Jul 19`;
       }
 
+      // ───────────────── News-network style feeds ─────────────────
+      // Each panel rotates through its items with a pop-in animation,
+      // styled like the lower-third graphics on CNBC / BBC / CNN.
+      // Static fallback is factual; when /api/live-feeds returns RSS
+      // headlines we splice them into the FIFA Teams panel (the live
+      // FIFA RSS doesn't fit cleanly into Fixtures/Facts/Travel).
+      const NEWS_FEEDS = {
+        newsFixtures: [
+          "Jun 11 · Estadio Azteca, Mexico City — Opening Match · 12:00 CDMX",
+          "Jun 12 · MetLife Stadium, NY/NJ — Group Stage · 15:00 ET",
+          "Jun 13 · BMO Field, Toronto — Group Stage · 18:00 ET",
+          "Jun 14 · BC Place, Vancouver — Group Stage · 16:00 PT",
+          "Jun 15 · Atlanta Stadium — Group Stage · 19:00 ET",
+          "Jun 16 · Dallas Stadium — Group Stage · 18:00 CT",
+          "Jul 14 · Atlanta Stadium — Semi-final",
+          "Jul 15 · Dallas Stadium — Semi-final",
+          "Jul 18 · Miami Stadium — Third-place match",
+          "Jul 19 · MetLife Stadium, NY/NJ — Final · 15:00 ET"
+        ],
+        newsTeams: [
+          "Mexico — Host nation · automatic qualification",
+          "Canada — Host nation · automatic qualification",
+          "United States — Host nation · automatic qualification",
+          "Argentina — Defending world champions (2022)",
+          "France — 2022 finalist · 2018 champion",
+          "Brazil — Five-time world champions",
+          "England — 2022 quarter-finalist",
+          "Spain — 2010 champion",
+          "Germany — Four-time world champions",
+          "Australia — Asian qualifier",
+          "Belgium — 2018 third-place",
+          "Portugal — 2022 quarter-finalist"
+        ],
+        newsFacts: [
+          "48 teams compete — the largest World Cup ever",
+          "104 matches across 39 days — the longest World Cup ever",
+          "16 host cities across 3 host nations",
+          "First tri-nation hosting in World Cup history",
+          "12 groups of 4 teams in the new format",
+          "Round of 32 added — eliminates two best 3rd-place teams",
+          "Estadio Azteca: only stadium to host three World Cup openers",
+          "MetLife Stadium hosts the Final on July 19, 2026",
+          "Atlanta and Dallas confirmed as semi-final venues",
+          "Miami selected for the third-place match",
+          "$11 billion projected economic impact across host cities",
+          "Fan ID enrollment open across all host-city kiosks"
+        ],
+        newsTravel: [
+          "ESTA required for visa-waiver country visitors",
+          "B-2 visitor visa for non-VWP countries — apply at US embassies",
+          "CDC: routine travel vaccinations recommended for all visitors",
+          "Customs and Border Protection wait times posted at CBP.gov",
+          "Inbound testing waivers active for FIFA-accredited personnel",
+          "TSA PreCheck and Global Entry recommended for stadium-day travel",
+          "Mobile Passport Control available at major US international airports",
+          "Border-city ground crossings: USA-Canada and USA-Mexico both open",
+          "Real ID required for domestic flights — verify before travel",
+          "Match-day shuttle networks active in every host city"
+        ]
+      };
+
+      let newsRotationTimers = [];
+      function startNewsRotation() {
+        // Clear any timers from a prior render.
+        newsRotationTimers.forEach(t => clearInterval(t));
+        newsRotationTimers = [];
+        Object.entries(NEWS_FEEDS).forEach(([id, items], idx) => {
+          let i = 0;
+          const tick = () => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.classList.remove("popping");
+            void el.offsetWidth; // force a reflow so the animation restarts
+            el.textContent = items[i % items.length];
+            el.classList.add("popping");
+            i++;
+          };
+          // Stagger each panel's first beat so the wall doesn't pulse in lockstep
+          setTimeout(() => {
+            tick();
+            newsRotationTimers.push(setInterval(tick, 5200));
+          }, idx * 900);
+        });
+      }
+
       function renderLiveCard() {
+        // Marquee headlines (live items if reachable, factual fallback otherwise).
         const items = state.liveItems.length
           ? state.liveItems.slice(0, 12)
           : [
@@ -1225,23 +1392,6 @@
           `;
         }).join("");
 
-        const sources = state.liveSources.length ? state.liveSources : [
-          { name: "FIFA Fixtures",    status: "syncing", latencyMs: 0 },
-          { name: "FIFA Teams",       status: "syncing", latencyMs: 0 },
-          { name: "Tournament Facts", status: "syncing", latencyMs: 0 },
-          { name: "CDC Travel",       status: "syncing", latencyMs: 0 }
-        ];
-
-        const cells = sources.slice(0, 4).map(s => {
-          const isLive = s.status === "live" || s.status === "reachable";
-          return `
-            <div class="live-cell ${isLive ? "" : "off"}">
-              <span class="name">${escapeHtml(s.name)}</span>
-              <span class="v">${escapeHtml(prettyStatus(s.status))}</span>
-              <span class="lat">${s.latencyMs ? s.latencyMs + " ms" : "—"}</span>
-            </div>`;
-        }).join("");
-
         const generated = state.generatedAt
           ? new Date(state.generatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
           : "—";
@@ -1256,7 +1406,24 @@
               <div class="meta">last sync · ${generated}</div>
             </div>
             <div class="ticker"><div class="ticker-track">${tickerHtml}</div></div>
-            <div class="live-grid">${cells}</div>
+            <div class="live-grid">
+              <div class="news-panel news-panel--fixtures">
+                <div class="news-label">FIFA Fixtures</div>
+                <div class="news-content" id="newsFixtures">—</div>
+              </div>
+              <div class="news-panel news-panel--teams">
+                <div class="news-label">FIFA Teams</div>
+                <div class="news-content" id="newsTeams">—</div>
+              </div>
+              <div class="news-panel news-panel--facts">
+                <div class="news-label">Tournament Facts</div>
+                <div class="news-content" id="newsFacts">—</div>
+              </div>
+              <div class="news-panel news-panel--travel">
+                <div class="news-label">US Travel</div>
+                <div class="news-content" id="newsTravel">—</div>
+              </div>
+            </div>
           </div>`;
       }
 
@@ -1681,7 +1848,7 @@
         $$(".section").forEach(s => s.classList.toggle("active", s.id === state.view));
 
         const r = {
-          overview: renderOverview, live: renderLiveSection, map: renderMapSection,
+          overview: renderOverview, map: renderMapSection,
           stadiums: renderStadiums, grants: renderGrants, business: renderBusiness,
           transport: renderTransport, safety: renderSafety, marathon: renderMarathon,
           youth: renderYouth, records: renderRecords, translate: renderTranslate,
@@ -1699,6 +1866,7 @@
           initVisibleMaps();
           animateCountUps();
           updateCountdown();
+          startNewsRotation();
         });
       }
 
@@ -1878,17 +2046,34 @@
 
       document.addEventListener("keydown", (e) => {
         if (e.target.matches("input, select, textarea")) return;
-        const map = { "1":"overview","2":"live","3":"map","4":"stadiums","5":"transport","6":"safety","7":"youth","8":"bracket" };
+        const map = { "1":"overview","2":"map","3":"stadiums","4":"transport","5":"safety","6":"youth","7":"bracket" };
         if (map[e.key]) { navigate(map[e.key]); }
         if (e.key === "Escape") $("#modal").classList.remove("open");
       });
 
       $("#refreshBtn").addEventListener("click", refreshLive);
-      $("#printBtn").addEventListener("click", () => window.print());
+      // Drive Google Translate via the topbar language picker. The widget
+      // loads async, so poll a short while for its select to be present.
+      function setPageLanguage(lang) {
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+        let attempts = 0;
+        const trySet = () => {
+          const goog = document.querySelector(".goog-te-combo");
+          if (goog) {
+            goog.value = lang;
+            goog.dispatchEvent(new Event("change"));
+            return;
+          }
+          if (++attempts < 30) setTimeout(trySet, 200);
+        };
+        trySet();
+      }
+
       $("#languageSelect").addEventListener("change", (e) => {
-        document.documentElement.lang = e.target.value;
-        document.documentElement.dir = e.target.value === "ar" ? "rtl" : "ltr";
-        toast(`Language: ${e.target.value.toUpperCase()}`);
+        const lang = e.target.value;
+        setPageLanguage(lang);
+        toast(lang === "en" ? "Language: English" : `Translating to ${lang.toUpperCase()}…`);
       });
       $("#closeModal").addEventListener("click", () => $("#modal").classList.remove("open"));
       $("#menuBtn")?.addEventListener("click", () => {

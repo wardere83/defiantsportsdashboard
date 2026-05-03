@@ -17,11 +17,19 @@ Impact view.
   Jun 11, 2026 · 12:00 CDMX / 18:00 UTC). Auto-switches to "Day N / 39"
   while the tournament is in progress and "Concluded" after the Final
   (Jul 19, 2026 · MetLife · NY/NJ).
-- **Live FIFA stream** — animated source ticker with the Defiant Sports
-  logo inlined every 4th item, per-source latency cells, pulsing live
-  indicator, and a dedicated **Live FIFA** tab with verified-source
-  status and headlines table. Fallback content is factual FIFA 2026
-  info — never fabricated live results.
+- **Live FIFA Source Stream** (on the Overview) — black broadcast-style
+  card with an animated marquee of factual FIFA 2026 headlines (Defiant
+  Sports logo inlined every 4th item) plus four lower-third **news
+  panels** that pop in and out CNBC/BBC/CNN-style: **FIFA Fixtures**
+  (rotating upcoming match dates and venues), **FIFA Teams** (host +
+  spotlight team intelligence), **Tournament Facts** (largest-WC-ever
+  framing facts), **US Travel** (ESTA / B-2 / CDC / CBP advisories for
+  inbound visitors). Each panel rotates every ~5 seconds with a staggered
+  pop-in animation. Fallback content is factual; never fabricated.
+- **Donate button** in the topbar links to the Defiant Foundation
+  donation page (`thedefiantfoundation.org/donate`).
+- **Translate dropdown** drives a hidden Google Translate widget so the
+  whole page is translated to ES / FR / PT / AR with a single click.
 - **Venues view** — every host venue rendered as an aligned compact
   card grid (city, country, venue name, capacity). Click a card to
   focus that city on the overview map.
@@ -86,17 +94,16 @@ npm run check # node --check (syntax)
 
 Aligned with the visible sidebar tabs.
 
-| Key   | View        |
-| ----- | ----------- |
-| `1`   | Overview    |
-| `2`   | Live FIFA   |
-| `3`   | Venues      |
-| `4`   | Stadiums    |
-| `5`   | Transport   |
-| `6`   | Safety      |
-| `7`   | Pogba Academy |
-| `8`   | Bracket     |
-| `Esc` | Close modal |
+| Key   | View          |
+| ----- | ------------- |
+| `1`   | Overview      |
+| `2`   | Venues        |
+| `3`   | Stadiums      |
+| `4`   | Transport     |
+| `5`   | Safety        |
+| `6`   | Pogba Academy |
+| `7`   | Bracket       |
+| `Esc` | Close modal   |
 
 ## Deployment
 
