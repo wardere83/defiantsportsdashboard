@@ -1389,8 +1389,7 @@
         ["safety",    "Safety",     "8", "△"],
         ["youth",     "Pogba Academy", "0", "○"],
         ["bracket",   "Bracket",    "[", "⌁"],
-        ["marathon",  "Marathon Clothing", "8", "◆"],
-        ["translate", "Translate",  "9", "文"]
+        ["marathon",  "Marathon Clothing", "8", "◆"]
       ];
 
       const stadiums = [
@@ -2574,7 +2573,7 @@
 
       document.addEventListener("keydown", (e) => {
         if (e.target.matches("input, select, textarea")) return;
-        const map = { "1":"overview","2":"map","3":"stadiums","4":"transport","5":"safety","6":"youth","7":"bracket","8":"marathon","9":"translate" };
+        const map = { "1":"overview","2":"map","3":"stadiums","4":"transport","5":"safety","6":"youth","7":"bracket","8":"marathon" };
         if (map[e.key]) { navigate(map[e.key]); }
         if (e.key === "Escape") $("#modal").classList.remove("open");
       });
