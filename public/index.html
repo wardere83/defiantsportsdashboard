@@ -684,36 +684,6 @@
         min-width: 0;
       }
 
-      .founders-photo {
-        position: relative;
-        aspect-ratio: 16 / 9;
-        border-radius: var(--radius-sm);
-        overflow: hidden;
-        background: linear-gradient(135deg, #1a1a1c 0%, #3f3f46 100%);
-        margin-bottom: 12px;
-      }
-      .founders-photo img {
-        width: 100%; height: 100%;
-        object-fit: cover;
-        display: block;
-      }
-      .founders-photo .credit {
-        position: absolute;
-        left: 12px; right: 12px; bottom: 10px;
-        color: #fff;
-        font-size: 11.5px;
-        font-weight: 700;
-        letter-spacing: 0.04em;
-        text-shadow: 0 1px 8px rgba(0,0,0,.7);
-      }
-      .founders-photo::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to bottom, transparent 55%, rgba(0,0,0,.65) 100%);
-        pointer-events: none;
-      }
-
       .drops-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -1943,26 +1913,6 @@
 
               <div class="card">
                 <div class="card-head">
-                  <h3>The Founders</h3>
-                  <span class="meta">Nipsey · Blacc Sam · Steve Carless</span>
-                </div>
-                <div class="card-body">
-                  <div class="founders-photo">
-                    <img src="./assets/marathon/founders.jpg" alt="Steve Carless, Nipsey Hussle, and Blacc Sam"
-                         loading="lazy"
-                         onerror="this.onerror=null; this.src='https://picsum.photos/seed/marathon-founders/1280/720';" />
-                    <div class="credit">Steve Carless · Nipsey Hussle · Blacc Sam</div>
-                  </div>
-                  <div class="list">
-                    ${listRow("Nipsey Hussle", `<span>Visionary, Grammy-recognised artist, founder · <strong>Ownership legacy</strong></span>`)}
-                    ${listRow("Blacc Sam", `<span>Brother and co-founder · <strong>Family stewardship</strong></span>`)}
-                    ${listRow("Steve Carless", `<span>Music industry executive, longtime collaborator · <strong>Culture strategy</strong></span>`)}
-                  </div>
-                </div>
-              </div>
-
-              <div class="card">
-                <div class="card-head">
                   <h3>Latest Drops</h3>
                   <a class="btn" href="https://www.themarathonclothing.com/collections/all" target="_blank" rel="noopener noreferrer">All collections ↗</a>
                 </div>
@@ -2142,7 +2092,7 @@
           business: "Local-market activation strategy",
           transport: "Match-day mobility advisories",
           safety: "Stewardship, health, and fan-flow",
-          marathon: "The Marathon Continues · founders, drops, music, and the Crenshaw legacy",
+          marathon: "The Marathon Continues · drops, music, and the Crenshaw legacy",
           youth: "Pogba Academy · World Cup access, futsal, athlete meet-ups, mentorship",
           records: "Narratives, campaigns, and rights",
           translate: "Multilingual coverage matrix",
