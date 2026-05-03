@@ -880,10 +880,14 @@
       .goog-te-banner-frame.skiptranslate,
       .goog-te-balloon-frame,
       .goog-te-menu-frame,
+      .goog-te-spinner,
       .goog-te-spinner-pos,
+      .goog-te-spinner-frame,
+      .goog-te-spinner-anim,
+      iframe.goog-te-spinner-frame,
       .goog-te-ftab,
       iframe.skiptranslate,
-      .skiptranslate iframe { display: none !important; visibility: hidden !important; }
+      .skiptranslate iframe { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
       .goog-te-gadget,
       .goog-logo-link,
       .goog-te-gadget-icon,
@@ -2609,10 +2613,25 @@
       function setPageLanguage(lang) {
         document.documentElement.lang = lang;
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+        // Set the cookie so future page loads also stay translated, then
+        // try to flip the language IN PLACE — no reload, no browser tab
+        // spinner. Polls briefly for the translation engine's hidden
+        // combo to be present, then dispatches a change.
         setGoogtrans(lang);
-        // Reload so Google Translate picks up the cookie. The hash route
-        // is preserved so the user lands back on the same tab.
-        setTimeout(() => location.reload(), 80);
+        let attempts = 0;
+        const trySet = () => {
+          const goog = document.querySelector(".goog-te-combo");
+          if (goog) {
+            goog.value = lang;
+            goog.dispatchEvent(new Event("change"));
+            return;
+          }
+          if (++attempts < 40) { setTimeout(trySet, 150); return; }
+          // Engine never showed up (script blocked / very slow network)
+          // — fall back to a reload so the cookie still takes effect.
+          location.reload();
+        };
+        trySet();
       }
 
       $("#languageSelect").addEventListener("change", (e) => {
