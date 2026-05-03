@@ -556,14 +556,14 @@
 
       /* Broadcast-style news panels inside the live FIFA card */
       .news-panel {
-        padding: 12px 14px 10px;
+        padding: 10px 14px 9px;
         border-right: 1px solid rgba(255,255,255,.08);
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
         position: relative;
         overflow: hidden;
-        min-height: 84px;
+        height: 72px;
       }
       .news-panel:last-child { border-right: 0; }
       .news-panel::before {
@@ -580,12 +580,13 @@
 
       .news-label {
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: 9.5px;
         font-weight: 800;
         letter-spacing: 0.18em;
         text-transform: uppercase;
         color: rgba(255,255,255,.78);
         display: flex; align-items: center; gap: 7px;
+        flex: 0 0 auto;
       }
       .news-label::before {
         content: "";
@@ -596,14 +597,18 @@
       }
 
       .news-content {
-        font-size: 13px;
+        font-size: 11.5px;
         font-weight: 600;
         color: rgba(255,255,255,.96);
-        line-height: 1.35;
+        line-height: 1.3;
         letter-spacing: -0.005em;
-        min-height: 2.7em;
-        display: flex;
-        align-items: center;
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
       }
       .news-content.popping {
         animation: news-pop .55s cubic-bezier(.2,.8,.2,1);
