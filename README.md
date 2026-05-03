@@ -122,7 +122,6 @@ Aligned with the visible sidebar tabs.
 | `6`   | Pogba Academy     |
 | `7`   | Bracket           |
 | `8`   | Marathon Clothing |
-| `9`   | Translate         |
 | `Esc` | Close modal       |
 
 ## Deployment
