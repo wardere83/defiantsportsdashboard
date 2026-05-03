@@ -394,10 +394,10 @@
         background: var(--accent-color, var(--ink));
       }
       .headline-tab .hl-text {
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 600;
         color: var(--ink);
-        line-height: 1.3;
+        line-height: 1.25;
         letter-spacing: -0.005em;
         flex: 1 1 auto;
         min-height: 0;
@@ -406,6 +406,8 @@
         -webkit-line-clamp: 3;
         line-clamp: 3;
         -webkit-box-orient: vertical;
+        word-break: break-word;
+        overflow-wrap: anywhere;
       }
       .headline-tab .hl-text.popping {
         animation: news-pop .55s cubic-bezier(.2,.8,.2,1);
@@ -673,10 +675,10 @@
       }
 
       .news-content {
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 600;
         color: rgba(255,255,255,.96);
-        line-height: 1.3;
+        line-height: 1.25;
         letter-spacing: -0.005em;
         flex: 1 1 auto;
         min-height: 0;
@@ -685,6 +687,8 @@
         -webkit-line-clamp: 2;
         line-clamp: 2;
         -webkit-box-orient: vertical;
+        word-break: break-word;
+        overflow-wrap: anywhere;
       }
       .news-content.popping {
         animation: news-pop .55s cubic-bezier(.2,.8,.2,1);
@@ -773,6 +777,63 @@
         object-position: center;
         display: block;
       }
+      /* Translate tab — flag-card language picker */
+      .lang-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .lang-card {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        text-align: left;
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        transition: transform .15s ease, box-shadow .2s ease, border-color .15s ease, background .15s ease;
+      }
+      .lang-card:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--line-2);
+      }
+      .lang-card.active {
+        border-color: var(--ink);
+        background: var(--surface-2);
+      }
+      .lang-flag { font-size: 22px; line-height: 1; flex: 0 0 auto; }
+      .lang-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+      .lang-native {
+        font-size: 13.5px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+        line-height: 1.18;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .lang-en {
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.10em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .lang-mark {
+        color: var(--live);
+        font-size: 14px;
+        line-height: 1;
+        flex: 0 0 auto;
+      }
+
       .video-frame {
         position: relative;
         aspect-ratio: 16 / 9;
@@ -1193,6 +1254,8 @@
         .grid-2, .grid-3 { grid-template-columns: 1fr; }
         .card-body { max-height: none; }
         .table-wrap { max-height: 60vh; }
+        .lang-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+        .marathon-grid { grid-template-columns: 1fr; }
         .pogba-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       }
 
@@ -1206,6 +1269,19 @@
         .ticker-logo { height: 20px; max-width: 72px; padding: 1px 4px; }
         .ticker-item.with-logo { gap: 10px; }
         .kpi.countdown-kpi .value { font-size: 17px; }
+        .lang-grid { grid-template-columns: 1fr; gap: 8px; }
+        .lang-card { padding: 11px 12px; }
+        .lang-flag { font-size: 20px; }
+        .lang-native { font-size: 13px; }
+        .marathon-hero { padding: 16px 18px; }
+        .marathon-hero blockquote { font-size: 18px; padding-left: 12px; }
+        .news-panel { height: auto; min-height: 78px; }
+        .headline-tab { height: auto; min-height: 88px; }
+      }
+
+      @media (max-width: 720px) {
+        .marathon-grid { grid-template-columns: 1fr; }
+        .pogba-strip { grid-template-columns: 1fr 1fr; }
       }
 
       /* Print */
@@ -1243,11 +1319,17 @@
           </div>
           <div class="top-actions">
             <select class="select" id="languageSelect" aria-label="Translate">
-              <option value="en">EN</option>
-              <option value="es">ES</option>
-              <option value="fr">FR</option>
-              <option value="pt">PT</option>
-              <option value="ar">AR</option>
+              <option value="en">🇺🇸 EN</option>
+              <option value="es">🇪🇸 ES</option>
+              <option value="fr">🇫🇷 FR</option>
+              <option value="pt">🇵🇹 PT</option>
+              <option value="ar">🇸🇦 AR</option>
+              <option value="ti">🇪🇷 TI</option>
+              <option value="so">🇸🇴 SO</option>
+              <option value="zh-TW">🇹🇼 ZH</option>
+              <option value="ko">🇰🇷 KO</option>
+              <option value="vi">🇻🇳 VI</option>
+              <option value="tl">🇵🇭 TL</option>
             </select>
             <a class="btn dark" id="donateBtn" href="https://thedefiantfoundation.org/donate/" target="_blank" rel="noopener noreferrer">Donate</a>
           </div>
@@ -1288,7 +1370,7 @@
       function googleTranslateElementInit() {
         new google.translate.TranslateElement({
           pageLanguage: "en",
-          includedLanguages: "en,es,fr,pt,ar",
+          includedLanguages: "en,es,fr,pt,ar,ti,so,zh-TW,ko,vi,tl",
           layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
           autoDisplay: false
         }, "google_translate_element");
@@ -1307,7 +1389,8 @@
         ["safety",    "Safety",     "8", "△"],
         ["youth",     "Pogba Academy", "0", "○"],
         ["bracket",   "Bracket",    "[", "⌁"],
-        ["marathon",  "Marathon Clothing", "8", "◆"]
+        ["marathon",  "Marathon Clothing", "8", "◆"],
+        ["translate", "Translate",  "9", "文"]
       ];
 
       const stadiums = [
@@ -2070,8 +2153,8 @@
                            disableremoteplayback
                            x-webkit-airplay="deny"
                            poster="./assets/marathon/Nip.webp">
-                      <source src="./assets/marathon/nip.mov" type="video/quicktime" />
                       <source src="./assets/marathon/nip.mp4" type="video/mp4" />
+                      <source src="./assets/marathon/nip.mov" type="video/quicktime" />
                       <source src="./assets/marathon/nip.webm" type="video/webm" />
                     </video>
                   </div>
@@ -2154,20 +2237,51 @@
           </div>`;
       }
 
+      // Languages surfaced in both the topbar picker and the Translate tab.
+      // Code values match the translation engine's locale identifiers; the
+      // dashboard reload handler already wires them through the cookie.
+      const LANGUAGES = [
+        { code: "en",    flag: "🇺🇸", name: "English",               native: "English"      },
+        { code: "es",    flag: "🇪🇸", name: "Spanish",               native: "Español"      },
+        { code: "fr",    flag: "🇫🇷", name: "French",                native: "Français"     },
+        { code: "pt",    flag: "🇵🇹", name: "Portuguese",            native: "Português"    },
+        { code: "ar",    flag: "🇸🇦", name: "Arabic",                native: "العربية"      },
+        { code: "ti",    flag: "🇪🇷", name: "Tigrinya",              native: "ትግርኛ"        },
+        { code: "so",    flag: "🇸🇴", name: "Somali",                native: "Soomaali"     },
+        { code: "zh-TW", flag: "🇹🇼", name: "Chinese (Traditional)", native: "繁體中文"      },
+        { code: "ko",    flag: "🇰🇷", name: "Korean",                native: "한국어"        },
+        { code: "vi",    flag: "🇻🇳", name: "Vietnamese",            native: "Tiếng Việt"   },
+        { code: "tl",    flag: "🇵🇭", name: "Tagalog",               native: "Tagalog"      }
+      ];
+
       function renderTranslate() {
+        const active = (typeof readGoogtrans === "function") ? readGoogtrans() : "en";
+        const cards = LANGUAGES.map(l => `
+          <button class="lang-card${l.code === active ? " active" : ""}" data-lang="${l.code}" type="button">
+            <span class="lang-flag" aria-hidden="true">${l.flag}</span>
+            <span class="lang-meta">
+              <span class="lang-native">${l.native}</span>
+              <span class="lang-en">${l.name}</span>
+            </span>
+            ${l.code === active ? `<span class="lang-mark">●</span>` : ""}
+          </button>`).join("");
+
         $("#translate").innerHTML = `
-          ${renderKpis()}
           <div class="fill">
             <div class="card">
-              <div class="card-head"><h3>Language Access Matrix</h3><span class="meta">${countries.length} markets</span></div>
-              <div class="card-body flush"><div class="table-wrap">
-                <table>
-                  <thead><tr><th>Market</th><th>Type</th><th>Languages</th><th>Coverage</th><th>Notes</th></tr></thead>
-                  <tbody>
-                    ${countries.map(c => `<tr><td><strong>${c[0]}</strong></td><td><span class="pill">${c[1]}</span></td><td>${c[2]}</td><td>Dashboard coverage</td><td>Human review for emergency copy</td></tr>`).join("")}
-                  </tbody>
-                </table>
-              </div></div>
+              <div class="card-head">
+                <h3>Translate this dashboard</h3>
+                <span class="meta">${LANGUAGES.length} languages</span>
+              </div>
+              <div class="card-body">
+                <p class="lede">
+                  Pick a language to translate the entire experience — the headline strip, the live FIFA card,
+                  every venue card, the bracket, the Marathon Clothing tab, modals, and the language matrix
+                  below. The dashboard reloads briefly so the translation engine can apply the new locale
+                  cleanly across every dynamic surface.
+                </p>
+                <div class="lang-grid">${cards}</div>
+              </div>
             </div>
           </div>`;
       }
@@ -2410,6 +2524,14 @@
           navigate(navBtn.dataset.view);
           return;
         }
+        const langCard = e.target.closest(".lang-card[data-lang]");
+        if (langCard) {
+          const lang = langCard.dataset.lang;
+          const sel = $("#languageSelect");
+          if (sel) sel.value = lang;
+          setPageLanguage(lang);
+          return;
+        }
         const sortHeader = e.target.closest("th[data-sort]");
         if (sortHeader) {
           const k = sortHeader.dataset.sort;
@@ -2452,7 +2574,7 @@
 
       document.addEventListener("keydown", (e) => {
         if (e.target.matches("input, select, textarea")) return;
-        const map = { "1":"overview","2":"map","3":"stadiums","4":"transport","5":"safety","6":"youth","7":"bracket","8":"marathon" };
+        const map = { "1":"overview","2":"map","3":"stadiums","4":"transport","5":"safety","6":"youth","7":"bracket","8":"marathon","9":"translate" };
         if (map[e.key]) { navigate(map[e.key]); }
         if (e.key === "Escape") $("#modal").classList.remove("open");
       });
@@ -2495,9 +2617,9 @@
       }
 
       $("#languageSelect").addEventListener("change", (e) => {
-        const lang = e.target.value;
-        toast(lang === "en" ? "Reverting to English…" : `Translating to ${lang.toUpperCase()}…`);
-        setPageLanguage(lang);
+        // No toast — page reload speaks for itself; the brand area
+        // shouldn't flash a status indicator on language change.
+        setPageLanguage(e.target.value);
       });
       $("#closeModal").addEventListener("click", () => $("#modal").classList.remove("open"));
       $("#menuBtn")?.addEventListener("click", () => {
