@@ -1381,6 +1381,7 @@
 
         <div class="view">
           <section class="section" id="overview"></section>
+          <section class="section" id="branding"></section>
           <section class="section" id="map"></section>
           <section class="section" id="stadiums"></section>
           <section class="section" id="grants"></section>
@@ -1427,7 +1428,8 @@
       // ───────────────── Data ─────────────────
       const views = [
         ["overview",  "Overview",   "1", "▦"],
-        ["map",       "Venues",     "2", "◇"],
+        ["branding",  "Branding",   "2", "✦"],
+        ["map",       "Venues",     "3", "◇"],
         ["stadiums",  "Stadiums",   "4", "⌂"],
         ["transport", "Transport",  "7", "⇄"],
         ["safety",    "Safety",     "8", "△"],
@@ -2270,6 +2272,116 @@
           </div>`;
       }
 
+      function renderBranding() {
+        $("#branding").innerHTML = `
+          <div class="marathon-hero">
+            <div class="kicker">Defiant Sports · Athlete Branding</div>
+            <blockquote>The voice of an athlete moves markets — and movements.</blockquote>
+            <cite>— Partner with the world-class roster behind Defiant Sports</cite>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Why athlete branding works</h3>
+              <span class="meta">Trust · Reach · Loyalty</span>
+            </div>
+            <div class="card-body">
+              <p class="lede">
+                Athletes are the most trusted voices in modern culture. They show up on
+                game day and on the timeline, hold attention across generations and
+                geographies, and convert that attention into the kind of long-form
+                loyalty traditional advertising can no longer buy. When an athlete
+                carries your message, the message arrives <strong>pre-credentialed</strong>.
+              </p>
+              <div class="grid-3" style="margin-top:14px">
+                ${simpleCard("Authentic Reach", "Direct line to global communities — fans follow the athlete, the message rides along, and engagement compounds across owned, earned, and paid surfaces.")}
+                ${simpleCard("Cultural Credibility", "Athletes operate at the intersection of sport, music, fashion, and social movement. A partnership lands inside conversations consumers actually trust.")}
+                ${simpleCard("Performance Halo", "Championship-level discipline transfers to the brand. Excellence on the field becomes a proof point for the product.")}
+                ${simpleCard("Long-Form Loyalty", "Athlete relationships outlast quarterly campaigns. Fans subscribe to the journey, not the spot — partners benefit for seasons, not weeks.")}
+                ${simpleCard("Multigenerational Pull", "From Gen Alpha to boomers, athletes are one of the few cultural figures whose appeal scales across age cohorts simultaneously.")}
+                ${simpleCard("Measurable Lift", "Reach, engagement rate, search volume, foot traffic, and product velocity move in lockstep with athlete-led activations — and we report on every layer.")}
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>What Defiant Sports brings to the partnership</h3>
+              <span class="meta">High-level branding partner</span>
+            </div>
+            <div class="card-body">
+              <p class="lede">
+                Defiant Sports is a curated platform — every athlete on the roster is
+                vetted not just for athletic excellence but for <strong>vision, voice,
+                and value alignment</strong>. We pair brands with athletes whose audience,
+                cause, and trajectory map cleanly onto the partner's growth thesis.
+              </p>
+              <div class="grid-3" style="margin-play:14px">
+                ${simpleCard("World-Class Roster", "Defending champions, Olympic medalists, and rising stars — all signed against character standards as much as performance benchmarks.")}
+                ${simpleCard("Strategic Storytelling", "We do not bolt logos onto athletes. We design narrative arcs that frame the brand as a co-author of the athlete's chapter.")}
+                ${simpleCard("Multi-Surface Activation", "Owned content, broadcast appearances, training programs, community events, retail moments — sequenced for compounding momentum.")}
+                ${simpleCard("Rights & IP Stewardship", "Clean clearances, proper image rights, contract guardrails — partners ship faster because compliance is handled upstream.")}
+                ${simpleCard("Operations & Production", "Defiant Sports captures, edits, and ships the work. Partners get launch-ready assets, not a creative briefing meeting.")}
+                ${simpleCard("Reporting & ROI", "Every partnership ships with a measurement plan: engagement, sentiment, brand-lift, conversion, sell-through. We are accountable to outcomes.")}
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Beyond marketing — movement</h3>
+              <span class="meta">Social · Systemic · Industry change</span>
+            </div>
+            <div class="card-body">
+              <p class="lede">
+                The athletes we partner with are a <strong>driving force in social,
+                systemic, and industry change</strong>. Their leadership and vision are
+                grounded in creating greater value for societies across the globe —
+                not in selling units. Brands that align with that mission inherit the
+                halo and the trust that comes with it.
+              </p>
+              <div class="grid-3" style="margin-top:14px">
+                ${simpleCard("Social Change", "Community-first activations: youth access programs, local-first content, mentor networks, equitable entry points to elite training pipelines.")}
+                ${simpleCard("Systemic Change", "Athletes leveraging their platforms to push policy, funding, and structural decisions that level the field for the next generation.")}
+                ${simpleCard("Industry Change", "Pioneering ownership, equity-stake partnerships, and player-owned media that shift power toward athletes — and toward the brands that backed them early.")}
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Partnership lanes</h3>
+              <span class="meta">Pick the surface, we build the rest</span>
+            </div>
+            <div class="card-body">
+              <div class="list">
+                ${listRow("Spotlight", "<span>Single-athlete activation across a defined window — campaign film, three-asset content series, owned-channel push, retail moment. <strong>Best for product launches.</strong></span>")}
+                ${listRow("Movement", "<span>Multi-athlete narrative arc spanning a season — anchored content drops, broadcast tie-ins, community events, owned and earned amplification. <strong>Best for category positioning.</strong></span>")}
+                ${listRow("Legacy", "<span>Enterprise-wide partnership: roster-level rights, co-branded programs, year-round content, equity-stake conversations, foundation-aligned community work. <strong>Best for category leadership.</strong></span>")}
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Start the conversation</h3>
+            </div>
+            <div class="card-body">
+              <p class="lede">
+                If your brand wants to partner with athletes who are already moving the
+                world — and operate with a team that engineers the partnership end to
+                end — Defiant Sports is the lane. The marathon continues; the partner
+                list is short on purpose.
+              </p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px">
+                <a class="btn dark" href="https://defiantsports.io" target="_blank" rel="noopener noreferrer">Visit Defiant Sports ↗</a>
+                <a class="btn" href="https://thedefiantfoundation.org/" target="_blank" rel="noopener noreferrer">Visit The Defiant Foundation ↗</a>
+                <a class="btn" href="mailto:partnerships@defiantsports.io?subject=Brand%20Partnership%20Inquiry">Email partnerships@defiantsports.io</a>
+              </div>
+            </div>
+          </div>`;
+      }
+
       function renderRecords() {
         $("#records").innerHTML = `
           ${renderKpis()}
@@ -2378,6 +2490,7 @@
         $("#viewTitle").textContent = meta ? meta[1] : "Overview";
         const crumbs = {
           overview: "Real-time host-city intelligence · FIFA World Cup 2026",
+          branding: "Athlete branding · Partner with the voices that move markets and movements",
           live: "Verified FIFA · CDC · partner endpoints · streaming when reachable",
           map: "All 16 host venues · click a card to focus that city on the overview map",
           stadiums: "Verified venue register · 16 host stadiums",
@@ -2396,7 +2509,7 @@
         $$(".section").forEach(s => s.classList.toggle("active", s.id === state.view));
 
         const r = {
-          overview: renderOverview, map: renderMapSection,
+          overview: renderOverview, branding: renderBranding, map: renderMapSection,
           stadiums: renderStadiums, grants: renderGrants, business: renderBusiness,
           transport: renderTransport, safety: renderSafety, marathon: renderMarathon,
           youth: renderYouth, records: renderRecords, translate: renderTranslate,
@@ -2649,7 +2762,7 @@
 
       document.addEventListener("keydown", (e) => {
         if (e.target.matches("input, select, textarea")) return;
-        const map = { "1":"overview","2":"map","3":"stadiums","4":"transport","5":"safety","6":"youth","7":"bracket","8":"marathon" };
+        const map = { "1":"overview","2":"branding","3":"map","4":"stadiums","5":"transport","6":"safety","7":"youth","8":"bracket","9":"marathon" };
         if (map[e.key]) { navigate(map[e.key]); }
         if (e.key === "Escape") $("#modal").classList.remove("open");
       });
