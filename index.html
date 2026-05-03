@@ -620,6 +620,173 @@
         100% { opacity: 1; transform: translateY(0); }
       }
 
+      /* ─────────── Marathon Clothing view ─────────── */
+      .marathon-hero {
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1c 60%, #2a2a2e 100%);
+        color: #fff;
+        border-radius: var(--radius);
+        border: 1px solid #1f1f24;
+        padding: 22px 26px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+      }
+      .marathon-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(900px 220px at 0% 100%, rgba(0,166,80,.15), transparent 60%),
+          radial-gradient(700px 220px at 100% 0%, rgba(245,180,0,.10), transparent 60%);
+        pointer-events: none;
+      }
+      .marathon-hero .kicker {
+        font-family: var(--mono);
+        font-size: 10.5px;
+        font-weight: 800;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,.65);
+        margin-bottom: 10px;
+        position: relative;
+      }
+      .marathon-hero blockquote {
+        margin: 0;
+        font-size: clamp(20px, 2.6vw, 32px);
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.18;
+        color: #fff;
+        position: relative;
+        padding-left: 16px;
+        border-left: 3px solid var(--live);
+      }
+      .marathon-hero cite {
+        display: block;
+        margin-top: 12px;
+        font-style: normal;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,.78);
+      }
+
+      .marathon-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+        gap: 12px;
+      }
+      .marathon-col {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .founders-photo {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+        background: linear-gradient(135deg, #1a1a1c 0%, #3f3f46 100%);
+        margin-bottom: 12px;
+      }
+      .founders-photo img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .founders-photo .credit {
+        position: absolute;
+        left: 12px; right: 12px; bottom: 10px;
+        color: #fff;
+        font-size: 11.5px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-shadow: 0 1px 8px rgba(0,0,0,.7);
+      }
+      .founders-photo::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, transparent 55%, rgba(0,0,0,.65) 100%);
+        pointer-events: none;
+      }
+
+      .drops-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px;
+      }
+      .drop-tile {
+        position: relative;
+        aspect-ratio: 1 / 1;
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+        background: linear-gradient(135deg, #1a1a1c 0%, #3f3f46 100%);
+        border: 1px solid var(--line);
+        cursor: pointer;
+        transition: transform .15s ease, box-shadow .2s ease;
+      }
+      .drop-tile:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+      .drop-tile img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .drop-tile .meta {
+        position: absolute;
+        left: 8px; right: 8px; bottom: 6px;
+        color: #fff;
+        font-size: 10.5px;
+        font-weight: 700;
+        text-shadow: 0 1px 6px rgba(0,0,0,.7);
+        z-index: 1;
+      }
+      .drop-tile::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, transparent 55%, rgba(0,0,0,.7) 100%);
+        pointer-events: none;
+      }
+
+      .video-frame {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        background: #000;
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+      }
+      .video-frame iframe {
+        position: absolute; inset: 0;
+        width: 100%; height: 100%;
+        border: 0;
+      }
+
+      .quote-rotator {
+        position: relative;
+        min-height: 78px;
+      }
+      .quote-rotator blockquote {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.32;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+        padding-left: 12px;
+        border-left: 3px solid var(--live);
+      }
+      .quote-rotator.popping blockquote {
+        animation: news-pop .55s cubic-bezier(.2,.8,.2,1);
+      }
+
+      @media (max-width: 980px) {
+        .marathon-grid { grid-template-columns: 1fr; }
+      }
+
       /* Hide the Google Translate banner + spinner so the dashboard
          stays clean while the rest of the page is translated. */
       .goog-te-banner-frame.skiptranslate,
@@ -1101,7 +1268,8 @@
         ["transport", "Transport",  "7", "⇄"],
         ["safety",    "Safety",     "8", "△"],
         ["youth",     "Pogba Academy", "0", "○"],
-        ["bracket",   "Bracket",    "[", "⌁"]
+        ["bracket",   "Bracket",    "[", "⌁"],
+        ["marathon",  "Marathon Clothing", "8", "◆"]
       ];
 
       const stadiums = [
@@ -1691,24 +1859,156 @@
           </div>`;
       }
 
+      // ───────────────── Marathon Clothing view ─────────────────
+      // YouTube video ID for the side-rail Nipsey track. Swap this
+      // constant to change the clip — graceful fallback below.
+      const NIPSEY_VIDEO_ID = "lxoa78Wf_7o"; // "Racks in the Middle"
+
+      const NIPSEY_QUOTES = [
+        "The Marathon Continues.",
+        "We honor the people that ain't quit, we honor the people that stayed down.",
+        "Have vision and patience for the long game.",
+        "It's not about how you start, it's about how you finish.",
+        "All money in, no money out.",
+        "Stay focused. Stay solid. Build your foundation.",
+        "Hard work pays off — there are no shortcuts.",
+        "When you write your own story, you can put a happy ending."
+      ];
+
+      const MARATHON_DROPS = [
+        { name: "Crenshaw Tee",          local: "./assets/marathon/drop-1.jpg", src: "https://picsum.photos/seed/marathon-tee/640/640" },
+        { name: "Victory Lap Hoodie",    local: "./assets/marathon/drop-2.jpg", src: "https://picsum.photos/seed/marathon-hoodie/640/640" },
+        { name: "TMC Cap",               local: "./assets/marathon/drop-3.jpg", src: "https://picsum.photos/seed/marathon-cap/640/640" },
+        { name: "All Money In Sweats",   local: "./assets/marathon/drop-4.jpg", src: "https://picsum.photos/seed/marathon-sweats/640/640" },
+        { name: "Marathon Tracksuit",    local: "./assets/marathon/drop-5.jpg", src: "https://picsum.photos/seed/marathon-tracksuit/640/640" },
+        { name: "Slauson Long Sleeve",   local: "./assets/marathon/drop-6.jpg", src: "https://picsum.photos/seed/marathon-longsleeve/640/640" }
+      ];
+
+      let marathonQuoteTimer = null;
+      function startMarathonQuoteRotator() {
+        if (marathonQuoteTimer) { clearInterval(marathonQuoteTimer); marathonQuoteTimer = null; }
+        const root = document.getElementById("marathonQuote");
+        const text = document.getElementById("marathonQuoteText");
+        if (!root || !text) return;
+        let i = 0;
+        const tick = () => {
+          if (!document.getElementById("marathonQuoteText")) return;
+          root.classList.remove("popping");
+          void root.offsetWidth;
+          text.textContent = NIPSEY_QUOTES[i % NIPSEY_QUOTES.length];
+          root.classList.add("popping");
+          i++;
+        };
+        tick();
+        marathonQuoteTimer = setInterval(tick, 6000);
+      }
+
       function renderMarathon() {
+        const drops = MARATHON_DROPS.map(d => `
+          <a class="drop-tile" href="https://www.themarathonclothing.com/" target="_blank" rel="noopener" aria-label="${escapeHtml(d.name)} on The Marathon Clothing">
+            <img src="${d.local}" alt="${escapeHtml(d.name)}" loading="lazy"
+                 onerror="this.onerror=null; this.src='${d.src}';" />
+            <div class="meta">${escapeHtml(d.name)}</div>
+          </a>`).join("");
+
         $("#marathon").innerHTML = `
           ${renderKpis()}
-          <div class="fill grid-2">
-            <div class="card">
-              <div class="card-head"><h3>The Marathon Clothing</h3><a class="btn dark" href="https://www.themarathonclothing.com/" target="_blank" rel="noopener">Visit store ↗</a></div>
-              <div class="card-body">
-                <p class="lede"><strong>The Marathon Continues.</strong> A culture-and-commerce homage to Nipsey Hussle, Blacc Sam, and Steven Carless, integrated inside the Defiant Sports platform.</p>
-                <blockquote style="border-left:3px solid var(--ink); padding:6px 0 6px 14px; margin:18px 0 0; font-size:18px; font-weight:800; letter-spacing:-.02em">"We honor the people that ain't quit, we honor the people that stayed down."</blockquote>
+          <div class="marathon-hero">
+            <div class="kicker">The Marathon Clothing · Crenshaw, Los Angeles</div>
+            <blockquote>"The Marathon Continues. We honor the people that ain't quit, we honor the people that stayed down."</blockquote>
+            <cite>— Nipsey Hussle (Ermias Asghedom · 1985–2019)</cite>
+          </div>
+
+          <div class="marathon-grid">
+            <div class="marathon-col">
+              <div class="card">
+                <div class="card-head">
+                  <h3>The Story</h3>
+                  <a class="btn dark" href="https://www.themarathonclothing.com/" target="_blank" rel="noopener noreferrer">Shop the store ↗</a>
+                </div>
+                <div class="card-body">
+                  <p class="lede">
+                    <strong>The Marathon Clothing</strong> is the smart-store apparel brand founded by
+                    <strong>Nipsey Hussle</strong>, his brother <strong>Blacc Sam</strong>, and longtime collaborator
+                    <strong>Steve Carless</strong>. Opened on Slauson Avenue in South Los Angeles in 2017, the
+                    flagship store reimagined the corner shop as community ownership infrastructure — every
+                    drop is a milestone in a longer race.
+                  </p>
+                  <p class="lede" style="margin-top:10px">
+                    Inside the Defiant Sports platform, the Marathon legacy is the cultural North Star: building
+                    locally, owning your block, and finishing what you start. The marathon continues.
+                  </p>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-head">
+                  <h3>The Founders</h3>
+                  <span class="meta">Nipsey · Blacc Sam · Steve Carless</span>
+                </div>
+                <div class="card-body">
+                  <div class="founders-photo">
+                    <img src="./assets/marathon/founders.jpg" alt="Steve Carless, Nipsey Hussle, and Blacc Sam"
+                         loading="lazy"
+                         onerror="this.onerror=null; this.src='https://picsum.photos/seed/marathon-founders/1280/720';" />
+                    <div class="credit">Steve Carless · Nipsey Hussle · Blacc Sam</div>
+                  </div>
+                  <div class="list">
+                    ${listRow("Nipsey Hussle", `<span>Visionary, Grammy-recognised artist, founder · <strong>Ownership legacy</strong></span>`)}
+                    ${listRow("Blacc Sam", `<span>Brother and co-founder · <strong>Family stewardship</strong></span>`)}
+                    ${listRow("Steve Carless", `<span>Music industry executive, longtime collaborator · <strong>Culture strategy</strong></span>`)}
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-head">
+                  <h3>Latest Drops</h3>
+                  <a class="btn" href="https://www.themarathonclothing.com/collections/all" target="_blank" rel="noopener noreferrer">All collections ↗</a>
+                </div>
+                <div class="card-body">
+                  <div class="drops-grid">${drops}</div>
+                </div>
               </div>
             </div>
-            <div class="card">
-              <div class="card-head"><h3>Legacy Register</h3></div>
-              <div class="card-body">
-                <div class="list">
-                  ${listRow("Nipsey Hussle", `<span class="pill">Ownership legacy</span>`)}
-                  ${listRow("Blacc Sam", `<span class="pill">Family stewardship</span>`)}
-                  ${listRow("Steven Carless", `<span class="pill">Culture strategy</span>`)}
+
+            <div class="marathon-col">
+              <div class="card">
+                <div class="card-head">
+                  <h3>Hussle Live</h3>
+                  <span class="pill ok dot">Now playing</span>
+                </div>
+                <div class="card-body flush">
+                  <div class="video-frame">
+                    <iframe src="https://www.youtube-nocookie.com/embed/${NIPSEY_VIDEO_ID}?rel=0&modestbranding=1"
+                            title="Nipsey Hussle — official video"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                            referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                  </div>
+                </div>
+                <div class="card-body" style="padding-top:10px">
+                  <a class="btn" href="https://www.youtube.com/results?search_query=Nipsey+Hussle+official" target="_blank" rel="noopener noreferrer" style="width:100%">More videos on YouTube ↗</a>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-head"><h3>Marathon Quotes</h3><span class="meta">Rotates every 6s</span></div>
+                <div class="card-body">
+                  <div class="quote-rotator" id="marathonQuote">
+                    <blockquote id="marathonQuoteText">${escapeHtml(NIPSEY_QUOTES[0])}</blockquote>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-head"><h3>Visit the Store</h3></div>
+                <div class="card-body">
+                  <div class="list">
+                    ${listRow("Address", `<span style="font-weight:700">3420 W Slauson Ave, Los Angeles, CA</span>`)}
+                    ${listRow("Online", `<a href="https://www.themarathonclothing.com/" target="_blank" rel="noopener noreferrer" style="font-weight:700; color:var(--ink)">themarathonclothing.com ↗</a>`)}
+                    ${listRow("Instagram", `<a href="https://www.instagram.com/themarathonclothing/" target="_blank" rel="noopener noreferrer" style="font-weight:700; color:var(--ink)">@themarathonclothing ↗</a>`)}
+                  </div>
                 </div>
               </div>
             </div>
@@ -1842,7 +2142,7 @@
           business: "Local-market activation strategy",
           transport: "Match-day mobility advisories",
           safety: "Stewardship, health, and fan-flow",
-          marathon: "The Marathon Continues · culture & commerce",
+          marathon: "The Marathon Continues · founders, drops, music, and the Crenshaw legacy",
           youth: "Pogba Academy · World Cup access, futsal, athlete meet-ups, mentorship",
           records: "Narratives, campaigns, and rights",
           translate: "Multilingual coverage matrix",
@@ -1872,6 +2172,7 @@
           animateCountUps();
           updateCountdown();
           startNewsRotation();
+          startMarathonQuoteRotator();
         });
       }
 
@@ -2051,7 +2352,7 @@
 
       document.addEventListener("keydown", (e) => {
         if (e.target.matches("input, select, textarea")) return;
-        const map = { "1":"overview","2":"map","3":"stadiums","4":"transport","5":"safety","6":"youth","7":"bracket" };
+        const map = { "1":"overview","2":"map","3":"stadiums","4":"transport","5":"safety","6":"youth","7":"bracket","8":"marathon" };
         if (map[e.key]) { navigate(map[e.key]); }
         if (e.key === "Escape") $("#modal").classList.remove("open");
       });
