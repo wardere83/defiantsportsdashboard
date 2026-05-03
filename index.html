@@ -10,6 +10,10 @@
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://unpkg.com" crossorigin />
+    <link rel="dns-prefetch" href="https://translate.google.com" />
+    <link rel="dns-prefetch" href="https://translate.googleapis.com" />
+    <link rel="dns-prefetch" href="https://picsum.photos" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap"
       rel="stylesheet"
@@ -1245,10 +1249,6 @@
               <option value="pt">PT</option>
               <option value="ar">AR</option>
             </select>
-            <button class="btn" id="refreshBtn" type="button" aria-label="Refresh live data">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-              Refresh
-            </button>
             <a class="btn dark" id="donateBtn" href="https://thedefiantfoundation.org/donate/" target="_blank" rel="noopener noreferrer">Donate</a>
           </div>
         </header>
@@ -2065,7 +2065,10 @@
                   <div class="video-frame">
                     <video class="nip-video"
                            autoplay loop muted playsinline
-                           preload="metadata"
+                           preload="auto"
+                           disablepictureinpicture
+                           disableremoteplayback
+                           x-webkit-airplay="deny"
                            poster="./assets/marathon/Nip.webp">
                       <source src="./assets/marathon/nip.mov" type="video/quicktime" />
                       <source src="./assets/marathon/nip.mp4" type="video/mp4" />
@@ -2302,11 +2305,18 @@
       }
 
       // ───────────────── Live data ─────────────────
+      // Once the /api/* endpoints fail (e.g. on static GitHub Pages
+      // hosting where there is no Express backend), stop polling. The
+      // dashboard already runs cleanly on the factual fallback content
+      // and there's no user-visible benefit to retrying every 5 min.
+      let liveApiAvailable = true;
+      let liveAutoRefreshTimer = null;
+
       async function refreshLive() {
+        if (!liveApiAvailable) return;
         state.live = "checking";
         state.grantLive = "checking";
         renderActive();
-        toast("Querying verified live sources…");
         try {
           const [live, grant] = await Promise.allSettled([
             fetch("/api/live-feeds"),
@@ -2330,11 +2340,18 @@
           } else {
             state.grantLive = "unavailable";
           }
-          toast(state.live === "connected" ? "Live sources synced." : "Live API unreachable — running in static mode.");
+          if (state.live === "connected") {
+            toast("Live sources synced.");
+          } else {
+            // No backend reachable — quietly fall back; don't re-poll.
+            liveApiAvailable = false;
+            if (liveAutoRefreshTimer) { clearInterval(liveAutoRefreshTimer); liveAutoRefreshTimer = null; }
+          }
         } catch {
           state.live = "unavailable";
           state.grantLive = "unavailable";
-          toast("Live API unreachable — running in static mode.");
+          liveApiAvailable = false;
+          if (liveAutoRefreshTimer) { clearInterval(liveAutoRefreshTimer); liveAutoRefreshTimer = null; }
         }
         renderActive();
       }
@@ -2440,7 +2457,7 @@
         if (e.key === "Escape") $("#modal").classList.remove("open");
       });
 
-      $("#refreshBtn").addEventListener("click", refreshLive);
+      $("#refreshBtn")?.addEventListener("click", refreshLive);
       // Translate the page via Google Translate's official cookie hook:
       // set googtrans, reload, the widget reads it on init and applies
       // the translation across all dynamic content. Far more reliable
@@ -2503,7 +2520,9 @@
       }
       renderActive();
       refreshLive();
-      setInterval(refreshLive, 5 * 60 * 1000);
+      // Only schedule the auto-refresh; refreshLive() will clear it
+      // automatically the first time the /api/* endpoints fail.
+      liveAutoRefreshTimer = setInterval(refreshLive, 5 * 60 * 1000);
       // Tick the FIFA 2026 countdown every second
       setInterval(updateCountdown, 1000);
     </script>
