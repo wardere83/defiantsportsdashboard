@@ -2422,28 +2422,46 @@
       });
 
       $("#refreshBtn").addEventListener("click", refreshLive);
-      // Drive Google Translate via the topbar language picker. The widget
-      // loads async, so poll a short while for its select to be present.
+      // Translate the page via Google Translate's official cookie hook:
+      // set googtrans, reload, the widget reads it on init and applies
+      // the translation across all dynamic content. Far more reliable
+      // than dispatching a fake change event into Google's hidden combo.
+      function readGoogtrans() {
+        const m = document.cookie.match(/(?:^|;\s*)googtrans=\/[a-z]+\/([a-z]+)/i);
+        return m ? m[1] : "en";
+      }
+      function setGoogtrans(lang) {
+        const host = location.hostname;
+        const expires = new Date(Date.now() + 365 * 24 * 3600 * 1000).toUTCString();
+        const clear = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        // Clear any existing cookie on both / and .domain so we start clean
+        document.cookie = clear;
+        if (host && host !== "localhost") {
+          document.cookie = clear + " domain=" + host + ";";
+          document.cookie = clear + " domain=." + host + ";";
+        }
+        if (lang && lang !== "en") {
+          const value = "googtrans=/en/" + lang + "; expires=" + expires + "; path=/;";
+          document.cookie = value;
+          if (host && host !== "localhost") {
+            document.cookie = value + " domain=" + host + ";";
+            document.cookie = value + " domain=." + host + ";";
+          }
+        }
+      }
       function setPageLanguage(lang) {
         document.documentElement.lang = lang;
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-        let attempts = 0;
-        const trySet = () => {
-          const goog = document.querySelector(".goog-te-combo");
-          if (goog) {
-            goog.value = lang;
-            goog.dispatchEvent(new Event("change"));
-            return;
-          }
-          if (++attempts < 30) setTimeout(trySet, 200);
-        };
-        trySet();
+        setGoogtrans(lang);
+        // Reload so Google Translate picks up the cookie. The hash route
+        // is preserved so the user lands back on the same tab.
+        setTimeout(() => location.reload(), 80);
       }
 
       $("#languageSelect").addEventListener("change", (e) => {
         const lang = e.target.value;
+        toast(lang === "en" ? "Reverting to English…" : `Translating to ${lang.toUpperCase()}…`);
         setPageLanguage(lang);
-        toast(lang === "en" ? "Language: English" : `Translating to ${lang.toUpperCase()}…`);
       });
       $("#closeModal").addEventListener("click", () => $("#modal").classList.remove("open"));
       $("#menuBtn")?.addEventListener("click", () => {
@@ -2454,6 +2472,16 @@
       // shareable links, and back/forward all land where the user expects.
       const initialView = viewFromHash();
       if (initialView) state.view = initialView;
+      // Sync the language picker to whatever Google Translate is showing
+      // (read from the googtrans cookie). Keeps the dropdown honest after
+      // a reload triggered by setPageLanguage.
+      const initialLang = readGoogtrans();
+      const langSel = $("#languageSelect");
+      if (langSel && [...langSel.options].some(o => o.value === initialLang)) {
+        langSel.value = initialLang;
+        document.documentElement.lang = initialLang;
+        document.documentElement.dir = initialLang === "ar" ? "rtl" : "ltr";
+      }
       renderActive();
       refreshLive();
       setInterval(refreshLive, 5 * 60 * 1000);
