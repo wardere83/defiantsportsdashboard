@@ -394,45 +394,53 @@
         mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
         -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
       }
-      .fifa-ticker-track {
-        display: inline-flex;
+      /* Beyond the Pitch headline rotator. One headline visible at a
+         time, breaking-news banner aesthetic. Crossfade + lift on
+         change (~250ms), 7s read window. Pause on hover/focus,
+         respects prefers-reduced-motion. */
+      .fifa-headline {
+        display: flex;
         align-items: center;
-        gap: 24px;
-        white-space: nowrap;
-        padding-left: 100%;
-        animation: fifa-marquee 240s linear infinite;
-        will-change: transform;
-        direction: ltr;
+        min-height: 56px;
+        padding: 14px 18px;
+        position: relative;
       }
-      .fifa-ticker:hover .fifa-ticker-track,
-      .fifa-ticker:focus-within .fifa-ticker-track {
-        animation-play-state: paused;
-      }
-      @keyframes fifa-marquee {
-        from { transform: translate3d(0, 0, 0); }
-        to   { transform: translate3d(-50%, 0, 0); }
-      }
-      .fifa-fact {
-        font-size: 12.5px;
-        font-weight: 600;
+      .fifa-headline-text {
+        font-size: 18px;
+        line-height: 1.35;
+        font-weight: 700;
         color: var(--ink);
-        letter-spacing: -0.005em;
+        letter-spacing: -0.012em;
+        margin: 0;
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 250ms ease, transform 250ms ease;
+        will-change: opacity, transform;
       }
-      .fifa-divider {
-        width: 6px; height: 6px;
-        border-radius: 50%;
-        background: #1d4ed8;
+      .fifa-headline.changing .fifa-headline-text {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      .fifa-headline-tag {
+        display: inline-block;
+        background: #b91c1c;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-right: 10px;
         flex: 0 0 auto;
-        opacity: 0.55;
+        align-self: center;
+      }
+      @media (max-width: 720px) {
+        .fifa-headline-text { font-size: 15px; }
+        .fifa-headline { min-height: 48px; padding: 12px 14px; }
       }
       @media (prefers-reduced-motion: reduce) {
-        .fifa-ticker-track {
-          animation: none;
-          padding-left: 0;
-          flex-wrap: wrap;
-          white-space: normal;
-        }
-        .fifa-ticker { overflow-x: auto; }
+        .fifa-headline-text { transition: none; }
       }
 
       /* Black Wall Street rotating card on the Marathon Clothing view.
@@ -1919,11 +1927,9 @@
         <div class="view">
           <section class="section" id="overview"  role="tabpanel" aria-labelledby="tab-overview"  tabindex="0"></section>
           <section class="section" id="branding"  role="tabpanel" aria-labelledby="tab-branding"  tabindex="0"></section>
-          <section class="section" id="map"       role="tabpanel" aria-labelledby="tab-map"       tabindex="0"></section>
           <section class="section" id="stadiums"  role="tabpanel" aria-labelledby="tab-stadiums"  tabindex="0"></section>
           <section class="section" id="grants"    role="tabpanel" aria-labelledby="tab-grants"    tabindex="0"></section>
           <section class="section" id="business"  role="tabpanel" aria-labelledby="tab-business"  tabindex="0"></section>
-          <section class="section" id="transport" role="tabpanel" aria-labelledby="tab-transport" tabindex="0"></section>
           <section class="section" id="safety"    role="tabpanel" aria-labelledby="tab-safety"    tabindex="0"></section>
           <section class="section" id="marathon"  role="tabpanel" aria-labelledby="tab-marathon"  tabindex="0"></section>
           <section class="section" id="youth"     role="tabpanel" aria-labelledby="tab-youth"     tabindex="0"></section>
@@ -1966,13 +1972,11 @@
       const views = [
         ["overview",  "Overview",   "1", "▦"],
         ["branding",  "Branding",   "2", "✦"],
-        ["map",       "Venues",     "3", "◇"],
-        ["stadiums",  "Stadiums",   "4", "⌂"],
-        ["transport", "Transport",  "7", "⇄"],
-        ["safety",    "Safety",     "8", "△"],
-        ["youth",     "Pogba Academy", "0", "○"],
-        ["bracket",   "Bracket",    "[", "⌁"],
-        ["marathon",  "Marathon Clothing", "8", "◆"]
+        ["stadiums",  "Stadiums",   "3", "⌂"],
+        ["safety",    "Safety",     "4", "△"],
+        ["youth",     "Pogba Academy", "5", "○"],
+        ["bracket",   "Bracket",    "6", "⌁"],
+        ["marathon",  "Marathon Clothing", "7", "◆"]
       ];
 
       const stadiums = [
@@ -2173,57 +2177,36 @@
       }
 
       // Beyond the Pitch facts: shipped on every view EXCEPT Marathon Clothing.
-      // Beyond the Pitch ticker. Short, punchy lines on the player
-      // impact that reaches beyond the field, value to community,
-      // nation, and global stage. Six words or fewer per line so the
-      // ticker reads at a glance.
+      // Beyond the Pitch headlines. Each one is a complete sentence,
+      // names a specific player, and points at a verifiable real-world
+      // impact. Rotated one at a time as a clean breaking-news banner;
+      // 7s per headline with a fast 250ms fade transition.
       const FIFA_HISTORY_FACTS = [
-        "Players carry national pride globally",
-        "One goal can lift a country",
-        "Captains build belief beyond borders",
-        "Footballers fund schools in homelands",
-        "Stars open clinics back home",
-        "Free meals through player foundations",
-        "Pitches built where there were none",
-        "Boots donated to rural academies",
-        "Mentorship lifts the next generation",
-        "Champions return to mentor youth",
-        "World Cups inspire millions of kids",
-        "Players model discipline for communities",
-        "Speaking out moves global policy",
-        "Athletes amplify human-rights causes",
-        "Goalkeepers fund clean-water projects",
-        "Strikers back literacy programs",
-        "Captains visit hospitals on off-days",
-        "Heroes share platforms with refugees",
-        "Stars stand for women in sport",
-        "Players plant trees in host cities",
-        "Disaster relief funded by squads",
-        "Earnings recycled into homelands",
-        "Academies open doors for the poor",
-        "Wages convert to community wealth",
-        "Stars launch foundations after retirement",
-        "Coaches pass wisdom across generations",
-        "Players unify nations under one flag",
-        "Goals heal fractured communities briefly",
-        "World stage raises every voice",
-        "Cleats traded for civic leadership",
-        "Athletes build bridges across borders",
-        "Sport diplomacy ends real disputes",
-        "Players visit war-torn cities",
-        "Captains hand out school supplies",
-        "Tournaments employ thousands locally",
-        "Hosting cities gain decade-long lift",
-        "Footballers teach English in villages",
-        "Stars sponsor surgeries for children",
-        "Champions give time, not just money",
-        "Pitch heroes become community pillars",
-        "Boots that started in dirt fields",
-        "Every pass funds a cause",
-        "Legacy outweighs trophies for many",
-        "Service is the real game",
-        "Greatness is measured off the pitch",
-        "Value others, win the world"
+        "Marcus Rashford forced the UK to extend free school meals through the holidays.",
+        "Didier Drogba helped halt Côte d'Ivoire's civil war with a single televised plea.",
+        "Sadio Mané built a school, a hospital, and a mosque in his hometown of Bambali.",
+        "Mohamed Salah funded clean water and an ambulance for his village of Nagrig.",
+        "Megan Rapinoe drove the USWNT to a landmark equal-pay settlement in 2022.",
+        "Juan Mata's Common Goal pledge sends 1% of player salaries into community football.",
+        "Lionel Messi's Inter Miami arrival lifted MLS attendance and global ratings.",
+        "Cristiano Ronaldo's CR7 Foundation backs pediatric cancer care in Portugal.",
+        "Kylian Mbappé donated his entire 2018 World Cup earnings to youth charity.",
+        "Marta Vieira da Silva opened doors for a generation of women's footballers.",
+        "Heung-min Son made Tottenham a magnet for Asian football fans worldwide.",
+        "Vinícius Júnior turned racist abuse into a public stand against discrimination.",
+        "Christian Pulisic donated to Ukraine humanitarian relief during the conflict.",
+        "Andrés Iniesta lifted La Masia's youth model into a global standard.",
+        "Roger Milla sparked the modern African football revolution at Italia '90.",
+        "Alex Morgan donated USWNT paychecks to U.S. youth soccer programs.",
+        "Mia Hamm's foundation funds bone-marrow research and girls' sport.",
+        "Abby Wambach's activism helped force pay equity into U.S. soccer contracts.",
+        "Tim Howard's foundation supports children with Tourette syndrome nationwide.",
+        "Pelé carried Brazil's flag into global diplomacy long after he retired.",
+        "Toni Kroos' foundation has covered care for over a thousand seriously ill children.",
+        "Manuel Neuer's foundation has backed homeless and at-risk kids since 2010.",
+        "Kevin De Bruyne funds rehabilitation for children with neurological injuries.",
+        "Iker Casillas mentored Spain's next generation of goalkeepers after the 2010 win.",
+        "Carli Lloyd's coaching mentors the next wave of U.S. women's footballers."
       ];
 
       // Black Wall Street facts: shipped exclusively on the Marathon Clothing
@@ -2253,19 +2236,45 @@
       // duplicated track for seamless loop. Any view that wants something
       // different (Marathon Clothing) calls renderBwsCard() instead.
       function renderKpis() {
-        const facts = FIFA_HISTORY_FACTS.map(f =>
-          `<span class="fifa-fact">${escapeHtml(f)}</span><span class="fifa-divider" aria-hidden="true"></span>`
-        ).join("");
+        const first = FIFA_HISTORY_FACTS[0] || "";
         return `
           <section class="fifa-history-block" aria-label="Beyond the Pitch">
             <header class="fifa-history-head">
               <span class="live-pulse" aria-hidden="true"></span>
               <h3>Beyond the Pitch</h3>
             </header>
-            <div class="fifa-ticker" tabindex="0" role="region" aria-label="Rotating notes on player impact. Hover or focus to pause.">
-              <div class="fifa-ticker-track">${facts}${facts}</div>
+            <div class="fifa-headline" id="btpHeadline" tabindex="0" role="region" aria-label="Rotating headlines on player impact. Hover or focus to pause." aria-live="polite">
+              <span class="fifa-headline-tag" aria-hidden="true">Headline</span>
+              <p class="fifa-headline-text" id="btpHeadlineText">${escapeHtml(first)}</p>
             </div>
           </section>`;
+      }
+
+      // Headline rotator. Crossfades in 250ms, holds each headline
+      // for 7s. State is module-scoped so re-renders preserve the
+      // current index and timer. Pauses on hover, focus, and when
+      // prefers-reduced-motion is on.
+      const btpState = { i: 0, timer: null };
+      function startBeyondThePitch() {
+        const host = document.getElementById("btpHeadline");
+        const text = document.getElementById("btpHeadlineText");
+        if (!host || !text) return;
+        if (btpState.timer) { clearInterval(btpState.timer); btpState.timer = null; }
+        // Render whatever index we're currently on (so re-renders
+        // don't snap back to 0 mid-rotation).
+        text.textContent = FIFA_HISTORY_FACTS[btpState.i] || "";
+        const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const advance = () => {
+          if (host.matches(":hover") || host.matches(":focus-within")) return;
+          host.classList.add("changing");
+          const dur = reduce ? 0 : 220;
+          setTimeout(() => {
+            btpState.i = (btpState.i + 1) % FIFA_HISTORY_FACTS.length;
+            text.textContent = FIFA_HISTORY_FACTS[btpState.i];
+            host.classList.remove("changing");
+          }, dur);
+        };
+        btpState.timer = setInterval(advance, 7000);
       }
 
       // Black Wall Street rotator card. Lives only on the Marathon
@@ -3259,11 +3268,9 @@
           overview: "Real-time host-city intelligence · FIFA World Cup 2026",
           branding: "Athlete branding · Partner with the voices that move markets and movements",
           live: "Verified FIFA · CDC · partner endpoints · streaming when reachable",
-          map: "All 16 host venues · click a card to focus that city on the overview map",
           stadiums: "Verified venue register · 16 host stadiums",
           grants: "Open grants & funding pathways · live status",
           business: "Local-market activation strategy",
-          transport: "Match-day mobility advisories",
           safety: "Stewardship, health, and fan-flow",
           marathon: "The Marathon Continues · drops, music, and the Crenshaw legacy",
           youth: "Pogba Academy · World Cup access, futsal, athlete meet-ups, mentorship",
@@ -3276,9 +3283,9 @@
         $$(".section").forEach(s => s.classList.toggle("active", s.id === state.view));
 
         const r = {
-          overview: renderOverview, branding: renderBranding, map: renderMapSection,
+          overview: renderOverview, branding: renderBranding,
           stadiums: renderStadiums, grants: renderGrants, business: renderBusiness,
-          transport: renderTransport, safety: renderSafety, marathon: renderMarathon,
+          safety: renderSafety, marathon: renderMarathon,
           youth: renderYouth, records: renderRecords, translate: renderTranslate,
           bracket: renderBracket
         }[state.view];
@@ -3297,6 +3304,7 @@
           startMarathonQuoteRotator();
           startBrandingRotator();
           startBwsRotator();
+          startBeyondThePitch();
           ensureVideoPlays();
           retranslateIfNeeded();
         });
@@ -3333,7 +3341,7 @@
       }
 
       function initVisibleMaps() {
-        ["hostMap_overview", "hostMap_detail"].forEach((id) => {
+        ["hostMap_overview"].forEach((id) => {
           const el = document.getElementById(id);
           if (!el || !window.L) return;
           if (maps[id]) {
@@ -3554,7 +3562,7 @@
           const city = focusRow.dataset.focusCity;
           if (stadiums.some(s => s.city === city)) {
             state.city = city;
-            navigate("map");
+            navigate("overview");
             toast(`Focused ${city}`);
           }
           return;
@@ -3600,7 +3608,7 @@
           }
         }
         if (e.target.matches("input, select, textarea")) return;
-        const map = { "1":"overview","2":"branding","3":"map","4":"stadiums","5":"transport","6":"safety","7":"youth","8":"bracket","9":"marathon" };
+        const map = { "1":"overview","2":"branding","3":"stadiums","4":"safety","5":"youth","6":"bracket","7":"marathon" };
         if (map[e.key]) { navigate(map[e.key]); }
         if (e.key === "Escape") $("#modal").classList.remove("open");
       });
