@@ -2132,10 +2132,40 @@
       function renderSafety() {
         $("#safety").innerHTML = `
           ${renderKpis()}
-          <div class="fill grid-3">
+          <div class="grid-3">
             ${simpleCard("Mass Gatherings", "Crowd movement, emergency exits, accessibility, hydration, and venue-entry procedures.")}
             ${simpleCard("Health Protocols", "Respiratory readiness, stay-home-when-sick guidance, hand hygiene, ventilation awareness, and medical escalation.")}
             ${simpleCard("Fan Stewardship", "Clear signage, multilingual alerts, staff escalation, transit dispersal, and incident reporting.")}
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Stand against human trafficking</h3>
+              <span class="meta">16 host cities, one human-rights mandate</span>
+            </div>
+            <div class="card-body">
+              <p class="lede">
+                Major sporting events draw millions of visitors and bring sharply elevated
+                human-trafficking risk across host regions. To meet that risk head-on, <strong>FIFA
+                provided all sixteen host cities with a common <a href="https://www.fifa.com/about-fifa/who-we-are/governance/human-rights" target="_blank" rel="noopener noreferrer" style="color:var(--ink); text-decoration: underline">FIFA Human Rights Framework</a></strong>,
+                a baseline of accountability binding the United States, Canada, and Mexico to the
+                same standard for the 2026 tournament.
+              </p>
+              <p class="lede" style="margin-top:10px">
+                <strong>Supporting existing organizations and projects.</strong> We understand the
+                importance of supporting the organizations already working for human rights in our
+                region. Defiant Sports stands with the advocates, survivor networks, and frontline
+                responders who carry this mission every day, not just on match-day. If you see
+                something, say something. Trust the people on the ground, fund the work, share the
+                resources below.
+              </p>
+              <div class="list" style="margin-top:14px">
+                ${listRow("National Human Trafficking Hotline (US)", `<span><a href="tel:18883737888" style="font-weight:700; color:var(--ink)">1-888-373-7888</a> · text <strong>HELP</strong> or <strong>INFO</strong> to <strong>233733</strong> · <a href="https://humantraffickinghotline.org/" target="_blank" rel="noopener noreferrer" style="color:var(--ink)">humantraffickinghotline.org</a></span>`)}
+                ${listRow("Polaris Project", `<span>Frontline anti-trafficking operations + policy advocacy · <a href="https://polarisproject.org/" target="_blank" rel="noopener noreferrer" style="color:var(--ink)">polarisproject.org</a></span>`)}
+                ${listRow("DHS Blue Campaign", `<span>Federal awareness + law-enforcement coordination · <a href="https://www.dhs.gov/blue-campaign" target="_blank" rel="noopener noreferrer" style="color:var(--ink)">dhs.gov/blue-campaign</a></span>`)}
+                ${listRow("FIFA Human Rights", `<span>Common baseline for all 16 host cities · <a href="https://www.fifa.com/about-fifa/who-we-are/governance/human-rights" target="_blank" rel="noopener noreferrer" style="color:var(--ink)">fifa.com/about-fifa/who-we-are/governance/human-rights</a></span>`)}
+              </div>
+            </div>
           </div>`;
       }
 
