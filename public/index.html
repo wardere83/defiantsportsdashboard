@@ -339,7 +339,7 @@
       }
       .card-body.flush { padding: 0; }
 
-      /* FIFA History block: heading + horizontally scrolling ticker.
+      /* Beyond the Pitch block: heading + horizontally scrolling ticker.
          CSS transform animation (60fps), pauses on hover and focus,
          respects prefers-reduced-motion. */
       .fifa-history-block {
@@ -400,7 +400,7 @@
         gap: 24px;
         white-space: nowrap;
         padding-left: 100%;
-        animation: fifa-marquee 90s linear infinite;
+        animation: fifa-marquee 240s linear infinite;
         will-change: transform;
         direction: ltr;
       }
@@ -1610,18 +1610,23 @@
         font-weight: 700;
         letter-spacing: 0.06em;
       }
+      .vcm-aerial-figure {
+        margin: 2px auto 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
       .vcm-aerial {
         position: relative;
-        margin: 0 auto;
         width: 100%;
-        max-width: 360px;
-        aspect-ratio: 16 / 10;
-        border-radius: 12px;
+        max-width: 240px;
+        aspect-ratio: 7 / 6;
+        border-radius: 14px;
         overflow: hidden;
-        border: 1px solid var(--line);
-        background: #0b0c0d;
+        background: transparent;
+        box-shadow: 0 8px 22px rgba(15, 18, 24, 0.18), 0 1px 3px rgba(15, 18, 24, 0.08);
       }
-      .vcm-aerial-map,
       .vcm-aerial img {
         position: absolute;
         inset: 0;
@@ -1631,16 +1636,12 @@
         display: block;
       }
       .vcm-aerial-cap {
-        position: absolute;
-        left: 8px;
-        bottom: 6px;
+        text-align: center;
         font-size: 9px;
         font-family: var(--mono);
-        color: rgba(255,255,255,0.85);
-        background: rgba(0,0,0,0.55);
-        padding: 2px 6px;
-        border-radius: 4px;
-        letter-spacing: 0.04em;
+        color: var(--ink-3);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
       }
       .vcm-stats {
         display: grid;
@@ -1906,7 +1907,7 @@
               <option value="ar">🇸🇦 SA</option>
               <option value="ti">🇪🇷 ER</option>
               <option value="so">🇸🇴 SO</option>
-              <option value="zh-TW">🇹🇼 TW</option>
+              <option value="zh-TW">🇨🇳 CN</option>
               <option value="ko">🇰🇷 KR</option>
               <option value="vi">🇻🇳 VN</option>
               <option value="tl">🇵🇭 PH</option>
@@ -1985,7 +1986,7 @@
         { city: "Mexico City",   country: "Mexico", iso: "MX", venue: "Estadio Azteca",       cap: 83000, role: "Opening · Group · R32 · R16",     lat: 19.303,  lng: -99.151  },
         { city: "Miami",         country: "USA",    iso: "US", venue: "Miami Stadium",        cap: 65000, role: "Group · R32 · QF · 3rd-place",    lat: 25.958,  lng: -80.239  },
         { city: "Monterrey",     country: "Mexico", iso: "MX", venue: "Estadio Monterrey",    cap: 53500, role: "Group · R32",                     lat: 25.669,  lng: -100.244 },
-        { city: "New York/NJ",   country: "USA",    iso: "US", venue: "MetLife Stadium",      cap: 82500, role: "Group · R32 · R16 · Final",       lat: 40.813,  lng: -74.874  },
+        { city: "New York/NJ",   country: "USA",    iso: "US", venue: "MetLife Stadium",      cap: 82500, role: "Group · R32 · R16 · Final",       lat: 40.813,  lng: -74.874, aerial: "./assets/stadiums/metlife.jpg" },
         { city: "Philadelphia",  country: "USA",    iso: "US", venue: "Philadelphia Stadium", cap: 69000, role: "Group · R16",                     lat: 39.901,  lng: -75.168  },
         { city: "SF Bay Area",   country: "USA",    iso: "US", venue: "Bay Area Stadium",     cap: 71000, role: "Group · R32",                     lat: 37.403,  lng: -121.970 },
         { city: "Seattle",       country: "USA",    iso: "US", venue: "Seattle Stadium",      cap: 69000, role: "Group · R32 · R16",               lat: 47.595,  lng: -122.331 },
@@ -2171,28 +2172,58 @@
         });
       }
 
-      // FIFA History facts: shipped on every view EXCEPT Marathon Clothing.
-      // 18 well-researched facts covering FIFA's founding, every era of the
-      // tournament, the 2026 expansion, and the three host nations.
+      // Beyond the Pitch facts: shipped on every view EXCEPT Marathon Clothing.
+      // Beyond the Pitch ticker. Short, punchy lines on the player
+      // impact that reaches beyond the field, value to community,
+      // nation, and global stage. Six words or fewer per line so the
+      // ticker reads at a glance.
       const FIFA_HISTORY_FACTS = [
-        "FIFA was founded in Paris on May 21, 1904 by seven national associations: Belgium, Denmark, France, Netherlands, Spain, Sweden, and Switzerland.",
-        "The first FIFA World Cup was played in Uruguay in 1930. Uruguay defeated Argentina 4-2 in the final.",
-        "13 teams competed in the 1930 World Cup, all by direct invitation since no qualification process yet existed.",
-        "Brazil holds the record for most FIFA World Cup titles with five (1958, 1962, 1970, 1994, 2002).",
-        "FIFA suspended the World Cup in 1942 and 1946 due to World War II, the only break in the tournament's history.",
-        "The format expanded from 16 teams to 24 in 1982, to 32 in 1998, and to 48 in 2026.",
-        "The 2026 FIFA World Cup is the first ever co-hosted by three nations: the United States, Canada, and Mexico.",
-        "Mexico becomes the first country to host or co-host three FIFA World Cups (1970, 1986, 2026).",
-        "The 2026 tournament features 16 host cities: 11 in the USA, 3 in Mexico, and 2 in Canada.",
-        "The opening match of FIFA World Cup 2026 is at Estadio Azteca, Mexico City, on June 11, 2026.",
-        "The final of the 2026 World Cup is at MetLife Stadium, New York/New Jersey, on July 19, 2026.",
-        "The 2026 format introduces a Round of 32, expanding knockouts to a seventh round.",
-        "104 matches will be played across 39 days in 2026, the most in World Cup history.",
-        "FIFA has 211 member associations, more than the United Nations' 193 member states.",
-        "The current World Cup trophy was redesigned in 1974 after Brazil retained the original Jules Rimet Trophy permanently in 1970.",
-        "Lionel Messi led Argentina to victory in 2022 in Qatar, his first World Cup title.",
-        "The host nation has won the trophy six times: Uruguay 1930, Italy 1934, England 1966, Germany 1974, Argentina 1978, France 1998.",
-        "The 1950 World Cup in Brazil ended with the Maracanazo, when Uruguay defeated Brazil 2-1 in the deciding match at the Maracanã."
+        "Players carry national pride globally",
+        "One goal can lift a country",
+        "Captains build belief beyond borders",
+        "Footballers fund schools in homelands",
+        "Stars open clinics back home",
+        "Free meals through player foundations",
+        "Pitches built where there were none",
+        "Boots donated to rural academies",
+        "Mentorship lifts the next generation",
+        "Champions return to mentor youth",
+        "World Cups inspire millions of kids",
+        "Players model discipline for communities",
+        "Speaking out moves global policy",
+        "Athletes amplify human-rights causes",
+        "Goalkeepers fund clean-water projects",
+        "Strikers back literacy programs",
+        "Captains visit hospitals on off-days",
+        "Heroes share platforms with refugees",
+        "Stars stand for women in sport",
+        "Players plant trees in host cities",
+        "Disaster relief funded by squads",
+        "Earnings recycled into homelands",
+        "Academies open doors for the poor",
+        "Wages convert to community wealth",
+        "Stars launch foundations after retirement",
+        "Coaches pass wisdom across generations",
+        "Players unify nations under one flag",
+        "Goals heal fractured communities briefly",
+        "World stage raises every voice",
+        "Cleats traded for civic leadership",
+        "Athletes build bridges across borders",
+        "Sport diplomacy ends real disputes",
+        "Players visit war-torn cities",
+        "Captains hand out school supplies",
+        "Tournaments employ thousands locally",
+        "Hosting cities gain decade-long lift",
+        "Footballers teach English in villages",
+        "Stars sponsor surgeries for children",
+        "Champions give time, not just money",
+        "Pitch heroes become community pillars",
+        "Boots that started in dirt fields",
+        "Every pass funds a cause",
+        "Legacy outweighs trophies for many",
+        "Service is the real game",
+        "Greatness is measured off the pitch",
+        "Value others, win the world"
       ];
 
       // Black Wall Street facts: shipped exclusively on the Marathon Clothing
@@ -2218,7 +2249,7 @@
         "The Marathon Continues, anchored in Nipsey's words, traces a direct line from Greenwood's stewardship ethos to today's Black business pioneers."
       ];
 
-      // Default top-of-view block: FIFA History scrolling ticker with a
+      // Default top-of-view block: Beyond the Pitch scrolling ticker with a
       // duplicated track for seamless loop. Any view that wants something
       // different (Marathon Clothing) calls renderBwsCard() instead.
       function renderKpis() {
@@ -2226,13 +2257,12 @@
           `<span class="fifa-fact">${escapeHtml(f)}</span><span class="fifa-divider" aria-hidden="true"></span>`
         ).join("");
         return `
-          <section class="fifa-history-block" aria-label="FIFA history">
+          <section class="fifa-history-block" aria-label="Beyond the Pitch">
             <header class="fifa-history-head">
               <span class="live-pulse" aria-hidden="true"></span>
-              <h3>FIFA History</h3>
-              <span class="meta">120+ years of the world's game</span>
+              <h3>Beyond the Pitch</h3>
             </header>
-            <div class="fifa-ticker" tabindex="0" role="region" aria-label="Rotating FIFA history facts. Hover or focus to pause.">
+            <div class="fifa-ticker" tabindex="0" role="region" aria-label="Rotating notes on player impact. Hover or focus to pause.">
               <div class="fifa-ticker-track">${facts}${facts}</div>
             </div>
           </section>`;
@@ -3140,7 +3170,7 @@
         { code: "ar",    country: "SA", flag: "🇸🇦", name: "Arabic",                native: "العربية"      },
         { code: "ti",    country: "ER", flag: "🇪🇷", name: "Tigrinya",              native: "ትግርኛ"        },
         { code: "so",    country: "SO", flag: "🇸🇴", name: "Somali",                native: "Soomaali"     },
-        { code: "zh-TW", country: "TW", flag: "🇹🇼", name: "Chinese (Traditional)", native: "繁體中文"      },
+        { code: "zh-TW", country: "CN", flag: "🇨🇳", name: "Chinese (Traditional)", native: "繁體中文"      },
         { code: "ko",    country: "KR", flag: "🇰🇷", name: "Korean",                native: "한국어"        },
         { code: "vi",    country: "VN", flag: "🇻🇳", name: "Vietnamese",            native: "Tiếng Việt"   },
         { code: "tl",    country: "PH", flag: "🇵🇭", name: "Tagalog",               native: "Tagalog"      }
@@ -3420,11 +3450,20 @@
       }
 
       // Renders the compact venue card body for the click-on-marker
-      // modal. Strictly venue-focused, with a centered aerial map
-      // tile (Esri World Imagery) for the stadium footprint.
+      // modal. Strictly venue-focused. If the stadium has a curated
+      // aerial photo (s.aerial), render it as a small centered image;
+      // otherwise omit the aerial section entirely so the rest of
+      // the card sits proportionally without dead space.
       function venueCardHtml(s) {
         const flag = flagFromIso(s.iso);
         const coords = `${s.lat.toFixed(3)}°, ${s.lng.toFixed(3)}°`;
+        const aerial = s.aerial ? `
+            <figure class="vcm-aerial-figure">
+              <div class="vcm-aerial">
+                <img src="${escapeHtml(s.aerial)}" alt="Aerial view of ${escapeHtml(s.venue)}, ${escapeHtml(s.city)}" loading="lazy" decoding="async" />
+              </div>
+              <figcaption class="vcm-aerial-cap">Aerial · ${escapeHtml(s.venue)}</figcaption>
+            </figure>` : "";
         return `
           <div class="venue-card-modal">
             <header class="vcm-head">
@@ -3434,10 +3473,7 @@
                 <span class="vcm-loc">${escapeHtml(s.city)}<span class="vcm-iso">${escapeHtml(s.iso)}</span></span>
               </div>
             </header>
-            <figure class="vcm-aerial" aria-label="Aerial view of ${escapeHtml(s.venue)}">
-              <div id="vcmAerialMap" class="vcm-aerial-map" role="img" aria-label="Satellite view, ${escapeHtml(s.city)}"></div>
-              <figcaption class="vcm-aerial-cap">Aerial · Esri World Imagery</figcaption>
-            </figure>
+            ${aerial}
             <dl class="vcm-stats">
               <div><dt>Capacity</dt><dd>${s.cap.toLocaleString()}</dd></div>
               <div><dt>Country</dt><dd>${escapeHtml(s.country)} (${escapeHtml(s.iso)})</dd></div>
@@ -3450,34 +3486,8 @@
           </div>`;
       }
 
-      // Mounts the small Leaflet satellite map inside the venue card
-      // after the modal DOM is in place. Uses Esri World Imagery,
-      // which is keyless and stable. Falls back silently if Leaflet
-      // hasn't loaded yet.
-      function mountVenueAerial(s) {
-        const el = document.getElementById("vcmAerialMap");
-        if (!el || !window.L) return;
-        try {
-          const m = L.map(el, {
-            zoomControl: false, dragging: false, scrollWheelZoom: false,
-            doubleClickZoom: false, boxZoom: false, keyboard: false,
-            attributionControl: false, touchZoom: false
-          }).setView([s.lat, s.lng], 16);
-          L.tileLayer(
-            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-            { maxZoom: 19 }
-          ).addTo(m);
-          L.circleMarker([s.lat, s.lng], {
-            radius: 7, color: "#ffffff", weight: 2,
-            fillColor: "#22c55e", fillOpacity: 0.95
-          }).addTo(m);
-          setTimeout(() => m.invalidateSize(), 30);
-        } catch {}
-      }
-
       function openVenueCard(s) {
         openModal(s.city, venueCardHtml(s));
-        requestAnimationFrame(() => mountVenueAerial(s));
       }
 
       // ───────────────── Routing (URL hash) ─────────────────
