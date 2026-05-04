@@ -1553,6 +1553,148 @@
         overflow: hidden;
       }
 
+      /* Compact venue card (map-click modal). Layout/styling cue
+         was BulleCloud's information cards: dense header, hero
+         image strip, then a tight key-value grid. Data is ours. */
+      .venue-card-modal {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .vcm-head {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .vcm-flag {
+        font-size: 28px;
+        line-height: 1;
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border-radius: 10px;
+        background: var(--surface-2, #f4f4f6);
+        border: 1px solid var(--line);
+        flex: 0 0 auto;
+      }
+      .vcm-title {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+        flex: 1 1 auto;
+      }
+      .vcm-venue {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--ink);
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .vcm-loc {
+        font-size: 12px;
+        color: var(--ink-3);
+        font-family: var(--mono);
+        letter-spacing: 0.04em;
+      }
+      .vcm-iso {
+        margin-left: 4px;
+        padding: 1px 6px;
+        border-radius: 4px;
+        background: var(--ink);
+        color: var(--white);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+      }
+      .vcm-aerial {
+        position: relative;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 360px;
+        aspect-ratio: 16 / 10;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        background: #0b0c0d;
+      }
+      .vcm-aerial-map,
+      .vcm-aerial img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .vcm-aerial-cap {
+        position: absolute;
+        left: 8px;
+        bottom: 6px;
+        font-size: 9px;
+        font-family: var(--mono);
+        color: rgba(255,255,255,0.85);
+        background: rgba(0,0,0,0.55);
+        padding: 2px 6px;
+        border-radius: 4px;
+        letter-spacing: 0.04em;
+      }
+      .vcm-stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px 14px;
+        margin: 0;
+      }
+      .vcm-stats > div {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: 8px 10px;
+        background: var(--surface-2, #f6f7f8);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+      .vcm-stats dt {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .vcm-stats dd {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .vcm-stats dd.mono {
+        font-family: var(--mono);
+        font-weight: 500;
+        font-size: 12px;
+      }
+      .vcm-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .lang-iso {
+        display: inline-block;
+        margin-left: 6px;
+        padding: 1px 6px;
+        border-radius: 4px;
+        background: var(--ink);
+        color: var(--white);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        font-family: var(--mono);
+        vertical-align: 1px;
+      }
+
       /* Toast */
       .toast {
         position: fixed; bottom: 18px; left: 50%;
@@ -1757,17 +1899,17 @@
           </div>
           <div class="top-actions">
             <select class="select" id="languageSelect" aria-label="Translate">
-              <option value="en">🇺🇸 EN</option>
+              <option value="en">🇺🇸 US</option>
               <option value="es">🇪🇸 ES</option>
               <option value="fr">🇫🇷 FR</option>
               <option value="pt">🇵🇹 PT</option>
-              <option value="ar">🇸🇦 AR</option>
-              <option value="ti">🇪🇷 TI</option>
+              <option value="ar">🇸🇦 SA</option>
+              <option value="ti">🇪🇷 ER</option>
               <option value="so">🇸🇴 SO</option>
-              <option value="zh-TW">🇹🇼 ZH</option>
-              <option value="ko">🇰🇷 KO</option>
-              <option value="vi">🇻🇳 VI</option>
-              <option value="tl">🇵🇭 TL</option>
+              <option value="zh-TW">🇹🇼 TW</option>
+              <option value="ko">🇰🇷 KR</option>
+              <option value="vi">🇻🇳 VN</option>
+              <option value="tl">🇵🇭 PH</option>
             </select>
             <a class="btn dark" id="donateBtn" href="https://thedefiantfoundation.org/donate/" target="_blank" rel="noopener noreferrer">Donate</a>
           </div>
@@ -1833,22 +1975,22 @@
       ];
 
       const stadiums = [
-        { city: "Atlanta", country: "USA", venue: "Atlanta Stadium", cap: 75000, role: "Group · R32 · R16 · Semi-final", lat: 33.755, lng: -84.401 },
-        { city: "Boston", country: "USA", venue: "Boston Stadium", cap: 65000, role: "Group · R32 · Quarter-final", lat: 42.091, lng: -70.164 },
-        { city: "Dallas", country: "USA", venue: "Dallas Stadium", cap: 94000, role: "Group · R32 · R16 · Semi-final", lat: 32.748, lng: -97.093 },
-        { city: "Guadalajara", country: "Mexico", venue: "Estadio Guadalajara", cap: 48000, role: "Group stage", lat: 20.682, lng: -103.462 },
-        { city: "Houston", country: "USA", venue: "Houston Stadium", cap: 72000, role: "Group · R32 · R16", lat: 29.684, lng: -95.411 },
-        { city: "Kansas City", country: "USA", venue: "Kansas City Stadium", cap: 73000, role: "Group · R32 · Quarter-final", lat: 39.049, lng: -94.484 },
-        { city: "Los Angeles", country: "USA", venue: "Los Angeles Stadium", cap: 70000, role: "Group · R32 · Quarter-final", lat: 33.953, lng: -118.339 },
-        { city: "Mexico City", country: "Mexico", venue: "Estadio Azteca", cap: 83000, role: "Opening · Group · R32 · R16", lat: 19.303, lng: -99.151 },
-        { city: "Miami", country: "USA", venue: "Miami Stadium", cap: 65000, role: "Group · R32 · QF · 3rd-place", lat: 25.958, lng: -80.239 },
-        { city: "Monterrey", country: "Mexico", venue: "Estadio Monterrey", cap: 53500, role: "Group · R32", lat: 25.669, lng: -100.244 },
-        { city: "New York/NJ", country: "USA", venue: "MetLife Stadium", cap: 82500, role: "Group · R32 · R16 · Final", lat: 40.813, lng: -74.874 },
-        { city: "Philadelphia", country: "USA", venue: "Philadelphia Stadium", cap: 69000, role: "Group · R16", lat: 39.901, lng: -75.168 },
-        { city: "SF Bay Area", country: "USA", venue: "Bay Area Stadium", cap: 71000, role: "Group · R32", lat: 37.403, lng: -121.970 },
-        { city: "Seattle", country: "USA", venue: "Seattle Stadium", cap: 69000, role: "Group · R32 · R16", lat: 47.595, lng: -122.331 },
-        { city: "Toronto", country: "Canada", venue: "BMO Field", cap: 45000, role: "Group · R32", lat: 43.633, lng: -79.418 },
-        { city: "Vancouver", country: "Canada", venue: "BC Place", cap: 54000, role: "Group · R32 · R16", lat: 49.276, lng: -123.111 }
+        { city: "Atlanta",       country: "USA",    iso: "US", venue: "Atlanta Stadium",      cap: 75000, role: "Group · R32 · R16 · Semi-final",  lat: 33.755,  lng: -84.401  },
+        { city: "Boston",        country: "USA",    iso: "US", venue: "Boston Stadium",       cap: 65000, role: "Group · R32 · Quarter-final",     lat: 42.091,  lng: -70.164  },
+        { city: "Dallas",        country: "USA",    iso: "US", venue: "Dallas Stadium",       cap: 94000, role: "Group · R32 · R16 · Semi-final",  lat: 32.748,  lng: -97.093  },
+        { city: "Guadalajara",   country: "Mexico", iso: "MX", venue: "Estadio Guadalajara",  cap: 48000, role: "Group stage",                     lat: 20.682,  lng: -103.462 },
+        { city: "Houston",       country: "USA",    iso: "US", venue: "Houston Stadium",      cap: 72000, role: "Group · R32 · R16",               lat: 29.684,  lng: -95.411  },
+        { city: "Kansas City",   country: "USA",    iso: "US", venue: "Kansas City Stadium",  cap: 73000, role: "Group · R32 · Quarter-final",     lat: 39.049,  lng: -94.484  },
+        { city: "Los Angeles",   country: "USA",    iso: "US", venue: "Los Angeles Stadium",  cap: 70000, role: "Group · R32 · Quarter-final",     lat: 33.953,  lng: -118.339 },
+        { city: "Mexico City",   country: "Mexico", iso: "MX", venue: "Estadio Azteca",       cap: 83000, role: "Opening · Group · R32 · R16",     lat: 19.303,  lng: -99.151  },
+        { city: "Miami",         country: "USA",    iso: "US", venue: "Miami Stadium",        cap: 65000, role: "Group · R32 · QF · 3rd-place",    lat: 25.958,  lng: -80.239  },
+        { city: "Monterrey",     country: "Mexico", iso: "MX", venue: "Estadio Monterrey",    cap: 53500, role: "Group · R32",                     lat: 25.669,  lng: -100.244 },
+        { city: "New York/NJ",   country: "USA",    iso: "US", venue: "MetLife Stadium",      cap: 82500, role: "Group · R32 · R16 · Final",       lat: 40.813,  lng: -74.874  },
+        { city: "Philadelphia",  country: "USA",    iso: "US", venue: "Philadelphia Stadium", cap: 69000, role: "Group · R16",                     lat: 39.901,  lng: -75.168  },
+        { city: "SF Bay Area",   country: "USA",    iso: "US", venue: "Bay Area Stadium",     cap: 71000, role: "Group · R32",                     lat: 37.403,  lng: -121.970 },
+        { city: "Seattle",       country: "USA",    iso: "US", venue: "Seattle Stadium",      cap: 69000, role: "Group · R32 · R16",               lat: 47.595,  lng: -122.331 },
+        { city: "Toronto",       country: "Canada", iso: "CA", venue: "BMO Field",            cap: 45000, role: "Group · R32",                     lat: 43.633,  lng: -79.418  },
+        { city: "Vancouver",     country: "Canada", iso: "CA", venue: "BC Place",             cap: 54000, role: "Group · R32 · R16",               lat: 49.276,  lng: -123.111 }
       ];
 
       const grants = [
@@ -2987,28 +3129,31 @@
       // Languages surfaced in both the topbar picker and the Translate tab.
       // Code values match the translation engine's locale identifiers; the
       // dashboard reload handler already wires them through the cookie.
+      // ISO 3166-1 alpha-2 country codes attached to each language so
+      // both the topbar selector and the Translate cards can label the
+      // country accurately (US not EN, KR not KO, TW not ZH, etc.).
       const LANGUAGES = [
-        { code: "en",    flag: "🇺🇸", name: "English",               native: "English"      },
-        { code: "es",    flag: "🇪🇸", name: "Spanish",               native: "Español"      },
-        { code: "fr",    flag: "🇫🇷", name: "French",                native: "Français"     },
-        { code: "pt",    flag: "🇵🇹", name: "Portuguese",            native: "Português"    },
-        { code: "ar",    flag: "🇸🇦", name: "Arabic",                native: "العربية"      },
-        { code: "ti",    flag: "🇪🇷", name: "Tigrinya",              native: "ትግርኛ"        },
-        { code: "so",    flag: "🇸🇴", name: "Somali",                native: "Soomaali"     },
-        { code: "zh-TW", flag: "🇹🇼", name: "Chinese (Traditional)", native: "繁體中文"      },
-        { code: "ko",    flag: "🇰🇷", name: "Korean",                native: "한국어"        },
-        { code: "vi",    flag: "🇻🇳", name: "Vietnamese",            native: "Tiếng Việt"   },
-        { code: "tl",    flag: "🇵🇭", name: "Tagalog",               native: "Tagalog"      }
+        { code: "en",    country: "US", flag: "🇺🇸", name: "English",               native: "English"      },
+        { code: "es",    country: "ES", flag: "🇪🇸", name: "Spanish",               native: "Español"      },
+        { code: "fr",    country: "FR", flag: "🇫🇷", name: "French",                native: "Français"     },
+        { code: "pt",    country: "PT", flag: "🇵🇹", name: "Portuguese",            native: "Português"    },
+        { code: "ar",    country: "SA", flag: "🇸🇦", name: "Arabic",                native: "العربية"      },
+        { code: "ti",    country: "ER", flag: "🇪🇷", name: "Tigrinya",              native: "ትግርኛ"        },
+        { code: "so",    country: "SO", flag: "🇸🇴", name: "Somali",                native: "Soomaali"     },
+        { code: "zh-TW", country: "TW", flag: "🇹🇼", name: "Chinese (Traditional)", native: "繁體中文"      },
+        { code: "ko",    country: "KR", flag: "🇰🇷", name: "Korean",                native: "한국어"        },
+        { code: "vi",    country: "VN", flag: "🇻🇳", name: "Vietnamese",            native: "Tiếng Việt"   },
+        { code: "tl",    country: "PH", flag: "🇵🇭", name: "Tagalog",               native: "Tagalog"      }
       ];
 
       function renderTranslate() {
         const active = (typeof readGoogtrans === "function") ? readGoogtrans() : "en";
         const cards = LANGUAGES.map(l => `
-          <button class="lang-card${l.code === active ? " active" : ""}" data-lang="${l.code}" type="button">
+          <button class="lang-card${l.code === active ? " active" : ""}" data-lang="${l.code}" type="button" aria-label="${l.name} (${l.country})">
             <span class="lang-flag" aria-hidden="true">${l.flag}</span>
             <span class="lang-meta">
               <span class="lang-native">${l.native}</span>
-              <span class="lang-en">${l.name}</span>
+              <span class="lang-en">${l.name} <span class="lang-iso">${l.country}</span></span>
             </span>
             ${l.code === active ? `<span class="lang-mark">●</span>` : ""}
           </button>`).join("");
@@ -3192,7 +3337,7 @@
             marker.bindTooltip(`${s.city} · ${s.venue}`, { direction: "top", offset: [0, -4] });
             marker.on("click", () => {
               state.city = s.city;
-              renderActive();
+              openVenueCard(s);
             });
           });
           setTimeout(() => map.invalidateSize(), 30);
@@ -3263,6 +3408,76 @@
         $("#modalTitle").textContent = title;
         $("#modalBody").innerHTML = body;
         $("#modal").classList.add("open");
+      }
+
+      // Helper: 4-letter flag emoji from an ISO 3166-1 alpha-2 code
+      // by mapping each letter to its Regional Indicator codepoint.
+      function flagFromIso(iso) {
+        if (!iso || iso.length !== 2) return "";
+        const A = 0x1F1E6;
+        const codes = iso.toUpperCase().split("").map(c => A + (c.charCodeAt(0) - 65));
+        return String.fromCodePoint(...codes);
+      }
+
+      // Renders the compact venue card body for the click-on-marker
+      // modal. Strictly venue-focused, with a centered aerial map
+      // tile (Esri World Imagery) for the stadium footprint.
+      function venueCardHtml(s) {
+        const flag = flagFromIso(s.iso);
+        const coords = `${s.lat.toFixed(3)}°, ${s.lng.toFixed(3)}°`;
+        return `
+          <div class="venue-card-modal">
+            <header class="vcm-head">
+              <div class="vcm-flag" aria-hidden="true">${flag}</div>
+              <div class="vcm-title">
+                <span class="vcm-venue">${escapeHtml(s.venue)}</span>
+                <span class="vcm-loc">${escapeHtml(s.city)}<span class="vcm-iso">${escapeHtml(s.iso)}</span></span>
+              </div>
+            </header>
+            <figure class="vcm-aerial" aria-label="Aerial view of ${escapeHtml(s.venue)}">
+              <div id="vcmAerialMap" class="vcm-aerial-map" role="img" aria-label="Satellite view, ${escapeHtml(s.city)}"></div>
+              <figcaption class="vcm-aerial-cap">Aerial · Esri World Imagery</figcaption>
+            </figure>
+            <dl class="vcm-stats">
+              <div><dt>Capacity</dt><dd>${s.cap.toLocaleString()}</dd></div>
+              <div><dt>Country</dt><dd>${escapeHtml(s.country)} (${escapeHtml(s.iso)})</dd></div>
+              <div><dt>Tournament role</dt><dd>${escapeHtml(s.role)}</dd></div>
+              <div><dt>Coordinates</dt><dd class="mono">${coords}</dd></div>
+            </dl>
+            <div class="vcm-actions">
+              <button class="btn" data-focus-city="${escapeHtml(s.city)}" type="button">Focus on map</button>
+            </div>
+          </div>`;
+      }
+
+      // Mounts the small Leaflet satellite map inside the venue card
+      // after the modal DOM is in place. Uses Esri World Imagery,
+      // which is keyless and stable. Falls back silently if Leaflet
+      // hasn't loaded yet.
+      function mountVenueAerial(s) {
+        const el = document.getElementById("vcmAerialMap");
+        if (!el || !window.L) return;
+        try {
+          const m = L.map(el, {
+            zoomControl: false, dragging: false, scrollWheelZoom: false,
+            doubleClickZoom: false, boxZoom: false, keyboard: false,
+            attributionControl: false, touchZoom: false
+          }).setView([s.lat, s.lng], 16);
+          L.tileLayer(
+            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+            { maxZoom: 19 }
+          ).addTo(m);
+          L.circleMarker([s.lat, s.lng], {
+            radius: 7, color: "#ffffff", weight: 2,
+            fillColor: "#22c55e", fillOpacity: 0.95
+          }).addTo(m);
+          setTimeout(() => m.invalidateSize(), 30);
+        } catch {}
+      }
+
+      function openVenueCard(s) {
+        openModal(s.city, venueCardHtml(s));
+        requestAnimationFrame(() => mountVenueAerial(s));
       }
 
       // ───────────────── Routing (URL hash) ─────────────────
@@ -3337,16 +3552,7 @@
         const openCity = e.target.closest("[data-open-city]");
         if (openCity) {
           const s = stadiums.find(x => x.city === openCity.dataset.openCity);
-          if (s) {
-            openModal(s.city, `
-              <div class="list">
-                ${listRow("Venue", `<strong>${s.venue}</strong>`)}
-                ${listRow("Country", s.country)}
-                ${listRow("Capacity", s.cap.toLocaleString())}
-                ${listRow("Coordinates", `<span style="font-family:var(--mono)">${s.lat.toFixed(3)}, ${s.lng.toFixed(3)}</span>`)}
-                ${listRow("Operational focus", "Transit · safety · business · language access")}
-              </div>`);
-          }
+          if (s) openVenueCard(s);
           return;
         }
         if (e.target.id === "grantRefresh") refreshLive();
