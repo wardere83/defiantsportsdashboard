@@ -782,6 +782,7 @@
         display: flex;
         flex-direction: column;
         gap: 4px;
+        min-height: 110px;
       }
       .resource-title {
         font-size: 13px;
@@ -795,10 +796,11 @@
         line-height: 1.35;
       }
       .resource-actions {
-        margin-top: 6px;
+        margin-top: auto;
+        padding-top: 8px;
         display: flex;
         flex-wrap: wrap;
-        gap: 6px 12px;
+        gap: 6px 8px;
       }
       .resource-link {
         font-size: 12px;
@@ -843,11 +845,17 @@
       .branding-pillars .card:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); border-color: var(--line-2); }
 
       /* Bottom strip: lanes + CTA in one row */
-      .branding-bottom-body { padding: 12px 14px; }
+      .branding-bottom-body {
+        padding: 12px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
       .branding-lanes {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 10px;
+        align-items: stretch;
       }
       .lane {
         position: relative;
@@ -855,8 +863,11 @@
         background: var(--surface);
         border: 1px solid var(--line);
         border-radius: var(--radius-sm);
-        display: flex; flex-direction: column;
-        gap: 2px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 3px;
+        min-height: 58px;
         transition: transform .15s ease, box-shadow .2s ease;
       }
       .lane:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
@@ -870,7 +881,19 @@
       .lane--legacy    { --accent-color: #00a650; }
       .lane strong { font-size: 13px; letter-spacing: -0.01em; color: var(--ink); }
       .lane span { font-size: 11.5px; color: var(--ink-2); line-height: 1.3; }
-      .branding-cta { margin-top: 10px; align-self: flex-start; }
+      .branding-cta-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        padding-top: 4px;
+        border-top: 1px solid var(--line);
+      }
+      .branding-cta-row .btn { padding-top: 4px; }
+      /* Equal-height pillar cards on the Branding tab */
+      .branding-pillars { align-items: stretch; }
+      .branding-pillars .card { display: flex; flex-direction: column; }
+      .branding-pillars .card-body { flex: 1 1 auto; }
 
       @media (max-width: 980px) {
         .branding-pillars { grid-template-columns: 1fr; }
@@ -1729,9 +1752,14 @@
       };
 
       let headlineRotationTimers = [];
+      let headlineRotationTimeouts = [];
       function startHeadlineRotation() {
+        // Clear both intervals and timeouts so navigating views before
+        // the staggered first-tick fires can't leak handlers.
         headlineRotationTimers.forEach(t => clearInterval(t));
+        headlineRotationTimeouts.forEach(t => clearTimeout(t));
         headlineRotationTimers = [];
+        headlineRotationTimeouts = [];
         Object.entries(HEADLINE_FEEDS).forEach(([id, items], idx) => {
           let i = 0;
           const tick = () => {
@@ -1743,10 +1771,13 @@
             el.classList.add("popping");
             i++;
           };
-          setTimeout(() => {
-            tick();
+          // Run the first tick IMMEDIATELY so the user never sees the
+          // placeholder "…" on a fresh paint. Stagger the recurring
+          // interval so the panels still pulse out of lockstep.
+          tick();
+          headlineRotationTimeouts.push(setTimeout(() => {
             headlineRotationTimers.push(setInterval(tick, 7000));
-          }, idx * 1100);
+          }, idx * 1100));
         });
       }
 
@@ -2465,6 +2496,7 @@
 
       function renderYouth() {
         $("#youth").innerHTML = `
+          ${renderKpis()}
           ${renderPogbaStrip()}
       <div class="fill" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 360px)); gap:12px; justify-content:start; align-content:start;">
             ${simpleCard("World Cup Access", "Youth from different cultural backgrounds receive soccer learning, match-day context, and safe fan experiences.")}
@@ -2510,6 +2542,7 @@
 
       function renderBranding() {
         $("#branding").innerHTML = `
+          ${renderKpis()}
           <div class="marathon-hero branding-hero">
             <div class="kicker">Voice Capital</div>
             <blockquote>The voice of an athlete moves markets, and movements.</blockquote>
@@ -2552,8 +2585,8 @@
 
           <div class="card branding-bottom">
             <div class="card-head">
-              <h3>Partnership lanes &nbsp;·&nbsp; Start the conversation</h3>
-              <a class="btn" href="mailto:info@thedefiantfoundation.com?subject=Brand%20Partnership%20Inquiry">info@thedefiantfoundation.com</a>
+              <h3>Partnership lanes</h3>
+              <span class="meta">Pick the surface, we build the rest</span>
             </div>
             <div class="card-body branding-bottom-body">
               <div class="branding-lanes">
@@ -2561,7 +2594,10 @@
                 <div class="lane lane--movement"><strong>Movement</strong><span>many athletes · category-wide push</span></div>
                 <div class="lane lane--legacy"><strong>Legacy</strong><span>full roster · category leadership</span></div>
               </div>
-              <a class="btn dark branding-cta" href="https://thedefiantfoundation.org/" target="_blank" rel="noopener noreferrer">Visit The Defiant Foundation ↗</a>
+              <div class="branding-cta-row">
+                <a class="btn dark" href="https://thedefiantfoundation.org/" target="_blank" rel="noopener noreferrer">Visit The Defiant Foundation ↗</a>
+                <a class="btn" href="mailto:info@thedefiantfoundation.com?subject=Brand%20Partnership%20Inquiry">Email info@thedefiantfoundation.com</a>
+              </div>
             </div>
           </div>`;
       }
