@@ -1750,6 +1750,10 @@
 
       let headlineRotationTimers = [];
       let headlineRotationTimeouts = [];
+      // Per-feed counter that survives renderActive() calls so the
+      // headline ticker keeps rotating instead of jumping back to
+      // item 0 every time the user clicks another tab.
+      const headlineCounters = {};
       function startHeadlineRotation() {
         // Clear both intervals and timeouts so navigating views before
         // the staggered first-tick fires can't leak handlers.
@@ -1758,19 +1762,19 @@
         headlineRotationTimers = [];
         headlineRotationTimeouts = [];
         Object.entries(HEADLINE_FEEDS).forEach(([id, items], idx) => {
-          let i = 0;
           const tick = () => {
             const el = document.getElementById(id);
             if (!el) return;
+            const i = (headlineCounters[id] || 0) % items.length;
+            headlineCounters[id] = (headlineCounters[id] || 0) + 1;
             el.classList.remove("popping");
             void el.offsetWidth;
-            el.textContent = items[i % items.length];
+            el.textContent = items[i];
             el.classList.add("popping");
-            i++;
           };
           // Run the first tick IMMEDIATELY so the user never sees the
           // placeholder "…" on a fresh paint. Stagger the recurring
-          // interval so the panels still pulse out of lockstep.
+          // interval so any future feed additions don't pulse in lockstep.
           tick();
           headlineRotationTimeouts.push(setTimeout(() => {
             headlineRotationTimers.push(setInterval(tick, 7000));
