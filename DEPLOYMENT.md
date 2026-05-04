@@ -13,8 +13,7 @@ npm install
 npm start
 ```
 
-Default port: `3000`. Most hosts inject a `PORT` environment variable —
-the server reads it automatically.
+Default port: `3000`. Most hosts inject a `PORT` environment variable, the server reads it automatically.
 
 Optional configuration:
 
@@ -58,11 +57,11 @@ The platform exposes the app on its assigned port; the server reads
 
 Once deployed, the dashboard hits these endpoints from the browser:
 
-- `GET /api/health` — heartbeat, version, uptime, cache status.
-- `GET /api/host-cities` — verified 16-city register.
-- `GET /api/impact` — computed impact metrics.
-- `GET /api/live-feeds` — real-time FIFA + CDC source check.
-- `GET /api/grant-feeds` — real-time grant and program endpoint check.
+- `GET /api/health`, heartbeat, version, uptime, cache status.
+- `GET /api/host-cities`, verified 16-city register.
+- `GET /api/impact`, computed impact metrics.
+- `GET /api/live-feeds`, real-time FIFA + CDC source check.
+- `GET /api/grant-feeds`, real-time grant and program endpoint check.
 
 Smoke-test after deploy:
 
