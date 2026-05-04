@@ -339,6 +339,236 @@
       }
       .card-body.flush { padding: 0; }
 
+      /* FIFA History block: heading + horizontally scrolling ticker.
+         CSS transform animation (60fps), pauses on hover and focus,
+         respects prefers-reduced-motion. */
+      .fifa-history-block {
+        position: relative;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+      }
+      .fifa-history-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px 8px 18px;
+        position: relative;
+      }
+      .fifa-history-head::before {
+        content: "";
+        position: absolute;
+        left: 0; top: 0; bottom: 0;
+        width: 3px;
+        background: #1d4ed8;
+      }
+      .fifa-history-head h3 {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink);
+      }
+      .fifa-history-head .meta {
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.10em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .fifa-history-head .live-pulse {
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        background: #1d4ed8;
+        box-shadow: 0 0 8px #1d4ed8;
+        animation: pulse 1.6s ease-in-out infinite;
+      }
+      .fifa-ticker {
+        position: relative;
+        overflow: hidden;
+        padding: 10px 0;
+        border-top: 1px solid var(--line);
+        mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+        -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+      }
+      .fifa-ticker-track {
+        display: inline-flex;
+        align-items: center;
+        gap: 24px;
+        white-space: nowrap;
+        padding-left: 100%;
+        animation: fifa-marquee 90s linear infinite;
+        will-change: transform;
+        direction: ltr;
+      }
+      .fifa-ticker:hover .fifa-ticker-track,
+      .fifa-ticker:focus-within .fifa-ticker-track {
+        animation-play-state: paused;
+      }
+      @keyframes fifa-marquee {
+        from { transform: translate3d(0, 0, 0); }
+        to   { transform: translate3d(-50%, 0, 0); }
+      }
+      .fifa-fact {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--ink);
+        letter-spacing: -0.005em;
+      }
+      .fifa-divider {
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: #1d4ed8;
+        flex: 0 0 auto;
+        opacity: 0.55;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .fifa-ticker-track {
+          animation: none;
+          padding-left: 0;
+          flex-wrap: wrap;
+          white-space: normal;
+        }
+        .fifa-ticker { overflow-x: auto; }
+      }
+
+      /* Black Wall Street rotating card on the Marathon Clothing view.
+         4s interval, 300ms fade, prev/next, dot indicators, pauses on
+         hover, focus, and when scrolled out of viewport. */
+      .bws-card {
+        position: relative;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+      }
+      .bws-card::before {
+        content: "";
+        position: absolute;
+        left: 0; top: 0; bottom: 0;
+        width: 3px;
+        background: #c1272d;
+      }
+      .bws-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+        row-gap: 6px;
+        padding: 10px 16px 8px 18px;
+      }
+      .bws-head h3 {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink);
+        display: flex; align-items: center; gap: 8px;
+      }
+      .bws-head h3::before {
+        content: "";
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        background: #c1272d;
+        box-shadow: 0 0 8px #c1272d;
+      }
+      .bws-controls {
+        display: flex;
+        gap: 6px;
+      }
+      .bws-controls button {
+        width: 32px; height: 32px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: var(--white);
+        color: var(--ink);
+        font-size: 14px;
+        line-height: 1;
+        cursor: pointer;
+        transition: background .15s ease, border-color .15s ease;
+      }
+      .bws-controls button:hover { background: var(--surface-2); border-color: var(--line-2); }
+      .bws-controls button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+      .bws-stage {
+        position: relative;
+        padding: 16px 18px;
+        border-top: 1px solid var(--line);
+        min-height: 76px;
+        display: flex;
+        align-items: center;
+      }
+      .bws-fact {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.4;
+        letter-spacing: -0.005em;
+        color: var(--ink);
+        transition: opacity .3s ease, transform .3s ease;
+      }
+      .bws-fact.fading {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      .bws-dots {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 8px 18px 12px;
+        border-top: 1px solid var(--line);
+      }
+      .bws-dot {
+        width: 8px; height: 8px;
+        padding: 0;
+        border-radius: 50%;
+        border: 1px solid var(--line);
+        background: var(--surface-2);
+        cursor: pointer;
+        transition: background .15s ease, transform .15s ease;
+      }
+      .bws-dot:hover { transform: scale(1.2); }
+      .bws-dot[aria-current="true"] { background: #c1272d; border-color: #c1272d; }
+      .bws-dot:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+      /* Skeleton loaders for any async card content */
+      @keyframes skeleton-shimmer {
+        0% { background-position: -400px 0; }
+        100% { background-position: 400px 0; }
+      }
+      .skeleton {
+        background: linear-gradient(90deg, var(--surface-2) 0%, var(--line) 50%, var(--surface-2) 100%);
+        background-size: 800px 100%;
+        animation: skeleton-shimmer 1.4s ease-in-out infinite;
+        border-radius: 6px;
+      }
+
+      /* Sidebar tab pattern: focus-visible ring + smooth active transition */
+      .nav button {
+        transition: background .2s ease, color .2s ease, transform .15s ease;
+      }
+      .nav button:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: -2px;
+      }
+      [role="tabpanel"]:focus { outline: none; }
+      [role="tabpanel"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: var(--radius); }
+
+      /* Reduced-motion: disable all decorative animations site-wide */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+
       /* Headline strip, a single full-width ticker tab above the live
          FIFA card. Mirrors the live ticker's full-bleed feel with a
          distinct light surface so it reads as a separate cultural-
@@ -1323,6 +1553,148 @@
         overflow: hidden;
       }
 
+      /* Compact venue card (map-click modal). Layout/styling cue
+         was BulleCloud's information cards: dense header, hero
+         image strip, then a tight key-value grid. Data is ours. */
+      .venue-card-modal {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .vcm-head {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .vcm-flag {
+        font-size: 28px;
+        line-height: 1;
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border-radius: 10px;
+        background: var(--surface-2, #f4f4f6);
+        border: 1px solid var(--line);
+        flex: 0 0 auto;
+      }
+      .vcm-title {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+        flex: 1 1 auto;
+      }
+      .vcm-venue {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--ink);
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .vcm-loc {
+        font-size: 12px;
+        color: var(--ink-3);
+        font-family: var(--mono);
+        letter-spacing: 0.04em;
+      }
+      .vcm-iso {
+        margin-left: 4px;
+        padding: 1px 6px;
+        border-radius: 4px;
+        background: var(--ink);
+        color: var(--white);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+      }
+      .vcm-aerial {
+        position: relative;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 360px;
+        aspect-ratio: 16 / 10;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        background: #0b0c0d;
+      }
+      .vcm-aerial-map,
+      .vcm-aerial img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .vcm-aerial-cap {
+        position: absolute;
+        left: 8px;
+        bottom: 6px;
+        font-size: 9px;
+        font-family: var(--mono);
+        color: rgba(255,255,255,0.85);
+        background: rgba(0,0,0,0.55);
+        padding: 2px 6px;
+        border-radius: 4px;
+        letter-spacing: 0.04em;
+      }
+      .vcm-stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px 14px;
+        margin: 0;
+      }
+      .vcm-stats > div {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: 8px 10px;
+        background: var(--surface-2, #f6f7f8);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+      .vcm-stats dt {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .vcm-stats dd {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .vcm-stats dd.mono {
+        font-family: var(--mono);
+        font-weight: 500;
+        font-size: 12px;
+      }
+      .vcm-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .lang-iso {
+        display: inline-block;
+        margin-left: 6px;
+        padding: 1px 6px;
+        border-radius: 4px;
+        background: var(--ink);
+        color: var(--white);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        font-family: var(--mono);
+        vertical-align: 1px;
+      }
+
       /* Toast */
       .toast {
         position: fixed; bottom: 18px; left: 50%;
@@ -1527,36 +1899,36 @@
           </div>
           <div class="top-actions">
             <select class="select" id="languageSelect" aria-label="Translate">
-              <option value="en">🇺🇸 EN</option>
+              <option value="en">🇺🇸 US</option>
               <option value="es">🇪🇸 ES</option>
               <option value="fr">🇫🇷 FR</option>
               <option value="pt">🇵🇹 PT</option>
-              <option value="ar">🇸🇦 AR</option>
-              <option value="ti">🇪🇷 TI</option>
+              <option value="ar">🇸🇦 SA</option>
+              <option value="ti">🇪🇷 ER</option>
               <option value="so">🇸🇴 SO</option>
-              <option value="zh-TW">🇹🇼 ZH</option>
-              <option value="ko">🇰🇷 KO</option>
-              <option value="vi">🇻🇳 VI</option>
-              <option value="tl">🇵🇭 TL</option>
+              <option value="zh-TW">🇹🇼 TW</option>
+              <option value="ko">🇰🇷 KR</option>
+              <option value="vi">🇻🇳 VN</option>
+              <option value="tl">🇵🇭 PH</option>
             </select>
             <a class="btn dark" id="donateBtn" href="https://thedefiantfoundation.org/donate/" target="_blank" rel="noopener noreferrer">Donate</a>
           </div>
         </header>
 
         <div class="view">
-          <section class="section" id="overview"></section>
-          <section class="section" id="branding"></section>
-          <section class="section" id="map"></section>
-          <section class="section" id="stadiums"></section>
-          <section class="section" id="grants"></section>
-          <section class="section" id="business"></section>
-          <section class="section" id="transport"></section>
-          <section class="section" id="safety"></section>
-          <section class="section" id="marathon"></section>
-          <section class="section" id="youth"></section>
-          <section class="section" id="records"></section>
-          <section class="section" id="translate"></section>
-          <section class="section" id="bracket"></section>
+          <section class="section" id="overview"  role="tabpanel" aria-labelledby="tab-overview"  tabindex="0"></section>
+          <section class="section" id="branding"  role="tabpanel" aria-labelledby="tab-branding"  tabindex="0"></section>
+          <section class="section" id="map"       role="tabpanel" aria-labelledby="tab-map"       tabindex="0"></section>
+          <section class="section" id="stadiums"  role="tabpanel" aria-labelledby="tab-stadiums"  tabindex="0"></section>
+          <section class="section" id="grants"    role="tabpanel" aria-labelledby="tab-grants"    tabindex="0"></section>
+          <section class="section" id="business"  role="tabpanel" aria-labelledby="tab-business"  tabindex="0"></section>
+          <section class="section" id="transport" role="tabpanel" aria-labelledby="tab-transport" tabindex="0"></section>
+          <section class="section" id="safety"    role="tabpanel" aria-labelledby="tab-safety"    tabindex="0"></section>
+          <section class="section" id="marathon"  role="tabpanel" aria-labelledby="tab-marathon"  tabindex="0"></section>
+          <section class="section" id="youth"     role="tabpanel" aria-labelledby="tab-youth"     tabindex="0"></section>
+          <section class="section" id="records"   role="tabpanel" aria-labelledby="tab-records"   tabindex="0"></section>
+          <section class="section" id="translate" role="tabpanel" aria-labelledby="tab-translate" tabindex="0"></section>
+          <section class="section" id="bracket"   role="tabpanel" aria-labelledby="tab-bracket"   tabindex="0"></section>
         </div>
       </main>
     </div>
@@ -1603,22 +1975,22 @@
       ];
 
       const stadiums = [
-        { city: "Atlanta", country: "USA", venue: "Atlanta Stadium", cap: 75000, role: "Group · R32 · R16 · Semi-final", lat: 33.755, lng: -84.401 },
-        { city: "Boston", country: "USA", venue: "Boston Stadium", cap: 65000, role: "Group · R32 · Quarter-final", lat: 42.091, lng: -70.164 },
-        { city: "Dallas", country: "USA", venue: "Dallas Stadium", cap: 94000, role: "Group · R32 · R16 · Semi-final", lat: 32.748, lng: -97.093 },
-        { city: "Guadalajara", country: "Mexico", venue: "Estadio Guadalajara", cap: 48000, role: "Group stage", lat: 20.682, lng: -103.462 },
-        { city: "Houston", country: "USA", venue: "Houston Stadium", cap: 72000, role: "Group · R32 · R16", lat: 29.684, lng: -95.411 },
-        { city: "Kansas City", country: "USA", venue: "Kansas City Stadium", cap: 73000, role: "Group · R32 · Quarter-final", lat: 39.049, lng: -94.484 },
-        { city: "Los Angeles", country: "USA", venue: "Los Angeles Stadium", cap: 70000, role: "Group · R32 · Quarter-final", lat: 33.953, lng: -118.339 },
-        { city: "Mexico City", country: "Mexico", venue: "Estadio Azteca", cap: 83000, role: "Opening · Group · R32 · R16", lat: 19.303, lng: -99.151 },
-        { city: "Miami", country: "USA", venue: "Miami Stadium", cap: 65000, role: "Group · R32 · QF · 3rd-place", lat: 25.958, lng: -80.239 },
-        { city: "Monterrey", country: "Mexico", venue: "Estadio Monterrey", cap: 53500, role: "Group · R32", lat: 25.669, lng: -100.244 },
-        { city: "New York/NJ", country: "USA", venue: "MetLife Stadium", cap: 82500, role: "Group · R32 · R16 · Final", lat: 40.813, lng: -74.874 },
-        { city: "Philadelphia", country: "USA", venue: "Philadelphia Stadium", cap: 69000, role: "Group · R16", lat: 39.901, lng: -75.168 },
-        { city: "SF Bay Area", country: "USA", venue: "Bay Area Stadium", cap: 71000, role: "Group · R32", lat: 37.403, lng: -121.970 },
-        { city: "Seattle", country: "USA", venue: "Seattle Stadium", cap: 69000, role: "Group · R32 · R16", lat: 47.595, lng: -122.331 },
-        { city: "Toronto", country: "Canada", venue: "BMO Field", cap: 45000, role: "Group · R32", lat: 43.633, lng: -79.418 },
-        { city: "Vancouver", country: "Canada", venue: "BC Place", cap: 54000, role: "Group · R32 · R16", lat: 49.276, lng: -123.111 }
+        { city: "Atlanta",       country: "USA",    iso: "US", venue: "Atlanta Stadium",      cap: 75000, role: "Group · R32 · R16 · Semi-final",  lat: 33.755,  lng: -84.401  },
+        { city: "Boston",        country: "USA",    iso: "US", venue: "Boston Stadium",       cap: 65000, role: "Group · R32 · Quarter-final",     lat: 42.091,  lng: -70.164  },
+        { city: "Dallas",        country: "USA",    iso: "US", venue: "Dallas Stadium",       cap: 94000, role: "Group · R32 · R16 · Semi-final",  lat: 32.748,  lng: -97.093  },
+        { city: "Guadalajara",   country: "Mexico", iso: "MX", venue: "Estadio Guadalajara",  cap: 48000, role: "Group stage",                     lat: 20.682,  lng: -103.462 },
+        { city: "Houston",       country: "USA",    iso: "US", venue: "Houston Stadium",      cap: 72000, role: "Group · R32 · R16",               lat: 29.684,  lng: -95.411  },
+        { city: "Kansas City",   country: "USA",    iso: "US", venue: "Kansas City Stadium",  cap: 73000, role: "Group · R32 · Quarter-final",     lat: 39.049,  lng: -94.484  },
+        { city: "Los Angeles",   country: "USA",    iso: "US", venue: "Los Angeles Stadium",  cap: 70000, role: "Group · R32 · Quarter-final",     lat: 33.953,  lng: -118.339 },
+        { city: "Mexico City",   country: "Mexico", iso: "MX", venue: "Estadio Azteca",       cap: 83000, role: "Opening · Group · R32 · R16",     lat: 19.303,  lng: -99.151  },
+        { city: "Miami",         country: "USA",    iso: "US", venue: "Miami Stadium",        cap: 65000, role: "Group · R32 · QF · 3rd-place",    lat: 25.958,  lng: -80.239  },
+        { city: "Monterrey",     country: "Mexico", iso: "MX", venue: "Estadio Monterrey",    cap: 53500, role: "Group · R32",                     lat: 25.669,  lng: -100.244 },
+        { city: "New York/NJ",   country: "USA",    iso: "US", venue: "MetLife Stadium",      cap: 82500, role: "Group · R32 · R16 · Final",       lat: 40.813,  lng: -74.874  },
+        { city: "Philadelphia",  country: "USA",    iso: "US", venue: "Philadelphia Stadium", cap: 69000, role: "Group · R16",                     lat: 39.901,  lng: -75.168  },
+        { city: "SF Bay Area",   country: "USA",    iso: "US", venue: "Bay Area Stadium",     cap: 71000, role: "Group · R32",                     lat: 37.403,  lng: -121.970 },
+        { city: "Seattle",       country: "USA",    iso: "US", venue: "Seattle Stadium",      cap: 69000, role: "Group · R32 · R16",               lat: 47.595,  lng: -122.331 },
+        { city: "Toronto",       country: "Canada", iso: "CA", venue: "BMO Field",            cap: 45000, role: "Group · R32",                     lat: 43.633,  lng: -79.418  },
+        { city: "Vancouver",     country: "Canada", iso: "CA", venue: "BC Place",             cap: 54000, role: "Group · R32 · R16",               lat: 49.276,  lng: -123.111 }
       ];
 
       const grants = [
@@ -1691,12 +2063,29 @@
       }
 
       // ───────────────── Nav ─────────────────
+      // WAI-ARIA tab pattern. The <nav id="nav"> is upgraded to
+      // role=tablist on init, every button is a role=tab pointing at
+      // its matching role=tabpanel section via aria-controls. Active
+      // tab is the only one with tabindex=0; all others are -1 so the
+      // arrow-key handler in keydown owns roving focus.
       function renderNav() {
-        $("#nav").innerHTML = views.map(([id, label, key, glyph]) => `
-          <button class="${state.view === id ? "active" : ""}" data-view="${id}" type="button">
-            <span>${label}</span>
-          </button>
-        `).join("");
+        const nav = $("#nav");
+        nav.setAttribute("role", "tablist");
+        nav.setAttribute("aria-orientation", "vertical");
+        nav.innerHTML = views.map(([id, label]) => {
+          const sel = state.view === id;
+          return `
+          <button
+            class="${sel ? "active" : ""}"
+            data-view="${id}"
+            id="tab-${id}"
+            role="tab"
+            type="button"
+            aria-selected="${sel ? "true" : "false"}"
+            aria-controls="${id}"
+            tabindex="${sel ? "0" : "-1"}"
+          ><span>${label}</span></button>`;
+        }).join("");
       }
 
       // ───────────────── KPIs ─────────────────
@@ -1782,14 +2171,154 @@
         });
       }
 
+      // FIFA History facts: shipped on every view EXCEPT Marathon Clothing.
+      // 18 well-researched facts covering FIFA's founding, every era of the
+      // tournament, the 2026 expansion, and the three host nations.
+      const FIFA_HISTORY_FACTS = [
+        "FIFA was founded in Paris on May 21, 1904 by seven national associations: Belgium, Denmark, France, Netherlands, Spain, Sweden, and Switzerland.",
+        "The first FIFA World Cup was played in Uruguay in 1930. Uruguay defeated Argentina 4-2 in the final.",
+        "13 teams competed in the 1930 World Cup, all by direct invitation since no qualification process yet existed.",
+        "Brazil holds the record for most FIFA World Cup titles with five (1958, 1962, 1970, 1994, 2002).",
+        "FIFA suspended the World Cup in 1942 and 1946 due to World War II, the only break in the tournament's history.",
+        "The format expanded from 16 teams to 24 in 1982, to 32 in 1998, and to 48 in 2026.",
+        "The 2026 FIFA World Cup is the first ever co-hosted by three nations: the United States, Canada, and Mexico.",
+        "Mexico becomes the first country to host or co-host three FIFA World Cups (1970, 1986, 2026).",
+        "The 2026 tournament features 16 host cities: 11 in the USA, 3 in Mexico, and 2 in Canada.",
+        "The opening match of FIFA World Cup 2026 is at Estadio Azteca, Mexico City, on June 11, 2026.",
+        "The final of the 2026 World Cup is at MetLife Stadium, New York/New Jersey, on July 19, 2026.",
+        "The 2026 format introduces a Round of 32, expanding knockouts to a seventh round.",
+        "104 matches will be played across 39 days in 2026, the most in World Cup history.",
+        "FIFA has 211 member associations, more than the United Nations' 193 member states.",
+        "The current World Cup trophy was redesigned in 1974 after Brazil retained the original Jules Rimet Trophy permanently in 1970.",
+        "Lionel Messi led Argentina to victory in 2022 in Qatar, his first World Cup title.",
+        "The host nation has won the trophy six times: Uruguay 1930, Italy 1934, England 1966, Germany 1974, Argentina 1978, France 1998.",
+        "The 1950 World Cup in Brazil ended with the Maracanazo, when Uruguay defeated Brazil 2-1 in the deciding match at the Maracanã."
+      ];
+
+      // Black Wall Street facts: shipped exclusively on the Marathon Clothing
+      // page. 17 historically accurate entries on Greenwood, the 1921
+      // massacre, the rebuild, the legacy, and the line to Nipsey Hussle.
+      const BWS_FACTS = [
+        "Greenwood District in Tulsa, Oklahoma was the most prosperous Black community in early 20th century America, earning the name Black Wall Street.",
+        "By 1921, Greenwood spanned 35 city blocks with over 100 Black-owned businesses, including hotels, theaters, banks, and grocery stores.",
+        "Booker T. Washington nicknamed Greenwood Avenue the Negro Wall Street after visiting Tulsa in 1913.",
+        "O. W. Gurley, considered the founder of Greenwood, purchased 40 acres in 1906 with the intent to sell exclusively to Black Americans.",
+        "Greenwood's prosperity was built on the Black dollar circulating multiple times within the community before leaving the district.",
+        "On May 31 to June 1, 1921, a white mob, deputized and aided by aircraft, attacked Greenwood in what became the Tulsa Race Massacre.",
+        "The 1921 massacre destroyed the entire 35-block district in less than 24 hours; estimates of deaths range from 75 to over 300.",
+        "Despite the destruction, Greenwood survivors began rebuilding within months. By 1942, the district counted 242 Black-owned businesses.",
+        "Greenwood's economic prosperity before 1921 surpassed many white American communities of comparable size.",
+        "The original Greenwood was largely demolished by urban renewal in the 1960s and 1970s, well after the 1921 massacre.",
+        "The Greenwood Cultural Center, opened in 1995, preserves the history of the district and the 1921 massacre.",
+        "In 2020, the City of Tulsa officially declared Greenwood a Black Wall Street Historic District.",
+        "In 2021, the centenary of the massacre, surviving witnesses including Viola Fletcher (107) testified before the United States Congress.",
+        "The 2021 anniversary brought presidential acknowledgement when Joe Biden became the first sitting US president to commemorate the massacre on its centenary.",
+        "Black Wall Street's legacy inspired contemporary Black entrepreneurs like Nipsey Hussle, who consciously built ownership into his Crenshaw operations.",
+        "Nipsey Hussle's ownership over consumption philosophy at The Marathon Clothing was directly inspired by the Black Wall Street model.",
+        "The Marathon Continues, anchored in Nipsey's words, traces a direct line from Greenwood's stewardship ethos to today's Black business pioneers."
+      ];
+
+      // Default top-of-view block: FIFA History scrolling ticker with a
+      // duplicated track for seamless loop. Any view that wants something
+      // different (Marathon Clothing) calls renderBwsCard() instead.
       function renderKpis() {
+        const facts = FIFA_HISTORY_FACTS.map(f =>
+          `<span class="fifa-fact">${escapeHtml(f)}</span><span class="fifa-divider" aria-hidden="true"></span>`
+        ).join("");
         return `
-          <div class="headline-strip grid-kpi">
-            <div class="headline-tab headline-tab--bws">
-              <span class="hl-label">Black Wall Street</span>
-              <div class="hl-text" id="hlBws">…</div>
+          <section class="fifa-history-block" aria-label="FIFA history">
+            <header class="fifa-history-head">
+              <span class="live-pulse" aria-hidden="true"></span>
+              <h3>FIFA History</h3>
+              <span class="meta">120+ years of the world's game</span>
+            </header>
+            <div class="fifa-ticker" tabindex="0" role="region" aria-label="Rotating FIFA history facts. Hover or focus to pause.">
+              <div class="fifa-ticker-track">${facts}${facts}</div>
             </div>
-          </div>`;
+          </section>`;
+      }
+
+      // Black Wall Street rotator card. Lives only on the Marathon
+      // Clothing view. 4-second interval, 300ms fade, prev/next +
+      // dots, IntersectionObserver pause when scrolled out of view.
+      function renderBwsCard() {
+        const dots = BWS_FACTS.map((_, i) =>
+          `<button class="bws-dot" role="tab" aria-label="Show fact ${i + 1} of ${BWS_FACTS.length}"${i === 0 ? ` aria-current="true"` : ""} data-bws-dot="${i}" type="button"></button>`
+        ).join("");
+        return `
+          <section class="bws-card" id="bwsCard" aria-roledescription="carousel" aria-label="Black Wall Street facts">
+            <header class="bws-head">
+              <h3>Black Wall Street</h3>
+              <div class="bws-controls" role="group" aria-label="Carousel controls">
+                <button data-bws-prev type="button" aria-label="Previous fact">&lsaquo;</button>
+                <button data-bws-next type="button" aria-label="Next fact">&rsaquo;</button>
+              </div>
+            </header>
+            <div class="bws-stage" aria-live="polite" aria-atomic="true">
+              <p class="bws-fact" id="bwsFact">${escapeHtml(BWS_FACTS[0])}</p>
+            </div>
+            <div class="bws-dots" role="tablist" aria-label="Black Wall Street fact selectors">${dots}</div>
+          </section>`;
+      }
+
+      // BWS rotator state + control wiring. Hover, focus, off-screen,
+      // and prev/next interactions all funnel through this single
+      // controller so timers never overlap.
+      let bwsState = { i: 0, timer: null, paused: false, observer: null };
+      function startBwsRotator() {
+        const card = document.getElementById("bwsCard");
+        const stage = document.getElementById("bwsFact");
+        if (!card || !stage) return;
+        bwsState.i = 0;
+        bwsState.paused = false;
+        if (bwsState.timer) { clearInterval(bwsState.timer); bwsState.timer = null; }
+        if (bwsState.observer) { try { bwsState.observer.disconnect(); } catch {} bwsState.observer = null; }
+
+        const renderFact = (idx) => {
+          stage.classList.add("fading");
+          setTimeout(() => {
+            stage.textContent = BWS_FACTS[idx];
+            stage.classList.remove("fading");
+            card.querySelectorAll("[data-bws-dot]").forEach((d, k) => {
+              if (k === idx) d.setAttribute("aria-current", "true");
+              else d.removeAttribute("aria-current");
+            });
+          }, 300);
+        };
+        const advance = (delta) => {
+          bwsState.i = (bwsState.i + delta + BWS_FACTS.length) % BWS_FACTS.length;
+          renderFact(bwsState.i);
+        };
+        const goTo = (idx) => {
+          bwsState.i = idx % BWS_FACTS.length;
+          renderFact(bwsState.i);
+        };
+        const startTimer = () => {
+          if (bwsState.timer) clearInterval(bwsState.timer);
+          bwsState.timer = setInterval(() => {
+            if (!bwsState.paused) advance(1);
+          }, 4000);
+        };
+
+        card.addEventListener("mouseenter", () => { bwsState.paused = true; });
+        card.addEventListener("mouseleave", () => { bwsState.paused = false; });
+        card.addEventListener("focusin", () => { bwsState.paused = true; });
+        card.addEventListener("focusout", () => { bwsState.paused = false; });
+        card.querySelector("[data-bws-prev]")?.addEventListener("click", () => advance(-1));
+        card.querySelector("[data-bws-next]")?.addEventListener("click", () => advance(1));
+        card.querySelectorAll("[data-bws-dot]").forEach((d, k) => {
+          d.addEventListener("click", () => goTo(k));
+        });
+
+        // Pause when out of viewport using IntersectionObserver
+        if ("IntersectionObserver" in window) {
+          bwsState.observer = new IntersectionObserver((entries) => {
+            entries.forEach((e) => { bwsState.paused = !e.isIntersecting; });
+          }, { threshold: 0.1 });
+          bwsState.observer.observe(card);
+        }
+
+        startTimer();
       }
 
       // KPI count-up animation (runs after render)
@@ -2357,7 +2886,7 @@
 
       function renderMarathon() {
         $("#marathon").innerHTML = `
-          ${renderKpis()}
+          ${renderBwsCard()}
           <div class="marathon-hero">
             <div class="kicker">The Marathon Clothing · Crenshaw, Los Angeles</div>
             <blockquote>"The Marathon Continues. We honor the people that ain't quit, we honor the people that stayed down."</blockquote>
@@ -2600,28 +3129,31 @@
       // Languages surfaced in both the topbar picker and the Translate tab.
       // Code values match the translation engine's locale identifiers; the
       // dashboard reload handler already wires them through the cookie.
+      // ISO 3166-1 alpha-2 country codes attached to each language so
+      // both the topbar selector and the Translate cards can label the
+      // country accurately (US not EN, KR not KO, TW not ZH, etc.).
       const LANGUAGES = [
-        { code: "en",    flag: "🇺🇸", name: "English",               native: "English"      },
-        { code: "es",    flag: "🇪🇸", name: "Spanish",               native: "Español"      },
-        { code: "fr",    flag: "🇫🇷", name: "French",                native: "Français"     },
-        { code: "pt",    flag: "🇵🇹", name: "Portuguese",            native: "Português"    },
-        { code: "ar",    flag: "🇸🇦", name: "Arabic",                native: "العربية"      },
-        { code: "ti",    flag: "🇪🇷", name: "Tigrinya",              native: "ትግርኛ"        },
-        { code: "so",    flag: "🇸🇴", name: "Somali",                native: "Soomaali"     },
-        { code: "zh-TW", flag: "🇹🇼", name: "Chinese (Traditional)", native: "繁體中文"      },
-        { code: "ko",    flag: "🇰🇷", name: "Korean",                native: "한국어"        },
-        { code: "vi",    flag: "🇻🇳", name: "Vietnamese",            native: "Tiếng Việt"   },
-        { code: "tl",    flag: "🇵🇭", name: "Tagalog",               native: "Tagalog"      }
+        { code: "en",    country: "US", flag: "🇺🇸", name: "English",               native: "English"      },
+        { code: "es",    country: "ES", flag: "🇪🇸", name: "Spanish",               native: "Español"      },
+        { code: "fr",    country: "FR", flag: "🇫🇷", name: "French",                native: "Français"     },
+        { code: "pt",    country: "PT", flag: "🇵🇹", name: "Portuguese",            native: "Português"    },
+        { code: "ar",    country: "SA", flag: "🇸🇦", name: "Arabic",                native: "العربية"      },
+        { code: "ti",    country: "ER", flag: "🇪🇷", name: "Tigrinya",              native: "ትግርኛ"        },
+        { code: "so",    country: "SO", flag: "🇸🇴", name: "Somali",                native: "Soomaali"     },
+        { code: "zh-TW", country: "TW", flag: "🇹🇼", name: "Chinese (Traditional)", native: "繁體中文"      },
+        { code: "ko",    country: "KR", flag: "🇰🇷", name: "Korean",                native: "한국어"        },
+        { code: "vi",    country: "VN", flag: "🇻🇳", name: "Vietnamese",            native: "Tiếng Việt"   },
+        { code: "tl",    country: "PH", flag: "🇵🇭", name: "Tagalog",               native: "Tagalog"      }
       ];
 
       function renderTranslate() {
         const active = (typeof readGoogtrans === "function") ? readGoogtrans() : "en";
         const cards = LANGUAGES.map(l => `
-          <button class="lang-card${l.code === active ? " active" : ""}" data-lang="${l.code}" type="button">
+          <button class="lang-card${l.code === active ? " active" : ""}" data-lang="${l.code}" type="button" aria-label="${l.name} (${l.country})">
             <span class="lang-flag" aria-hidden="true">${l.flag}</span>
             <span class="lang-meta">
               <span class="lang-native">${l.native}</span>
-              <span class="lang-en">${l.name}</span>
+              <span class="lang-en">${l.name} <span class="lang-iso">${l.country}</span></span>
             </span>
             ${l.code === active ? `<span class="lang-mark">●</span>` : ""}
           </button>`).join("");
@@ -2734,7 +3266,7 @@
           startNewsRotation();
           startMarathonQuoteRotator();
           startBrandingRotator();
-          startHeadlineRotation();
+          startBwsRotator();
           ensureVideoPlays();
           retranslateIfNeeded();
         });
@@ -2805,7 +3337,7 @@
             marker.bindTooltip(`${s.city} · ${s.venue}`, { direction: "top", offset: [0, -4] });
             marker.on("click", () => {
               state.city = s.city;
-              renderActive();
+              openVenueCard(s);
             });
           });
           setTimeout(() => map.invalidateSize(), 30);
@@ -2876,6 +3408,76 @@
         $("#modalTitle").textContent = title;
         $("#modalBody").innerHTML = body;
         $("#modal").classList.add("open");
+      }
+
+      // Helper: 4-letter flag emoji from an ISO 3166-1 alpha-2 code
+      // by mapping each letter to its Regional Indicator codepoint.
+      function flagFromIso(iso) {
+        if (!iso || iso.length !== 2) return "";
+        const A = 0x1F1E6;
+        const codes = iso.toUpperCase().split("").map(c => A + (c.charCodeAt(0) - 65));
+        return String.fromCodePoint(...codes);
+      }
+
+      // Renders the compact venue card body for the click-on-marker
+      // modal. Strictly venue-focused, with a centered aerial map
+      // tile (Esri World Imagery) for the stadium footprint.
+      function venueCardHtml(s) {
+        const flag = flagFromIso(s.iso);
+        const coords = `${s.lat.toFixed(3)}°, ${s.lng.toFixed(3)}°`;
+        return `
+          <div class="venue-card-modal">
+            <header class="vcm-head">
+              <div class="vcm-flag" aria-hidden="true">${flag}</div>
+              <div class="vcm-title">
+                <span class="vcm-venue">${escapeHtml(s.venue)}</span>
+                <span class="vcm-loc">${escapeHtml(s.city)}<span class="vcm-iso">${escapeHtml(s.iso)}</span></span>
+              </div>
+            </header>
+            <figure class="vcm-aerial" aria-label="Aerial view of ${escapeHtml(s.venue)}">
+              <div id="vcmAerialMap" class="vcm-aerial-map" role="img" aria-label="Satellite view, ${escapeHtml(s.city)}"></div>
+              <figcaption class="vcm-aerial-cap">Aerial · Esri World Imagery</figcaption>
+            </figure>
+            <dl class="vcm-stats">
+              <div><dt>Capacity</dt><dd>${s.cap.toLocaleString()}</dd></div>
+              <div><dt>Country</dt><dd>${escapeHtml(s.country)} (${escapeHtml(s.iso)})</dd></div>
+              <div><dt>Tournament role</dt><dd>${escapeHtml(s.role)}</dd></div>
+              <div><dt>Coordinates</dt><dd class="mono">${coords}</dd></div>
+            </dl>
+            <div class="vcm-actions">
+              <button class="btn" data-focus-city="${escapeHtml(s.city)}" type="button">Focus on map</button>
+            </div>
+          </div>`;
+      }
+
+      // Mounts the small Leaflet satellite map inside the venue card
+      // after the modal DOM is in place. Uses Esri World Imagery,
+      // which is keyless and stable. Falls back silently if Leaflet
+      // hasn't loaded yet.
+      function mountVenueAerial(s) {
+        const el = document.getElementById("vcmAerialMap");
+        if (!el || !window.L) return;
+        try {
+          const m = L.map(el, {
+            zoomControl: false, dragging: false, scrollWheelZoom: false,
+            doubleClickZoom: false, boxZoom: false, keyboard: false,
+            attributionControl: false, touchZoom: false
+          }).setView([s.lat, s.lng], 16);
+          L.tileLayer(
+            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+            { maxZoom: 19 }
+          ).addTo(m);
+          L.circleMarker([s.lat, s.lng], {
+            radius: 7, color: "#ffffff", weight: 2,
+            fillColor: "#22c55e", fillOpacity: 0.95
+          }).addTo(m);
+          setTimeout(() => m.invalidateSize(), 30);
+        } catch {}
+      }
+
+      function openVenueCard(s) {
+        openModal(s.city, venueCardHtml(s));
+        requestAnimationFrame(() => mountVenueAerial(s));
       }
 
       // ───────────────── Routing (URL hash) ─────────────────
@@ -2950,16 +3552,7 @@
         const openCity = e.target.closest("[data-open-city]");
         if (openCity) {
           const s = stadiums.find(x => x.city === openCity.dataset.openCity);
-          if (s) {
-            openModal(s.city, `
-              <div class="list">
-                ${listRow("Venue", `<strong>${s.venue}</strong>`)}
-                ${listRow("Country", s.country)}
-                ${listRow("Capacity", s.cap.toLocaleString())}
-                ${listRow("Coordinates", `<span style="font-family:var(--mono)">${s.lat.toFixed(3)}, ${s.lng.toFixed(3)}</span>`)}
-                ${listRow("Operational focus", "Transit · safety · business · language access")}
-              </div>`);
-          }
+          if (s) openVenueCard(s);
           return;
         }
         if (e.target.id === "grantRefresh") refreshLive();
@@ -2967,6 +3560,35 @@
       });
 
       document.addEventListener("keydown", (e) => {
+        // Arrow-key roving focus for the WAI-ARIA tablist. Activated
+        // only when focus is currently inside the nav, so arrows still
+        // do their normal thing in scrollable content.
+        const inTablist = e.target.closest('#nav [role="tab"]');
+        if (inTablist) {
+          const tabs = Array.from(document.querySelectorAll('#nav [role="tab"]'));
+          const idx = tabs.indexOf(inTablist);
+          let next = -1;
+          if (e.key === "ArrowDown" || e.key === "ArrowRight") next = (idx + 1) % tabs.length;
+          else if (e.key === "ArrowUp" || e.key === "ArrowLeft") next = (idx - 1 + tabs.length) % tabs.length;
+          else if (e.key === "Home") next = 0;
+          else if (e.key === "End") next = tabs.length - 1;
+          if (next >= 0) {
+            e.preventDefault();
+            const targetId = tabs[next].dataset.view;
+            navigate(targetId);
+            // renderNav() rebuilt the buttons, refocus the new one.
+            requestAnimationFrame(() => {
+              const fresh = document.getElementById("tab-" + targetId);
+              if (fresh) fresh.focus();
+            });
+            return;
+          }
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            navigate(inTablist.dataset.view);
+            return;
+          }
+        }
         if (e.target.matches("input, select, textarea")) return;
         const map = { "1":"overview","2":"branding","3":"map","4":"stadiums","5":"transport","6":"safety","7":"youth","8":"bracket","9":"marathon" };
         if (map[e.key]) { navigate(map[e.key]); }
