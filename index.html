@@ -1215,9 +1215,13 @@
       .menu-btn { display: none; }
 
       /* ─────────── Responsive ─────────── */
+      /* iPad-landscape and small laptops */
       @media (max-width: 1280px) {
         :root { --rail: 208px; }
         .kpi .value { font-size: 22px; }
+        .headline-tab { height: 102px; }
+        .headline-tab .hl-text { font-size: 10.5px; }
+        .pogba-tile { max-height: 180px; }
       }
 
       @media (max-width: 1100px) {
@@ -1284,7 +1288,9 @@
           row-gap: 8px;
         }
         .top-actions { flex-wrap: wrap; row-gap: 6px; }
-        .top-actions .select { display: none; }
+        .top-actions .select { min-height: 36px; }  /* keep language picker reachable on touch */
+        .top-actions .btn { min-height: 36px; padding: 0 14px; }
+        .nav button { min-height: 38px; }  /* touch-friendly tab targets */
         .view { padding: 12px 14px 18px; }
         #overview.section.active {
           display: grid;
@@ -1323,9 +1329,37 @@
         .headline-tab { height: auto; min-height: 88px; }
       }
 
+      /* Tablet-portrait + large phones */
       @media (max-width: 720px) {
         .marathon-grid { grid-template-columns: 1fr; }
         .pogba-strip { grid-template-columns: 1fr 1fr; }
+        .news-panel { padding: 9px 12px 8px; }
+        .marathon-hero blockquote { font-size: 20px; }
+      }
+
+      /* Small phones */
+      @media (max-width: 420px) {
+        .brand img { width: 116px; }
+        .topbar h2 { font-size: 13px; }
+        .topbar .crumb { font-size: 11px; }
+        .topbar > div:first-child { width: 100%; }   /* title gets its own row */
+        .top-actions { width: 100%; }                /* actions wrap as a strip */
+        .top-actions .btn, .top-actions .select { flex: 1 1 auto; }
+        .marathon-hero { padding: 14px 16px; }
+        .marathon-hero blockquote { font-size: 17px; }
+        .pogba-strip { grid-template-columns: 1fr; }
+        .pogba-tile { aspect-ratio: 16 / 9; max-height: 200px; }
+        .news-panel { min-height: 70px; }
+      }
+
+      /* Touch-and-tap niceties wherever the device is touch-capable. */
+      @media (hover: none) {
+        .btn, .nav button, .lang-card, .venue-card, .pogba-tile, .drop-tile {
+          -webkit-tap-highlight-color: rgba(0,0,0,0.06);
+        }
+        .btn:hover, .lang-card:hover, .venue-card:hover, .pogba-tile:hover {
+          transform: none;  /* no hover lift on touch where it would feel laggy */
+        }
       }
 
       /* Print */
