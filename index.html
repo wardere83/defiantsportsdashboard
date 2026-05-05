@@ -421,20 +421,6 @@
         opacity: 0;
         transform: translateY(6px);
       }
-      .fifa-headline-tag {
-        display: inline-block;
-        background: #b91c1c;
-        color: #fff;
-        font-size: 10px;
-        font-weight: 800;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        padding: 4px 8px;
-        border-radius: 4px;
-        margin-right: 10px;
-        flex: 0 0 auto;
-        align-self: center;
-      }
       @media (max-width: 720px) {
         .fifa-headline-text { font-size: 15px; }
         .fifa-headline { min-height: 48px; padding: 12px 14px; }
@@ -1719,6 +1705,114 @@
       }
       .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+      /* Team Defiant page: hero mission card + leadership grid. */
+      .team-hero {
+        margin-bottom: 18px;
+      }
+      .team-hero-title {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin: 0 0 8px;
+        color: var(--ink);
+      }
+      .team-hero .lede + .lede {
+        margin-top: 10px;
+      }
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 18px;
+      }
+      .team-card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 22px 22px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+      }
+      .team-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+        border-color: var(--ink-3);
+      }
+      .team-photo {
+        margin: 0 auto;
+        width: 120px;
+        height: 120px;
+      }
+      .team-photo-frame {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        overflow: hidden;
+        background: linear-gradient(135deg, #111418 0%, #2a3138 100%);
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-family: var(--font);
+        font-size: 38px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        box-shadow: 0 6px 18px rgba(15, 18, 24, 0.18);
+      }
+      .team-photo-frame::before {
+        content: attr(data-initials);
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        z-index: 0;
+      }
+      .team-photo-frame img {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .team-meta {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .team-role {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .team-name {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--ink);
+        margin: 0;
+        letter-spacing: -0.01em;
+      }
+      .team-alias {
+        font-size: 11px;
+        font-style: italic;
+        color: var(--ink-3);
+      }
+      .team-bio {
+        font-size: 13px;
+        line-height: 1.55;
+        color: var(--ink-2);
+        margin: 0;
+      }
+      @media (max-width: 720px) {
+        .team-photo { width: 100px; height: 100px; }
+        .team-photo-frame { font-size: 32px; }
+        .team-card { padding: 18px; }
+      }
+
       /* Mobile menu trigger */
       .menu-btn { display: none; }
 
@@ -1927,7 +2021,7 @@
         <div class="view">
           <section class="section" id="overview"  role="tabpanel" aria-labelledby="tab-overview"  tabindex="0"></section>
           <section class="section" id="branding"  role="tabpanel" aria-labelledby="tab-branding"  tabindex="0"></section>
-          <section class="section" id="stadiums"  role="tabpanel" aria-labelledby="tab-stadiums"  tabindex="0"></section>
+          <section class="section" id="team"      role="tabpanel" aria-labelledby="tab-team"      tabindex="0"></section>
           <section class="section" id="grants"    role="tabpanel" aria-labelledby="tab-grants"    tabindex="0"></section>
           <section class="section" id="business"  role="tabpanel" aria-labelledby="tab-business"  tabindex="0"></section>
           <section class="section" id="safety"    role="tabpanel" aria-labelledby="tab-safety"    tabindex="0"></section>
@@ -1970,12 +2064,12 @@
     <script>
       // ───────────────── Data ─────────────────
       const views = [
-        ["overview",  "Overview",   "1", "▦"],
-        ["branding",  "Branding",   "2", "✦"],
-        ["stadiums",  "Stadiums",   "3", "⌂"],
-        ["safety",    "Safety",     "4", "△"],
-        ["youth",     "Pogba Academy", "5", "○"],
-        ["bracket",   "Bracket",    "6", "⌁"],
+        ["overview",  "Overview",          "1", "▦"],
+        ["branding",  "Branding",          "2", "✦"],
+        ["team",      "Team Defiant",      "3", "★"],
+        ["safety",    "Safety",            "4", "△"],
+        ["youth",     "Pogba Academy",     "5", "○"],
+        ["bracket",   "Bracket",           "6", "⌁"],
         ["marathon",  "Marathon Clothing", "7", "◆"]
       ];
 
@@ -2038,8 +2132,6 @@
       const state = {
         view: "overview",
         city: "New York/NJ",
-        stadiumQuery: "",
-        stadiumSort: { key: "cap", dir: "desc" },
         live: "syncing",
         grantLive: "syncing",
         liveSources: [],
@@ -2244,7 +2336,6 @@
               <h3>Beyond the Pitch</h3>
             </header>
             <div class="fifa-headline" id="btpHeadline" tabindex="0" role="region" aria-label="Rotating headlines on player impact. Hover or focus to pause." aria-live="polite">
-              <span class="fifa-headline-tag" aria-hidden="true">Headline</span>
               <p class="fifa-headline-text" id="btpHeadlineText">${escapeHtml(first)}</p>
             </div>
           </section>`;
@@ -2709,65 +2800,90 @@
           </div>`;
       }
 
-      function renderStadiums() {
-        const q = state.stadiumQuery.toLowerCase();
-        if (state.stadiumSort.key === "role") state.stadiumSort = { key: "cap", dir: "desc" };
-        const { key, dir } = state.stadiumSort;
-        const filtered = stadiums.filter(s =>
-          !q || s.city.toLowerCase().includes(q) || s.country.toLowerCase().includes(q)
-            || s.venue.toLowerCase().includes(q)
-        );
-        const sorted = filtered.slice().sort((a, b) => {
-          const av = a[key], bv = b[key];
-          const cmp = typeof av === "number" ? av - bv : String(av).localeCompare(String(bv));
-          return dir === "asc" ? cmp : -cmp;
-        });
-        const arrow = (k) => key === k ? (dir === "asc" ? " ↑" : " ↓") : "";
-        $("#stadiums").innerHTML = `
+      // Team Defiant: leadership bios. Each bio renders a portrait
+      // slot (real headshot if available at assets/team/<slug>.jpg,
+      // otherwise an initials avatar) plus role, name, and bio copy.
+      const TEAM_BIOS = [
+        {
+          slug: "carless",
+          name: "Steven Pierre Carless",
+          alias: "Steve-O",
+          role: "CEO, The Defiant Foundation",
+          bio: "Grammy Award-winning executive Steven Pierre Carless, widely known as Steve-O, is a trailblazing leader recognized for his work with Nipsey Hussle, Beyoncé, Polo G, John Legend, and others. His contributions to award-winning records have earned him multiple Grammys, reinforcing his impact at the highest level of the industry. In 2021, he made history as the first Black President of Warner Records, cementing his legacy as a transformative force in music and culture. Now serving as CEO of The Defiant Foundation, Carless brings elite leadership to drive a value-driven impact across the U.S. and globally."
+        },
+        {
+          slug: "brandon",
+          name: "Jamal “Mally” Brandon",
+          role: "VP, Digital Media & Growth Strategy",
+          bio: "Jamal “Mally” Brandon is a music executive and serial entrepreneur with a proven track record spanning production, artist management, and digital media strategy. Having worked with multi-platinum artists and legacy acts, he built his expertise in production before transitioning into executive leadership, driving impactful business and content initiatives. As a key force behind Shot Selection Media, he has contributed to generating over 1 billion YouTube views through targeted digital marketing and audience growth strategies. Now serving as VP of Digital Media & Growth Strategies, Brandon leverages his cross-functional expertise to scale digital reach, optimize engagement, and dismantle systemic mechanisms that do not add value to communities they market to."
+        },
+        {
+          slug: "mathias-pogba",
+          name: "Mathias Pogba",
+          role: "CEO, Pogba Academy",
+          bio: "Mathias Pogba is a retired professional footballer whose passion has led him to launch a new venture focused on developing young talent and minds. He currently serves as CEO of Pogba Academy, a player development organization dedicated to creating a holistic pathway for athletes at all levels and stages of interest. He takes pride in implementing world-class strategies that drive success. Recognizing player development as a critical priority, he continues to promote structured approaches that highlight the long-term benefits for youth across diverse age groups."
+        },
+        {
+          slug: "paul-pogba",
+          name: "Paul Pogba",
+          role: "Elite Ambassador",
+          bio: "Paul Pogba, currently playing for AS Monaco, is a World Cup-winning French midfielder recognized for his elite performance at the highest levels of global football. Having played for top clubs including Manchester United and Juventus, he has secured multiple domestic league titles and international honors, including the 2018 FIFA World Cup with France. Known for his versatility, technical skill, and leadership on the pitch, Pogba has also built a global brand through endorsements, philanthropy, and cultural influence beyond the sport. More recently, he has expanded his impact beyond football by becoming a shareholder and ambassador in a professional sports venture, signaling his growing presence in the global sports business landscape."
+        },
+        {
+          slug: "hassan",
+          name: "Hassan",
+          role: "Strategic Policy Advisor",
+          bio: "Hassan is a high-impact policy strategist and organizational scaling expert with extensive cross-sector experience spanning government agencies, global corporations, and CBOs. He specializes in advancing the Return on Relationship (RoR) framework, leveraging authentic connectivity as a strategic driver of systemic evolution and institutional growth. As a transformational leader, Hassan integrates systems thinking, adaptive leadership, and equity-centered design to help organizations build robust capacity. His multidimensional approach is engineered to deliver measurable results in some of the world's most complex and multifaceted environments."
+        }
+      ];
+
+      function teamInitials(name) {
+        return name.replace(/[“”"']/g, "")
+          .split(/\s+/)
+          .filter(Boolean)
+          .map(w => w[0])
+          .filter(c => /[A-Za-z]/.test(c))
+          .slice(0, 2)
+          .join("")
+          .toUpperCase();
+      }
+
+      function renderTeam() {
+        const cards = TEAM_BIOS.map(p => {
+          const photoSrc = `./assets/team/${p.slug}.jpg`;
+          const initials = teamInitials(p.name);
+          const aliasLine = p.alias ? `<span class="team-alias">a.k.a. ${escapeHtml(p.alias)}</span>` : "";
+          return `
+            <article class="team-card">
+              <figure class="team-photo">
+                <div class="team-photo-frame" data-initials="${escapeHtml(initials)}">
+                  <img src="${escapeHtml(photoSrc)}" alt="Portrait of ${escapeHtml(p.name)}" loading="lazy" decoding="async"
+                       onerror="this.remove()" />
+                </div>
+              </figure>
+              <header class="team-meta">
+                <span class="team-role">${escapeHtml(p.role)}</span>
+                <h4 class="team-name">${escapeHtml(p.name)}</h4>
+                ${aliasLine}
+              </header>
+              <p class="team-bio">${escapeHtml(p.bio)}</p>
+            </article>`;
+        }).join("");
+
+        $("#team").innerHTML = `
           ${renderKpis()}
           <div class="fill">
-            <div class="card">
-              <div class="card-head">
-                <h3>Stadium Register</h3>
-                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
-                  <input class="input" id="stadiumSearch" type="search" placeholder="Search city, country, venue…"
-                    value="${escapeHtml(state.stadiumQuery)}"
-                    style="height:30px; padding:0 10px; border-radius:8px; border:1px solid var(--line); background:var(--white); font-size:12px; min-width:220px"
-                    autocomplete="off" />
-                  <span class="meta">${sorted.length}/${stadiums.length} venues</span>
-                </div>
+            <section class="card team-hero" aria-labelledby="teamHeroTitle">
+              <div class="card-body">
+                <h3 id="teamHeroTitle" class="team-hero-title">Team Defiant</h3>
+                <p class="lede">We are a collective of passionate creatives, fueled by a shared vision of a world where everyone has the opportunity to thrive.</p>
+                <p class="lede">Our mission? To empower individuals and communities to break the cycle of poverty. We're not just about handouts; we're about hand-ups. We're Defiant, and we won't stop until every voice is heard and every potential is realized.</p>
               </div>
-              <div class="card-body flush"><div class="table-wrap">
-                <table>
-                  <thead><tr>
-                    <th data-sort="city" style="cursor:pointer">City${arrow("city")}</th>
-                    <th data-sort="country" style="cursor:pointer">Country${arrow("country")}</th>
-                    <th data-sort="venue" style="cursor:pointer">Venue${arrow("venue")}</th>
-                    <th data-sort="cap" style="cursor:pointer">Capacity${arrow("cap")}</th>
-                  </tr></thead>
-                  <tbody>
-                    ${sorted.map(s => `
-                      <tr data-focus-city="${escapeHtml(s.city)}" style="cursor:pointer">
-                        <td><strong>${s.city}</strong></td>
-                        <td>${s.country}</td>
-                        <td>${s.venue}</td>
-                        <td style="font-family:var(--mono)">${s.cap.toLocaleString()}</td>
-                      </tr>
-                    `).join("")}
-                    ${sorted.length === 0 ? `<tr><td colspan="4" style="text-align:center; color:var(--ink-3); padding:24px">No venues match "${escapeHtml(state.stadiumQuery)}"</td></tr>` : ""}
-                  </tbody>
-                </table>
-              </div></div>
-            </div>
+            </section>
+            <section class="team-grid" aria-label="Leadership">
+              ${cards}
+            </section>
           </div>`;
-        const search = $("#stadiumSearch");
-        if (search) {
-          search.addEventListener("input", (e) => {
-            state.stadiumQuery = e.target.value;
-            renderStadiums();
-            const s = $("#stadiumSearch"); if (s) { s.focus(); s.setSelectionRange(s.value.length, s.value.length); }
-          });
-        }
       }
 
       function renderGrants() {
@@ -2802,24 +2918,6 @@
             ${simpleCard("Business Exposure", "Local restaurants, retailers, wellness providers, creators, and nonprofits package watch-party readiness, QR capture, sponsor reporting, and multilingual fan messaging.")}
             ${simpleCard("Partner Lane", "The Defiant Foundation, Bulle Consulting, and DreamCo Management help organizations scale fund development and World Cup marketing city by city.")}
             ${simpleCard("Operating Rule", "Keep activations safe, measurable, language-accessible, and sponsor-ready, without cluttering the fan journey.")}
-          </div>`;
-      }
-
-      function renderTransport() {
-        $("#transport").innerHTML = `
-          ${renderKpis()}
-          <div class="fill">
-            <div class="card">
-              <div class="card-head"><h3>Transportation Advisories</h3><span class="meta">Match-day mobility</span></div>
-              <div class="card-body flush"><div class="table-wrap">
-                <table>
-                  <thead><tr><th>Market</th><th>Type</th><th>Asset</th><th>Status</th><th>Source</th></tr></thead>
-                  <tbody>
-                    ${transitRows.map(r => `<tr><td><strong>${r[0]}</strong></td><td>Advisory</td><td>${r[1]}</td><td><span class="pill ok dot">Match-day</span></td><td>Live agency check when connected</td></tr>`).join("")}
-                  </tbody>
-                </table>
-              </div></div>
-            </div>
           </div>`;
       }
 
@@ -3268,7 +3366,7 @@
           overview: "Real-time host-city intelligence · FIFA World Cup 2026",
           branding: "Athlete branding · Partner with the voices that move markets and movements",
           live: "Verified FIFA · CDC · partner endpoints · streaming when reachable",
-          stadiums: "Verified venue register · 16 host stadiums",
+          team: "Team Defiant · the leadership building the foundation",
           grants: "Open grants & funding pathways · live status",
           business: "Local-market activation strategy",
           safety: "Stewardship, health, and fan-flow",
@@ -3284,7 +3382,7 @@
 
         const r = {
           overview: renderOverview, branding: renderBranding,
-          stadiums: renderStadiums, grants: renderGrants, business: renderBusiness,
+          team: renderTeam, grants: renderGrants, business: renderBusiness,
           safety: renderSafety, marathon: renderMarathon,
           youth: renderYouth, records: renderRecords, translate: renderTranslate,
           bracket: renderBracket
@@ -3546,17 +3644,6 @@
           setPageLanguage(lang);
           return;
         }
-        const sortHeader = e.target.closest("th[data-sort]");
-        if (sortHeader) {
-          const k = sortHeader.dataset.sort;
-          if (state.stadiumSort.key === k) {
-            state.stadiumSort.dir = state.stadiumSort.dir === "asc" ? "desc" : "asc";
-          } else {
-            state.stadiumSort = { key: k, dir: k === "cap" ? "desc" : "asc" };
-          }
-          renderStadiums();
-          return;
-        }
         const focusRow = e.target.closest("[data-focus-city]");
         if (focusRow) {
           const city = focusRow.dataset.focusCity;
@@ -3608,7 +3695,7 @@
           }
         }
         if (e.target.matches("input, select, textarea")) return;
-        const map = { "1":"overview","2":"branding","3":"stadiums","4":"safety","5":"youth","6":"bracket","7":"marathon" };
+        const map = { "1":"overview","2":"branding","3":"team","4":"safety","5":"youth","6":"bracket","7":"marathon" };
         if (map[e.key]) { navigate(map[e.key]); }
         if (e.key === "Escape") $("#modal").classList.remove("open");
       });
