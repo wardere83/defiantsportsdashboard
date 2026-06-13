@@ -2477,10 +2477,10 @@
 
       // ───────────────── Live FIFA card ─────────────────
       // ───────────────── FIFA 2026 Countdown (KPI tile) ─────────────────
-      // Opening match: Mexico City (Estadio Azteca), Jun 11, 2026 at 12:00 noon.
+      // Opening match: Mexico City (Estadio Azteca), Jun 11, 2026 at 13:00 (1:00 PM).
       // Mexico City sits on CST (UTC-6) year-round (DST abolished there in 2022),
-      // so 12:00 CDMX = 18:00 UTC.
-      const KICKOFF_UTC = Date.UTC(2026, 5, 11, 18, 0, 0);
+      // so 13:00 CDMX = 19:00 UTC.
+      const KICKOFF_UTC = Date.UTC(2026, 5, 11, 19, 0, 0);
       // Final: MetLife Stadium (NY/NJ), Jul 19, 2026, 15:00 ET = 19:00 UTC.
       const FINAL_UTC   = Date.UTC(2026, 6, 19, 19, 0, 0);
 
@@ -2522,14 +2522,15 @@
       // FIFA RSS doesn't fit cleanly into Fixtures/Facts/Travel).
       const NEWS_FEEDS = {
         newsFixtures: [
-          "Jun 11 · Estadio Azteca, Mexico City, Opening Match · 12:00 CDMX",
-          "Jun 12 · MetLife Stadium, NY/NJ, Group Stage · 15:00 ET",
-          "Jun 13 · BMO Field, Toronto, Group Stage · 18:00 ET",
-          "Jun 14 · BC Place, Vancouver, Group Stage · 16:00 PT",
-          "Jun 15 · Atlanta Stadium, Group Stage · 19:00 ET",
-          "Jun 16 · Dallas Stadium, Group Stage · 18:00 CT",
-          "Jul 14 · Atlanta Stadium, Semi-final",
-          "Jul 15 · Dallas Stadium, Semi-final",
+          "Jun 11 · Estadio Azteca, Mexico City, Opening Match · 13:00 CDMX",
+          "Jun 12 · BMO Field, Toronto, Canada vs Bosnia and Herzegovina",
+          "Jun 12 · Los Angeles Stadium, USA vs Paraguay",
+          "Group stage · Jun 11 to Jun 27 · 72 matches, 16 host cities",
+          "Round of 32 · Jun 28 to Jul 3, new knockout round",
+          "Round of 16 · Jul 4 to Jul 7",
+          "Quarter-finals · Jul 9 to Jul 11",
+          "Jul 14 · Dallas Stadium, Semi-final",
+          "Jul 15 · Atlanta Stadium, Semi-final",
           "Jul 18 · Miami Stadium, Third-place match",
           "Jul 19 · MetLife Stadium, NY/NJ, Final · 15:00 ET"
         ],
@@ -2553,7 +2554,7 @@
           "16 host cities across 3 host nations",
           "First tri-nation hosting in World Cup history",
           "12 groups of 4 teams in the new format",
-          "Round of 32 added, eliminates two best 3rd-place teams",
+          "Top 2 per group plus 8 best 3rd-place teams reach Round of 32",
           "Estadio Azteca: only stadium to host three World Cup openers",
           "MetLife Stadium hosts the Final on July 19, 2026",
           "Atlanta and Dallas confirmed as semi-final venues",
@@ -3324,14 +3325,23 @@
         <div class="card-head"><h3>FIFA World Cup 2026, Bracket</h3><span class="meta">Jun 11 to Jul 19, 2026 · 48 teams · 104 matches · 16 host cities</span></div>
         <div class="card-body">
           <p class="lede"><strong>Format:</strong> 12 groups of 4 → top 2 of each group + 8 best third-placed teams advance to the Round of 32 → R16 → QF → SF → 3rd-place match → Final. Hosts <strong>Canada, Mexico, USA</strong> qualify automatically.</p>
-          <p class="lede" style="margin-top:6px"><strong>Opener:</strong> Mexico vs TBD, Estadio Azteca, Mexico City, Jun 11, 2026 · <strong>Final:</strong> MetLife Stadium, New York/New Jersey, Jul 19, 2026</p>
+          <p class="lede" style="margin-top:6px"><strong>Opener:</strong> Mexico vs South Africa, Estadio Azteca, Mexico City, Jun 11, 2026 · <strong>Final:</strong> MetLife Stadium, New York/New Jersey, Jul 19, 2026</p>
           <h4 style="margin:18px 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)">Group Stage, 12 Groups of 4</h4>
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:10px;">
             ${[
-              ["A","Mexico (host)"],["B","Canada (host)"],["C","TBD"],["D","USA (host)"],
-              ["E","TBD"],["F","TBD"],["G","TBD"],["H","TBD"],
-              ["I","TBD"],["J","TBD"],["K","TBD"],["L","TBD"]
-            ].map(g => `<div style="border:1px solid var(--line); border-radius:10px; padding:8px 10px; background:var(--surface)"><strong>Group ${g[0]}</strong><ol style="margin:6px 0 0; padding-left:18px; font-size:12px; color:var(--ink-2)"><li>${g[1]}</li><li>TBD</li><li>TBD</li><li>TBD</li></ol></div>`).join("")}
+              ["A", ["Mexico (host)","South Korea","Czechia","South Africa"]],
+              ["B", ["Canada (host)","Switzerland","Qatar","Bosnia and Herzegovina"]],
+              ["C", ["Brazil","Morocco","Scotland","Haiti"]],
+              ["D", ["USA (host)","Paraguay","Australia","Türkiye"]],
+              ["E", ["Germany","Ecuador","Ivory Coast","Curaçao"]],
+              ["F", ["Netherlands","Japan","Sweden","Tunisia"]],
+              ["G", ["Belgium","Egypt","Iran","New Zealand"]],
+              ["H", ["Spain","Uruguay","Saudi Arabia","Cabo Verde"]],
+              ["I", ["France","Senegal","Norway","Iraq"]],
+              ["J", ["Argentina","Austria","Algeria","Jordan"]],
+              ["K", ["Portugal","Colombia","Uzbekistan","DR Congo"]],
+              ["L", ["England","Croatia","Ghana","Panama"]]
+            ].map(g => `<div style="border:1px solid var(--line); border-radius:10px; padding:8px 10px; background:var(--surface)"><strong>Group ${g[0]}</strong><ol style="margin:6px 0 0; padding-left:18px; font-size:12px; color:var(--ink-2)">${g[1].map(t => `<li>${t}</li>`).join("")}</ol></div>`).join("")}
           </div>
           <h4 style="margin:18px 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)">Knockout Stage</h4>
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:10px;">
