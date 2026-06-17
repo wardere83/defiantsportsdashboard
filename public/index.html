@@ -3386,7 +3386,8 @@
       // time (t) and host city. No scores are invented: only finalized results
       // carry a score, so upcoming and in-play matches stay blank. Standings
       // are computed live from the results below. Verified Jun 17, 2026:
-      // Matchday 1 is complete for Groups A to J; Groups K and L open Jun 17.
+      // Matchday 1 done for Groups A to J; Groups K and L underway Jun 17
+      // (Portugal 1-1 DR Congo and England 4-2 Croatia final, two left to play).
       const GROUP_STAGE = [
         { g:"A", teams:["Mexico (host)","South Korea","Czechia","South Africa"], matches:[
           { d:"Jun 11", h:"Mexico", a:"South Africa", hs:2, as:0 },
@@ -3469,7 +3470,7 @@
           { d:"Jun 27", h:"Jordan", a:"Argentina", t:"10:00 PM ET", city:"Dallas" }
         ]},
         { g:"K", teams:["Portugal","Colombia","Uzbekistan","DR Congo"], matches:[
-          { d:"Jun 17", h:"Portugal", a:"DR Congo", today:true, t:"1:00 PM ET", city:"Houston" },
+          { d:"Jun 17", h:"Portugal", a:"DR Congo", hs:1, as:1 },
           { d:"Jun 17", h:"Uzbekistan", a:"Colombia", today:true, t:"10:00 PM ET", city:"Mexico City" },
           { d:"Jun 23", h:"Portugal", a:"Uzbekistan", t:"1:00 PM ET", city:"Houston" },
           { d:"Jun 23", h:"Colombia", a:"DR Congo", t:"10:00 PM ET", city:"Guadalajara" },
@@ -3477,7 +3478,7 @@
           { d:"Jun 27", h:"DR Congo", a:"Uzbekistan", t:"7:30 PM ET", city:"Atlanta" }
         ]},
         { g:"L", teams:["England","Croatia","Ghana","Panama"], matches:[
-          { d:"Jun 17", h:"England", a:"Croatia", today:true, t:"4:00 PM ET", city:"Dallas" },
+          { d:"Jun 17", h:"England", a:"Croatia", hs:4, as:2 },
           { d:"Jun 17", h:"Ghana", a:"Panama", today:true, t:"7:00 PM ET", city:"Toronto" },
           { d:"Jun 23", h:"England", a:"Ghana", t:"4:00 PM ET", city:"Boston" },
           { d:"Jun 23", h:"Panama", a:"Croatia", t:"7:00 PM ET", city:"Toronto" },
