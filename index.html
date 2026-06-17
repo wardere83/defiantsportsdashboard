@@ -1968,6 +1968,69 @@
         }
       }
 
+      /* Bracket group cards with full fixture + result lists */
+      .bgroup {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        background: var(--surface);
+        padding: 10px 12px;
+        box-shadow: var(--shadow-sm);
+      }
+      .bgroup-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px;
+        padding-bottom: 8px;
+        margin-bottom: 8px;
+        border-bottom: 1px solid var(--line);
+      }
+      .bgroup-head strong { font-size: 13px; letter-spacing: .04em; }
+      .bgroup-head .teams { font-size: 10.5px; color: var(--ink-3); text-align: right; line-height: 1.3; }
+      .bmatches { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+      .bm {
+        display: grid;
+        grid-template-columns: 42px 1fr auto;
+        align-items: center;
+        gap: 8px;
+        font-size: 11.5px;
+        color: var(--ink-2);
+        padding: 5px 7px;
+        border-radius: 7px;
+        border: 1px solid transparent;
+        background: var(--surface-2);
+      }
+      .bm .bm-date { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
+      .bm .bm-teams { color: var(--ink-2); }
+      .bm .bm-meta { font-family: var(--mono); font-size: 10px; color: var(--ink-4); white-space: nowrap; }
+      /* Played match: highlighted with the live-green accent + bold score */
+      .bm.played {
+        background: var(--live-glow);
+        border-color: rgba(0, 166, 80, 0.32);
+        color: var(--ink);
+      }
+      .bm.played .bm-teams { color: var(--ink); }
+      .bm.played .bm-score { font-weight: 700; color: var(--live); }
+      .bm.played .bm-date { color: var(--live); }
+      /* Matches kicking off today */
+      .bm.today { border-color: var(--accent); }
+      .bm.today .bm-meta { color: var(--accent); font-weight: 600; }
+      .bm .bm-city { color: var(--ink-4); }
+      .bm.played .bm-meta { color: var(--live); }
+      /* Live group standings table */
+      .bstand { width: 100%; border-collapse: collapse; margin: 2px 0 9px; }
+      .bstand td { padding: 3px 4px; font-size: 11px; color: var(--ink-2); border-bottom: 1px solid var(--line); }
+      .bstand thead td { border-bottom: 1px solid var(--line-2); }
+      .bstand tbody tr:last-child td { border-bottom: 0; }
+      .bstand .pos { width: 16px; text-align: center; font-family: var(--mono); font-size: 10px; color: var(--ink-4); }
+      .bstand .tm { text-align: left; }
+      .bstand .hd { color: var(--ink-4); font-size: 9.5px; text-transform: uppercase; letter-spacing: .04em; }
+      .bstand .num { width: 26px; text-align: center; font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
+      .bstand .pts { width: 26px; text-align: center; font-weight: 700; color: var(--ink); }
+      .bstand tr.adv { background: var(--live-glow); }
+      .bstand tr.adv .pos { color: var(--live); font-weight: 700; }
+      .bstand tr.adv .tm { font-weight: 600; color: var(--ink); }
+
       /* Print */
       @media print {
         .rail, .topbar { display: none; }
@@ -2477,10 +2540,10 @@
 
       // ───────────────── Live FIFA card ─────────────────
       // ───────────────── FIFA 2026 Countdown (KPI tile) ─────────────────
-      // Opening match: Mexico City (Estadio Azteca), Jun 11, 2026 at 12:00 noon.
+      // Opening match: Mexico City (Estadio Azteca), Jun 11, 2026 at 13:00 (1:00 PM).
       // Mexico City sits on CST (UTC-6) year-round (DST abolished there in 2022),
-      // so 12:00 CDMX = 18:00 UTC.
-      const KICKOFF_UTC = Date.UTC(2026, 5, 11, 18, 0, 0);
+      // so 13:00 CDMX = 19:00 UTC.
+      const KICKOFF_UTC = Date.UTC(2026, 5, 11, 19, 0, 0);
       // Final: MetLife Stadium (NY/NJ), Jul 19, 2026, 15:00 ET = 19:00 UTC.
       const FINAL_UTC   = Date.UTC(2026, 6, 19, 19, 0, 0);
 
@@ -2522,14 +2585,15 @@
       // FIFA RSS doesn't fit cleanly into Fixtures/Facts/Travel).
       const NEWS_FEEDS = {
         newsFixtures: [
-          "Jun 11 · Estadio Azteca, Mexico City, Opening Match · 12:00 CDMX",
-          "Jun 12 · MetLife Stadium, NY/NJ, Group Stage · 15:00 ET",
-          "Jun 13 · BMO Field, Toronto, Group Stage · 18:00 ET",
-          "Jun 14 · BC Place, Vancouver, Group Stage · 16:00 PT",
-          "Jun 15 · Atlanta Stadium, Group Stage · 19:00 ET",
-          "Jun 16 · Dallas Stadium, Group Stage · 18:00 CT",
-          "Jul 14 · Atlanta Stadium, Semi-final",
-          "Jul 15 · Dallas Stadium, Semi-final",
+          "Jun 11 · Estadio Azteca, Mexico City, Opening Match · 13:00 CDMX",
+          "Jun 12 · BMO Field, Toronto, Canada vs Bosnia and Herzegovina",
+          "Jun 12 · Los Angeles Stadium, USA vs Paraguay",
+          "Group stage · Jun 11 to Jun 27 · 72 matches, 16 host cities",
+          "Round of 32 · Jun 28 to Jul 3, new knockout round",
+          "Round of 16 · Jul 4 to Jul 7",
+          "Quarter-finals · Jul 9 to Jul 11",
+          "Jul 14 · Dallas Stadium, Semi-final",
+          "Jul 15 · Atlanta Stadium, Semi-final",
           "Jul 18 · Miami Stadium, Third-place match",
           "Jul 19 · MetLife Stadium, NY/NJ, Final · 15:00 ET"
         ],
@@ -2553,7 +2617,7 @@
           "16 host cities across 3 host nations",
           "First tri-nation hosting in World Cup history",
           "12 groups of 4 teams in the new format",
-          "Round of 32 added, eliminates two best 3rd-place teams",
+          "Top 2 per group plus 8 best 3rd-place teams reach Round of 32",
           "Estadio Azteca: only stadium to host three World Cup openers",
           "MetLife Stadium hosts the Final on July 19, 2026",
           "Atlanta and Dallas confirmed as semi-final venues",
@@ -3316,6 +3380,167 @@
           </div>`;
       }
 
+      // ───────────────── Group-stage fixtures + live results ─────────────────
+      // Full 72-match group schedule. A match with a numeric score (hs/as) is
+      // final and renders highlighted; everything else shows its ET kickoff
+      // time (t) and host city. No scores are invented: only finalized results
+      // carry a score, so upcoming and in-play matches stay blank. Standings
+      // are computed live from the results below. Verified Jun 17, 2026:
+      // Matchday 1 is complete for Groups A to J; Groups K and L open Jun 17.
+      const GROUP_STAGE = [
+        { g:"A", teams:["Mexico (host)","South Korea","Czechia","South Africa"], matches:[
+          { d:"Jun 11", h:"Mexico", a:"South Africa", hs:2, as:0 },
+          { d:"Jun 11", h:"South Korea", a:"Czechia", hs:2, as:1 },
+          { d:"Jun 18", h:"Czechia", a:"South Africa", t:"12:00 PM ET", city:"Atlanta" },
+          { d:"Jun 18", h:"Mexico", a:"South Korea", t:"9:00 PM ET", city:"Guadalajara" },
+          { d:"Jun 24", h:"Czechia", a:"Mexico", t:"9:00 PM ET", city:"Mexico City" },
+          { d:"Jun 24", h:"South Africa", a:"South Korea", t:"9:00 PM ET", city:"Monterrey" }
+        ]},
+        { g:"B", teams:["Canada (host)","Switzerland","Qatar","Bosnia-Herzegovina"], matches:[
+          { d:"Jun 12", h:"Canada", a:"Bosnia-Herzegovina", hs:1, as:1 },
+          { d:"Jun 13", h:"Qatar", a:"Switzerland", hs:1, as:1 },
+          { d:"Jun 18", h:"Switzerland", a:"Bosnia-Herzegovina", t:"3:00 PM ET", city:"Los Angeles" },
+          { d:"Jun 18", h:"Canada", a:"Qatar", t:"6:00 PM ET", city:"Vancouver" },
+          { d:"Jun 24", h:"Switzerland", a:"Canada", t:"3:00 PM ET", city:"Vancouver" },
+          { d:"Jun 24", h:"Bosnia-Herzegovina", a:"Qatar", t:"3:00 PM ET", city:"Seattle" }
+        ]},
+        { g:"C", teams:["Brazil","Morocco","Scotland","Haiti"], matches:[
+          { d:"Jun 13", h:"Brazil", a:"Morocco", hs:1, as:1 },
+          { d:"Jun 13", h:"Scotland", a:"Haiti", hs:1, as:0 },
+          { d:"Jun 19", h:"Scotland", a:"Morocco", t:"6:00 PM ET", city:"Boston" },
+          { d:"Jun 19", h:"Brazil", a:"Haiti", t:"9:00 PM ET", city:"Philadelphia" },
+          { d:"Jun 24", h:"Scotland", a:"Brazil", t:"6:00 PM ET", city:"Miami" },
+          { d:"Jun 24", h:"Morocco", a:"Haiti", t:"6:00 PM ET", city:"Atlanta" }
+        ]},
+        { g:"D", teams:["USA (host)","Paraguay","Australia","Türkiye"], matches:[
+          { d:"Jun 12", h:"USA", a:"Paraguay", hs:4, as:1 },
+          { d:"Jun 13", h:"Australia", a:"Türkiye", hs:2, as:0 },
+          { d:"Jun 19", h:"USA", a:"Australia", t:"3:00 PM ET", city:"Seattle" },
+          { d:"Jun 19", h:"Türkiye", a:"Paraguay", t:"12:00 AM ET", city:"SF Bay Area" },
+          { d:"Jun 25", h:"Türkiye", a:"USA", t:"10:00 PM ET", city:"Los Angeles" },
+          { d:"Jun 25", h:"Paraguay", a:"Australia", t:"10:00 PM ET", city:"SF Bay Area" }
+        ]},
+        { g:"E", teams:["Germany","Ecuador","Ivory Coast","Curaçao"], matches:[
+          { d:"Jun 14", h:"Germany", a:"Curaçao", hs:7, as:1 },
+          { d:"Jun 14", h:"Ivory Coast", a:"Ecuador", hs:1, as:0 },
+          { d:"Jun 20", h:"Germany", a:"Ivory Coast", t:"4:00 PM ET", city:"Toronto" },
+          { d:"Jun 20", h:"Ecuador", a:"Curaçao", t:"8:00 PM ET", city:"Kansas City" },
+          { d:"Jun 25", h:"Curaçao", a:"Ivory Coast", t:"4:00 PM ET", city:"Philadelphia" },
+          { d:"Jun 25", h:"Ecuador", a:"Germany", t:"4:00 PM ET", city:"New York/NJ" }
+        ]},
+        { g:"F", teams:["Netherlands","Japan","Sweden","Tunisia"], matches:[
+          { d:"Jun 14", h:"Netherlands", a:"Japan", hs:2, as:2 },
+          { d:"Jun 14", h:"Sweden", a:"Tunisia", hs:5, as:1 },
+          { d:"Jun 20", h:"Netherlands", a:"Sweden", t:"1:00 PM ET", city:"Houston" },
+          { d:"Jun 20", h:"Tunisia", a:"Japan", t:"12:00 AM ET", city:"Guadalajara" },
+          { d:"Jun 25", h:"Japan", a:"Sweden", t:"7:00 PM ET", city:"Dallas" },
+          { d:"Jun 25", h:"Tunisia", a:"Netherlands", t:"7:00 PM ET", city:"Kansas City" }
+        ]},
+        { g:"G", teams:["Belgium","Egypt","Iran","New Zealand"], matches:[
+          { d:"Jun 15", h:"Belgium", a:"Egypt", hs:1, as:1 },
+          { d:"Jun 15", h:"Iran", a:"New Zealand", hs:2, as:2 },
+          { d:"Jun 21", h:"Belgium", a:"Iran", t:"3:00 PM ET", city:"Los Angeles" },
+          { d:"Jun 21", h:"New Zealand", a:"Egypt", t:"9:00 PM ET", city:"Vancouver" },
+          { d:"Jun 26", h:"Egypt", a:"Iran", t:"11:00 PM ET", city:"Seattle" },
+          { d:"Jun 26", h:"New Zealand", a:"Belgium", t:"11:00 PM ET", city:"Vancouver" }
+        ]},
+        { g:"H", teams:["Spain","Uruguay","Saudi Arabia","Cabo Verde"], matches:[
+          { d:"Jun 15", h:"Spain", a:"Cabo Verde", hs:0, as:0 },
+          { d:"Jun 15", h:"Saudi Arabia", a:"Uruguay", hs:1, as:1 },
+          { d:"Jun 21", h:"Spain", a:"Saudi Arabia", t:"12:00 PM ET", city:"Atlanta" },
+          { d:"Jun 21", h:"Uruguay", a:"Cabo Verde", t:"6:00 PM ET", city:"Miami" },
+          { d:"Jun 26", h:"Cabo Verde", a:"Saudi Arabia", t:"8:00 PM ET", city:"Houston" },
+          { d:"Jun 26", h:"Uruguay", a:"Spain", t:"8:00 PM ET", city:"Guadalajara" }
+        ]},
+        { g:"I", teams:["France","Senegal","Norway","Iraq"], matches:[
+          { d:"Jun 16", h:"France", a:"Senegal", hs:3, as:1 },
+          { d:"Jun 16", h:"Norway", a:"Iraq", hs:4, as:1 },
+          { d:"Jun 22", h:"France", a:"Iraq", t:"5:00 PM ET", city:"Philadelphia" },
+          { d:"Jun 22", h:"Norway", a:"Senegal", t:"8:00 PM ET", city:"New York/NJ" },
+          { d:"Jun 26", h:"Norway", a:"France", t:"3:00 PM ET", city:"Boston" },
+          { d:"Jun 26", h:"Senegal", a:"Iraq", t:"3:00 PM ET", city:"Toronto" }
+        ]},
+        { g:"J", teams:["Argentina","Austria","Algeria","Jordan"], matches:[
+          { d:"Jun 16", h:"Argentina", a:"Algeria", hs:3, as:0 },
+          { d:"Jun 16", h:"Austria", a:"Jordan", hs:3, as:1 },
+          { d:"Jun 22", h:"Argentina", a:"Austria", t:"1:00 PM ET", city:"Dallas" },
+          { d:"Jun 22", h:"Jordan", a:"Algeria", t:"11:00 PM ET", city:"SF Bay Area" },
+          { d:"Jun 27", h:"Algeria", a:"Austria", t:"10:00 PM ET", city:"Kansas City" },
+          { d:"Jun 27", h:"Jordan", a:"Argentina", t:"10:00 PM ET", city:"Dallas" }
+        ]},
+        { g:"K", teams:["Portugal","Colombia","Uzbekistan","DR Congo"], matches:[
+          { d:"Jun 17", h:"Portugal", a:"DR Congo", today:true, t:"1:00 PM ET", city:"Houston" },
+          { d:"Jun 17", h:"Uzbekistan", a:"Colombia", today:true, t:"10:00 PM ET", city:"Mexico City" },
+          { d:"Jun 23", h:"Portugal", a:"Uzbekistan", t:"1:00 PM ET", city:"Houston" },
+          { d:"Jun 23", h:"Colombia", a:"DR Congo", t:"10:00 PM ET", city:"Guadalajara" },
+          { d:"Jun 27", h:"Colombia", a:"Portugal", t:"7:30 PM ET", city:"Miami" },
+          { d:"Jun 27", h:"DR Congo", a:"Uzbekistan", t:"7:30 PM ET", city:"Atlanta" }
+        ]},
+        { g:"L", teams:["England","Croatia","Ghana","Panama"], matches:[
+          { d:"Jun 17", h:"England", a:"Croatia", today:true, t:"4:00 PM ET", city:"Dallas" },
+          { d:"Jun 17", h:"Ghana", a:"Panama", today:true, t:"7:00 PM ET", city:"Toronto" },
+          { d:"Jun 23", h:"England", a:"Ghana", t:"4:00 PM ET", city:"Boston" },
+          { d:"Jun 23", h:"Panama", a:"Croatia", t:"7:00 PM ET", city:"Toronto" },
+          { d:"Jun 27", h:"Panama", a:"England", t:"5:00 PM ET", city:"New York/NJ" },
+          { d:"Jun 27", h:"Croatia", a:"Ghana", t:"5:00 PM ET", city:"Philadelphia" }
+        ]}
+      ];
+
+      // Compute live group standings from the finalized results above.
+      function groupStandings(grp) {
+        const tbl = {};
+        grp.teams.forEach(name => {
+          const t = name.replace(/\s*\(host\)/, "");
+          tbl[t] = { team: t, p:0, w:0, d:0, l:0, gf:0, ga:0, pts:0 };
+        });
+        grp.matches.forEach(m => {
+          if (typeof m.hs !== "number") return;
+          const H = tbl[m.h], A = tbl[m.a];
+          if (!H || !A) return;
+          H.p++; A.p++; H.gf += m.hs; H.ga += m.as; A.gf += m.as; A.ga += m.hs;
+          if (m.hs > m.as) { H.w++; A.l++; H.pts += 3; }
+          else if (m.hs < m.as) { A.w++; H.l++; A.pts += 3; }
+          else { H.d++; A.d++; H.pts++; A.pts++; }
+        });
+        return Object.values(tbl).sort((a, b) =>
+          b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga) || b.gf - a.gf || a.team.localeCompare(b.team));
+      }
+
+      function renderStandings(grp) {
+        const rows = groupStandings(grp);
+        const livePlayed = grp.matches.some(m => typeof m.hs === "number");
+        return `<table class="bstand">
+          <thead><tr><td class="pos"></td><td class="tm hd">Team</td><td class="num">P</td><td class="num">GD</td><td class="pts">Pts</td></tr></thead>
+          <tbody>${rows.map((r, i) => {
+            const gd = r.gf - r.ga;
+            const gds = gd > 0 ? `+${gd}` : `${gd}`;
+            const adv = livePlayed && i < 2 ? ` class="adv"` : "";
+            return `<tr${adv}><td class="pos">${i + 1}</td><td class="tm">${r.team}</td><td class="num">${r.p}</td><td class="num">${gds}</td><td class="pts">${r.pts}</td></tr>`;
+          }).join("")}</tbody>
+        </table>`;
+      }
+
+      function bMatchRow(m) {
+        if (typeof m.hs === "number") {
+          return `<li class="bm played"><span class="bm-date">${m.d}</span>`
+            + `<span class="bm-teams">${m.h} <span class="bm-score">${m.hs}-${m.as}</span> ${m.a}</span>`
+            + `<span class="bm-meta">FT</span></li>`;
+        }
+        const cls = m.today ? "bm today" : "bm";
+        const city = m.city ? ` <span class="bm-city">${m.city}</span>` : "";
+        return `<li class="${cls}"><span class="bm-date">${m.d}</span>`
+          + `<span class="bm-teams">${m.h} v ${m.a}${city}</span>`
+          + `<span class="bm-meta">${m.t || ""}</span></li>`;
+      }
+
+      function renderGroupCard(grp) {
+        return `<div class="bgroup">
+          <div class="bgroup-head"><strong>Group ${grp.g}</strong><span class="teams">Standings, live</span></div>
+          ${renderStandings(grp)}
+          <ul class="bmatches">${grp.matches.map(bMatchRow).join("")}</ul>
+        </div>`;
+      }
+
       function renderBracket() {
   $("#bracket").innerHTML = `
     ${renderKpis()}
@@ -3324,14 +3549,15 @@
         <div class="card-head"><h3>FIFA World Cup 2026, Bracket</h3><span class="meta">Jun 11 to Jul 19, 2026 · 48 teams · 104 matches · 16 host cities</span></div>
         <div class="card-body">
           <p class="lede"><strong>Format:</strong> 12 groups of 4 → top 2 of each group + 8 best third-placed teams advance to the Round of 32 → R16 → QF → SF → 3rd-place match → Final. Hosts <strong>Canada, Mexico, USA</strong> qualify automatically.</p>
-          <p class="lede" style="margin-top:6px"><strong>Opener:</strong> Mexico vs TBD, Estadio Azteca, Mexico City, Jun 11, 2026 · <strong>Final:</strong> MetLife Stadium, New York/New Jersey, Jul 19, 2026</p>
-          <h4 style="margin:18px 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)">Group Stage, 12 Groups of 4</h4>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:10px;">
-            ${[
-              ["A","Mexico (host)"],["B","Canada (host)"],["C","TBD"],["D","USA (host)"],
-              ["E","TBD"],["F","TBD"],["G","TBD"],["H","TBD"],
-              ["I","TBD"],["J","TBD"],["K","TBD"],["L","TBD"]
-            ].map(g => `<div style="border:1px solid var(--line); border-radius:10px; padding:8px 10px; background:var(--surface)"><strong>Group ${g[0]}</strong><ol style="margin:6px 0 0; padding-left:18px; font-size:12px; color:var(--ink-2)"><li>${g[1]}</li><li>TBD</li><li>TBD</li><li>TBD</li></ol></div>`).join("")}
+          <p class="lede" style="margin-top:6px"><strong>Opener:</strong> Mexico vs South Africa, Estadio Azteca, Mexico City, Jun 11, 2026 · <strong>Final:</strong> MetLife Stadium, New York/New Jersey, Jul 19, 2026</p>
+          <h4 style="margin:18px 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)">Group Stage, all 72 matches</h4>
+          <p class="lede" style="margin:0 0 10px; font-size:11.5px; color:var(--ink-3)">
+            <span style="display:inline-block; width:9px; height:9px; border-radius:3px; background:var(--live); vertical-align:middle; margin-right:4px"></span>Final result, highlighted ·
+            <span style="display:inline-block; width:9px; height:9px; border-radius:3px; border:1px solid var(--accent); vertical-align:middle; margin:0 4px 0 8px"></span>Kicks off today ·
+            upcoming matches show ET kickoff time and host city. Standings update live from results: top two of each group (highlighted) advance, plus the eight best third-placed teams.
+          </p>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(248px, 1fr)); gap:10px;">
+            ${GROUP_STAGE.map(renderGroupCard).join("")}
           </div>
           <h4 style="margin:18px 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)">Knockout Stage</h4>
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:10px;">
