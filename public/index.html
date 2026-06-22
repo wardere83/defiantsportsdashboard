@@ -3173,15 +3173,6 @@
                   </div>
                 </div>
               </div>
-              <div class="card">
-                <div class="card-body">
-                  <div class="fnd-tabs" role="tablist" aria-label="The Neighborhood Nip Foundation">
-                    ${FOUNDATION_TABS.map((t, i) => `<button type="button" class="fnd-pill${i === 0 ? " on" : ""}" role="tab" aria-selected="${i === 0 ? "true" : "false"}" data-fnd="${i}">${t[0]}</button>`).join("")}
-                  </div>
-                  <p class="fnd-panel lede" id="fndPanel">${escapeHtml(FOUNDATION_TABS[0][1])}</p>
-                  <div class="fnd-meta">Est. 2019 · Crenshaw, Los Angeles · Programming begins 2025</div>
-                </div>
-              </div>
             </div>
 
             <div class="marathon-col">
@@ -3200,6 +3191,25 @@
                       <source src="./assets/marathon/nip.mov" type="video/quicktime" />
                       <source src="./assets/marathon/nip.webm" type="video/webm" />
                     </video>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-body">
+                  <div class="fnd-tabs" role="tablist" aria-label="The Neighborhood Nip Foundation">
+                    ${FOUNDATION_TABS.map((t, i) => `<button type="button" class="fnd-pill${i === 0 ? " on" : ""}" role="tab" aria-selected="${i === 0 ? "true" : "false"}" data-fnd="${i}">${t[0]}</button>`).join("")}
+                  </div>
+                  <p class="fnd-panel lede" id="fndPanel">${escapeHtml(FOUNDATION_TABS[0][1])}</p>
+                  <div class="fnd-meta">Est. 2019 · Crenshaw, Los Angeles · Programming begins 2025</div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-head"><h3>In His Words</h3></div>
+                <div class="card-body">
+                  <div class="quote-rotator" id="marathonQuote">
+                    <blockquote id="marathonQuoteText">${escapeHtml(NIPSEY_QUOTES[0])}</blockquote>
                   </div>
                 </div>
               </div>
@@ -3804,6 +3814,7 @@
           updateCountdown();
           startNewsRotation();
           wireFoundationTabs();
+          startMarathonQuoteRotator();
           startBrandingRotator();
           startBwsRotator();
           startBeyondThePitch();
