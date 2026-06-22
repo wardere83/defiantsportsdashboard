@@ -11,6 +11,18 @@ UI. Nothing in this file is mocked.
 - FIFA Teams, `https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/teams`
 - FIFA Tournament Facts, `https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/fifa-world-cup-2026-hosts-cities-dates-usa-mexico-canada`
 
+## Live bracket scores (`/api/worldcup-bracket`)
+
+- ESPN soccer scoreboard, `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard`
+
+Real-time World Cup scores and matchups. The server queries ESPN across
+the group-stage date window (env `WC_START`, `WC_END`, `WC_LEAGUE`),
+normalizes each match, and caches the set for `CACHE_TTL_MS`. The browser
+overlays these scores onto the verified bracket data; if the feed is
+unreachable it keeps the verified data, so the bracket never breaks. On
+static (no-server) deploys the browser calls ESPN directly, since ESPN
+sends permissive CORS headers. ESPN results match FIFA's official tables.
+
 ## Grant & program feeds (`/api/grant-feeds`)
 
 - Seattle Small Sparks Fund, `https://frontporch.seattle.gov/2026/01/23/bring-your-community-together-small-sparks-grants-available-to-support-community-events/`
