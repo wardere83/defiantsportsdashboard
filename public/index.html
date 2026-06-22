@@ -2038,6 +2038,69 @@
       .bstand tr.adv .pos { color: var(--live); font-weight: 700; }
       .bstand tr.adv .tm { font-weight: 600; color: var(--ink); }
 
+      /* Neighborhood Nip Foundation view */
+      .fnd-hero {
+        position: relative;
+        border-radius: var(--radius);
+        overflow: hidden;
+        margin-bottom: 16px;
+        box-shadow: var(--shadow-md);
+        background: var(--black);
+      }
+      .fnd-hero-img {
+        width: 100%;
+        min-height: 280px;
+        max-height: 520px;
+        object-fit: cover;
+        object-position: center 22%;
+        display: block;
+      }
+      .fnd-hero-overlay {
+        position: absolute;
+        inset: auto 0 0 0;
+        padding: 30px 26px 22px;
+        background: linear-gradient(to top, rgba(10, 10, 10, 0.84), rgba(10, 10, 10, 0.28) 58%, transparent);
+        color: #fff;
+      }
+      .fnd-hero-overlay .kicker {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.82);
+        margin-bottom: 8px;
+      }
+      .fnd-hero-overlay h2 {
+        font-size: clamp(20px, 3vw, 30px);
+        line-height: 1.18;
+        font-weight: 700;
+        max-width: 24ch;
+      }
+      .fnd-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+      .fnd-pill {
+        border: 1px solid var(--line-2);
+        background: var(--surface);
+        color: var(--ink-2);
+        padding: 7px 14px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background .18s ease, color .18s ease, border-color .18s ease;
+      }
+      .fnd-pill:hover { border-color: var(--ink-3); }
+      .fnd-pill.on { background: var(--black); color: #fff; border-color: var(--black); }
+      .fnd-panel { min-height: 66px; font-size: 15px; line-height: 1.6; margin: 0; }
+      .fnd-meta {
+        margin-top: 16px;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: .04em;
+        color: var(--ink-3);
+      }
+
       /* Print */
       @media print {
         .rail, .topbar { display: none; }
@@ -2141,7 +2204,7 @@
         ["safety",    "Safety",            "4", "△"],
         ["youth",     "Pogba Academy",     "5", "○"],
         ["bracket",   "Bracket",           "6", "⌁"],
-        ["marathon",  "Marathon Clothing", "7", "◆"]
+        ["marathon",  "Neighborhood Nip Foundation", "7", "◆"]
       ];
 
       const stadiums = [
@@ -3093,58 +3156,55 @@
         marathonQuoteTimer = setInterval(tick, 6000);
       }
 
+      // Neighborhood Nip Foundation: condensed, interactive info panel.
+      // Three pills swap a single short blurb so the page stays minimal.
+      const FOUNDATION_TABS = [
+        ["Mission", "Created in 2019 to extend Nipsey Hussle's legacy, inspiring the community through initiatives that benefit underprivileged youth."],
+        ["The Plaza", "Programming kicks off in 2025 with a full reconstruction of Nipsey Hussle Plaza, the original home of The Marathon Store."],
+        ["The Vision", "An interdisciplinary community center for students from elementary through high school, spanning academic studies to music and studio access."]
+      ];
+
+      function wireFoundationTabs() {
+        const panel = document.getElementById("fndPanel");
+        if (!panel) return;
+        const pills = [...document.querySelectorAll(".fnd-pill")];
+        pills.forEach(p => p.addEventListener("click", () => {
+          pills.forEach(x => { x.classList.remove("on"); x.setAttribute("aria-selected", "false"); });
+          p.classList.add("on");
+          p.setAttribute("aria-selected", "true");
+          panel.textContent = FOUNDATION_TABS[+p.dataset.fnd][1];
+        }));
+      }
+
       function renderMarathon() {
         $("#marathon").innerHTML = `
-          ${renderBwsCard()}
-          <div class="marathon-hero">
-            <div class="kicker">The Marathon Clothing · Crenshaw, Los Angeles</div>
-            <blockquote>"The Marathon Continues. We honor the people that ain't quit, we honor the people that stayed down."</blockquote>
-            <cite>Nipsey Hussle (Ermias Asghedom · 1985-2019)</cite>
+          <div class="fnd-hero">
+            <img class="fnd-hero-img" src="./assets/foundation/community.jpg"
+                 alt="Nipsey Hussle with students"
+                 loading="lazy"
+                 onerror="this.onerror=null; this.src='./assets/marathon/Nip.webp';" />
+            <div class="fnd-hero-overlay">
+              <div class="kicker">The Neighborhood Nip Foundation</div>
+              <h2>Extending Nipsey Hussle's legacy for the next generation.</h2>
+            </div>
           </div>
 
           <div class="marathon-grid">
             <div class="marathon-col">
               <div class="card">
-                <div class="card-head">
-                  <h3>The Story</h3>
-                  <a class="btn dark" href="https://www.themarathonclothing.com/" target="_blank" rel="noopener noreferrer">Shop the store ↗</a>
-                </div>
                 <div class="card-body">
-                  <p class="lede">
-                    <strong>The Marathon Clothing</strong> is the smart-store apparel brand founded by
-                    <strong>Nipsey Hussle</strong>, his brother <strong>Blacc Sam</strong>, and longtime collaborator
-                    <strong>Steve Carless</strong>. Opened on Slauson Avenue in South Los Angeles in 2017, the
-                    flagship store reimagined the corner shop as community ownership infrastructure, every
-                    drop is a milestone in a longer race.
-                  </p>
-                  <p class="lede" style="margin-top:10px">
-                    Inside the Defiant Sports platform, the Marathon legacy is the cultural North Star: building
-                    locally, owning your block, and finishing what you start. The marathon continues.
-                  </p>
-                </div>
-              </div>
-
-              <div class="card">
-                <div class="card-head">
-                  <h3>Nipsey Hussle</h3>
-                  <a class="btn" href="https://thedefiantfoundation.org/" target="_blank" rel="noopener noreferrer">Visit TDF ↗</a>
-                </div>
-                <div class="card-body flush">
-                  <div class="nipsey-hero">
-                    <img src="./assets/marathon/Nip.webp" alt="Nipsey Hussle, The Marathon Clothing"
-                         loading="lazy"
-                         onerror="this.onerror=null; this.src='https://picsum.photos/seed/nipsey-hussle-tribute/1280/720';" />
+                  <div class="fnd-tabs" role="tablist" aria-label="The Neighborhood Nip Foundation">
+                    ${FOUNDATION_TABS.map((t, i) => `<button type="button" class="fnd-pill${i === 0 ? " on" : ""}" role="tab" aria-selected="${i === 0 ? "true" : "false"}" data-fnd="${i}">${t[0]}</button>`).join("")}
                   </div>
+                  <p class="fnd-panel lede" id="fndPanel">${escapeHtml(FOUNDATION_TABS[0][1])}</p>
+                  <div class="fnd-meta">Est. 2019 · Crenshaw, Los Angeles · Programming begins 2025</div>
                 </div>
               </div>
-
             </div>
 
             <div class="marathon-col">
               <div class="card">
-                <div class="card-head">
-                  <h3>Nip Forever</h3>
-                </div>
+                <div class="card-head"><h3>Nip Forever</h3></div>
                 <div class="card-body flush">
                   <div class="video-frame">
                     <video class="nip-video"
@@ -3158,26 +3218,6 @@
                       <source src="./assets/marathon/nip.mov" type="video/quicktime" />
                       <source src="./assets/marathon/nip.webm" type="video/webm" />
                     </video>
-                  </div>
-                </div>
-              </div>
-
-              <div class="card">
-                <div class="card-head"><h3>Marathon Quotes</h3></div>
-                <div class="card-body">
-                  <div class="quote-rotator" id="marathonQuote">
-                    <blockquote id="marathonQuoteText">${escapeHtml(NIPSEY_QUOTES[0])}</blockquote>
-                  </div>
-                </div>
-              </div>
-
-              <div class="card">
-                <div class="card-head"><h3>Visit the Store</h3></div>
-                <div class="card-body">
-                  <div class="list">
-                    ${listRow("Address", `<span style="font-weight:700">3420 W Slauson Ave, Los Angeles, CA</span>`)}
-                    ${listRow("Online", `<a href="https://www.themarathonclothing.com/" target="_blank" rel="noopener noreferrer" style="font-weight:700; color:var(--ink)">themarathonclothing.com ↗</a>`)}
-                    ${listRow("Instagram", `<a href="https://www.instagram.com/themarathonclothing/" target="_blank" rel="noopener noreferrer" style="font-weight:700; color:var(--ink)">@themarathonclothing ↗</a>`)}
                   </div>
                 </div>
               </div>
@@ -3377,7 +3417,7 @@
               <div class="card-body">
                 <p class="lede">
                   Pick a language to translate the entire experience, the headline strip, the live FIFA card,
-                  every venue card, the bracket, the Marathon Clothing tab, modals, and the language matrix
+                  every venue card, the bracket, the Neighborhood Nip Foundation tab, modals, and the language matrix
                   below. The dashboard reloads briefly so the translation engine can apply the new locale
                   cleanly across every dynamic surface.
                 </p>
@@ -3752,7 +3792,7 @@
           grants: "Open grants & funding pathways · live status",
           business: "Local-market activation strategy",
           safety: "Stewardship, health, and fan-flow",
-          marathon: "The Marathon Continues · drops, music, and the Crenshaw legacy",
+          marathon: "The Neighborhood Nip Foundation · extending Nipsey Hussle's legacy for youth",
           youth: "Pogba Academy · World Cup access, futsal, athlete meet-ups, mentorship",
           records: "Narratives, campaigns, and rights",
           translate: "Multilingual coverage matrix",
@@ -3781,7 +3821,7 @@
           animateCountUps();
           updateCountdown();
           startNewsRotation();
-          startMarathonQuoteRotator();
+          wireFoundationTabs();
           startBrandingRotator();
           startBwsRotator();
           startBeyondThePitch();
