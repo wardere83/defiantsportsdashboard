@@ -2017,6 +2017,13 @@
       .bm.today .bm-meta { color: var(--accent); font-weight: 600; }
       .bm .bm-city { color: var(--ink-4); }
       .bm.played .bm-meta { color: var(--live); }
+      /* In-progress match pulled from the live feed */
+      .bm.liveing { background: rgba(217, 119, 6, 0.12); border-color: rgba(217, 119, 6, 0.40); }
+      .bm.liveing .bm-score { font-weight: 700; color: var(--warn); }
+      .bm.liveing .bm-meta { color: var(--warn); font-weight: 700; }
+      /* Bracket live/static status line */
+      .brk-live { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: var(--live); }
+      .brk-static { font-size: 11.5px; color: var(--ink-3); }
       /* Live group standings table */
       .bstand { width: 100%; border-collapse: collapse; margin: 2px 0 9px; }
       .bstand td { padding: 3px 4px; font-size: 11px; color: var(--ink-2); border-bottom: 1px solid var(--line); }
@@ -3527,6 +3534,11 @@
             + `<span class="bm-teams">${m.h} <span class="bm-score">${m.hs}-${m.as}</span> ${m.a}</span>`
             + `<span class="bm-meta">FT</span></li>`;
         }
+        if (m.live && Array.isArray(m.liveScore)) {
+          return `<li class="bm liveing"><span class="bm-date">${m.d}</span>`
+            + `<span class="bm-teams">${m.h} <span class="bm-score">${m.liveScore[0]}-${m.liveScore[1]}</span> ${m.a}</span>`
+            + `<span class="bm-meta">LIVE</span></li>`;
+        }
         const cls = m.today ? "bm today" : "bm";
         const city = m.city ? ` <span class="bm-city">${m.city}</span>` : "";
         return `<li class="${cls}"><span class="bm-date">${m.d}</span>`
@@ -3542,6 +3554,147 @@
         </div>`;
       }
 
+      // ───────────────── Live scores via ESPN (fail-safe overlay) ─────────────────
+      // GROUP_STAGE above is the verified fallback. When a live feed is
+      // reachable we overlay real scores onto a clone of it and re-render;
+      // if anything fails we keep the verified data, so the bracket can't break.
+      // Source priority: (1) our own /api/worldcup-bracket proxy (Node-host
+      // deploys), then (2) ESPN's public API directly (static deploys, ESPN
+      // sends CORS headers). ESPN's results match official FIFA results.
+      const ESPN_LEAGUE = "fifa.world";
+      const ESPN_RANGE = { start: "20260611", end: "20260627" };
+      let bracketData = null;        // overlaid live dataset; null means use GROUP_STAGE
+      let bracketSource = "static";  // "static" or "live"
+      let bracketSync = null;        // ISO timestamp of last successful live sync
+      let bracketLiveFails = 0;
+      let bracketLiveTimer = null;
+
+      // Normalize a national-team name so ESPN's spellings match ours.
+      function normTeam(s) {
+        const x = String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "")
+          .toLowerCase().replace(/[^a-z]/g, "");
+        const alias = {
+          unitedstates: "usa", us: "usa", usmnt: "usa",
+          turkiye: "turkiye", turkey: "turkiye",
+          congodr: "drcongo", drcongo: "drcongo", democraticrepublicofthecongo: "drcongo", drcongo2: "drcongo",
+          capeverde: "caboverde", caboverde: "caboverde",
+          korearepublic: "southkorea", southkorea: "southkorea", republicofkorea: "southkorea", korea: "southkorea",
+          bosniaherzegovina: "bosnia", bosniaandherzegovina: "bosnia", bosnia: "bosnia",
+          iriran: "iran", iran: "iran",
+          czechia: "czechia", czechrepublic: "czechia",
+          ivorycoast: "ivorycoast", cotedivoire: "ivorycoast", cotedivoire2: "ivorycoast"
+        };
+        return alias[x] || x;
+      }
+
+      function pairKey(a, b) { return [normTeam(a), normTeam(b)].sort().join("|"); }
+
+      // Parse an ESPN soccer scoreboard payload into flat match records.
+      function parseEspnEvents(json) {
+        const out = [];
+        const events = (json && json.events) || [];
+        for (const ev of events) {
+          const comp = ev.competitions && ev.competitions[0];
+          if (!comp) continue;
+          const cs = comp.competitors || [];
+          const home = cs.find(c => c.homeAway === "home") || cs[0];
+          const away = cs.find(c => c.homeAway === "away") || cs[1];
+          if (!home || !away) continue;
+          const st = (comp.status && comp.status.type) || (ev.status && ev.status.type) || {};
+          const hs = home.score === 0 || home.score ? Number(home.score) : NaN;
+          const as = away.score === 0 || away.score ? Number(away.score) : NaN;
+          out.push({
+            home: (home.team && (home.team.displayName || home.team.name)) || "",
+            away: (away.team && (away.team.displayName || away.team.name)) || "",
+            homeScore: Number.isFinite(hs) ? hs : null,
+            awayScore: Number.isFinite(as) ? as : null,
+            state: st.state || null,        // pre | in | post
+            completed: !!st.completed
+          });
+        }
+        return out;
+      }
+
+      // Overlay live match records onto a clone of GROUP_STAGE.
+      function overlayLive(matches) {
+        const map = {};
+        for (const m of matches) {
+          if (!m.home || !m.away) continue;
+          map[pairKey(m.home, m.away)] = {
+            hn: normTeam(m.home), hs: m.homeScore, as: m.awayScore,
+            completed: m.completed, state: m.state
+          };
+        }
+        let applied = 0;
+        const data = GROUP_STAGE.map(g => ({
+          g: g.g, teams: g.teams.slice(), matches: g.matches.map(x => Object.assign({}, x))
+        }));
+        for (const g of data) for (const mm of g.matches) {
+          const f = map[pairKey(mm.h, mm.a)];
+          if (!f) continue;
+          const oriented = f.hn === normTeam(mm.h); // do feed home/away match ours?
+          if (f.completed && Number.isFinite(f.hs) && Number.isFinite(f.as)) {
+            mm.hs = oriented ? f.hs : f.as;
+            mm.as = oriented ? f.as : f.hs;
+            delete mm.today; delete mm.live; delete mm.liveScore;
+            applied++;
+          } else if (f.state === "in" && Number.isFinite(f.hs) && Number.isFinite(f.as)) {
+            mm.live = true;
+            mm.liveScore = oriented ? [f.hs, f.as] : [f.as, f.hs];
+            applied++;
+          }
+        }
+        return { data, applied };
+      }
+
+      async function fetchBracketLive() {
+        // 1) Our server proxy (present on Node-host deploys).
+        try {
+          const r = await fetch("/api/worldcup-bracket", { cache: "no-store" });
+          if (r.ok) {
+            const p = await r.json();
+            if (p && Array.isArray(p.matches) && p.matches.length) return p.matches;
+          }
+        } catch (_) { /* fall through to direct ESPN */ }
+        // 2) ESPN directly (works on static deploys; ESPN sends CORS headers).
+        const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${ESPN_LEAGUE}/scoreboard?dates=${ESPN_RANGE.start}-${ESPN_RANGE.end}`;
+        const r2 = await fetch(url, { cache: "no-store" });
+        if (!r2.ok) throw new Error("ESPN HTTP " + r2.status);
+        return parseEspnEvents(await r2.json());
+      }
+
+      async function refreshBracketLive() {
+        try {
+          const matches = await fetchBracketLive();
+          if (!matches || !matches.length) throw new Error("no live matches");
+          const { data, applied } = overlayLive(matches);
+          if (applied > 0) {
+            bracketData = data;
+            bracketSource = "live";
+            bracketSync = new Date().toISOString();
+            if (state.view === "bracket") renderBracket();
+          }
+          bracketLiveFails = 0;
+        } catch (_) {
+          // Stay on verified data; back off after repeated failures (e.g. no feed reachable).
+          bracketLiveFails++;
+          if (bracketLiveFails >= 3 && bracketLiveTimer) {
+            clearInterval(bracketLiveTimer);
+            bracketLiveTimer = null;
+          }
+        }
+      }
+
+      function bracketStatusHtml() {
+        if (bracketSource === "live") {
+          const t = bracketSync
+            ? new Date(bracketSync).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+            : "";
+          return `<span class="brk-live"><span class="live-mark"></span>Live scores · ESPN · synced ${t}</span>`;
+        }
+        return `<span class="brk-static">Showing verified results · live ESPN feed connects when deployed</span>`;
+      }
+
       function renderBracket() {
   $("#bracket").innerHTML = `
     ${renderKpis()}
@@ -3549,6 +3702,7 @@
       <div class="card">
         <div class="card-head"><h3>FIFA World Cup 2026, Bracket</h3><span class="meta">Jun 11 to Jul 19, 2026 · 48 teams · 104 matches · 16 host cities</span></div>
         <div class="card-body">
+          <div style="margin-bottom:12px">${bracketStatusHtml()}</div>
           <p class="lede"><strong>Format:</strong> 12 groups of 4 → top 2 of each group + 8 best third-placed teams advance to the Round of 32 → R16 → QF → SF → 3rd-place match → Final. Hosts <strong>Canada, Mexico, USA</strong> qualify automatically.</p>
           <p class="lede" style="margin-top:6px"><strong>Opener:</strong> Mexico vs South Africa, Estadio Azteca, Mexico City, Jun 11, 2026 · <strong>Final:</strong> MetLife Stadium, New York/New Jersey, Jul 19, 2026</p>
           <h4 style="margin:18px 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)">Group Stage, all 72 matches</h4>
@@ -3558,7 +3712,7 @@
             upcoming matches show ET kickoff time and host city. Standings update live from results: top two of each group (highlighted) advance, plus the eight best third-placed teams.
           </p>
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(248px, 1fr)); gap:10px;">
-            ${GROUP_STAGE.map(renderGroupCard).join("")}
+            ${(bracketData || GROUP_STAGE).map(renderGroupCard).join("")}
           </div>
           <h4 style="margin:18px 0 8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)">Knockout Stage</h4>
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:10px;">
@@ -4031,6 +4185,11 @@
       // Only schedule the auto-refresh; refreshLive() will clear it
       // automatically the first time the /api/* endpoints fail.
       liveAutoRefreshTimer = setInterval(refreshLive, 5 * 60 * 1000);
+      // Pull live bracket scores from ESPN and refresh every 2 minutes.
+      // refreshBracketLive() is fail-safe: on any error it keeps the
+      // verified GROUP_STAGE data and backs off after repeated failures.
+      refreshBracketLive();
+      bracketLiveTimer = setInterval(refreshBracketLive, 2 * 60 * 1000);
       // Tick the FIFA 2026 countdown every second
       setInterval(updateCountdown, 1000);
 

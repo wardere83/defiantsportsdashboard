@@ -11,6 +11,14 @@ const CACHE_TTL_MS = Number(process.env.CACHE_TTL_MS || 5 * 60 * 1000);
 
 let liveFeedCache = null;
 let grantFeedCache = null;
+let bracketCache = null;
+
+// ESPN's public soccer API powers live World Cup scores. No key required;
+// it returns the same results as FIFA's official tables. Configurable so the
+// window can be widened to the knockouts or pointed at a season slug.
+const WC_LEAGUE = process.env.WC_LEAGUE || "fifa.world";
+const WC_START = process.env.WC_START || "20260611";
+const WC_END = process.env.WC_END || "20260627";
 
 const verifiedSources = [
   {
@@ -296,6 +304,94 @@ app.get("/api/live-feeds", async (_req, res, next) => {
 app.get("/api/grant-feeds", async (_req, res, next) => {
   try {
     const payload = await cached(grantFeedCache, (value) => (grantFeedCache = value), grantSources);
+    res.json(payload);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ── Live World Cup scores from ESPN (server-side proxy, avoids browser CORS) ──
+function ymdRange(start, end) {
+  const toDate = (s) => new Date(Date.UTC(+s.slice(0, 4), +s.slice(4, 6) - 1, +s.slice(6, 8)));
+  const days = [];
+  for (let d = toDate(start), last = toDate(end); d <= last; d.setUTCDate(d.getUTCDate() + 1)) {
+    const y = d.getUTCFullYear();
+    const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(d.getUTCDate()).padStart(2, "0");
+    days.push(`${y}${m}${day}`);
+  }
+  return days;
+}
+
+function parseEspnScoreboard(json) {
+  const out = [];
+  const events = (json && json.events) || [];
+  for (const ev of events) {
+    const comp = ev.competitions && ev.competitions[0];
+    if (!comp) continue;
+    const cs = comp.competitors || [];
+    const home = cs.find((c) => c.homeAway === "home") || cs[0];
+    const away = cs.find((c) => c.homeAway === "away") || cs[1];
+    if (!home || !away) continue;
+    const st = (comp.status && comp.status.type) || (ev.status && ev.status.type) || {};
+    const hs = home.score === 0 || home.score ? Number(home.score) : NaN;
+    const as = away.score === 0 || away.score ? Number(away.score) : NaN;
+    out.push({
+      date: comp.date || ev.date || null,
+      home: (home.team && (home.team.displayName || home.team.name)) || "",
+      away: (away.team && (away.team.displayName || away.team.name)) || "",
+      homeScore: Number.isFinite(hs) ? hs : null,
+      awayScore: Number.isFinite(as) ? as : null,
+      state: st.state || null,
+      completed: Boolean(st.completed),
+    });
+  }
+  return out;
+}
+
+async function fetchEspnDay(ymd) {
+  const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${WC_LEAGUE}/scoreboard?dates=${ymd}`;
+  const response = await fetch(url, {
+    headers: {
+      "User-Agent": "DefiantSportsWorldCupDashboard/1.0 (+https://defiantsports.io)",
+      Accept: "application/json",
+    },
+    signal: AbortSignal.timeout(9000),
+  });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return parseEspnScoreboard(await response.json());
+}
+
+async function buildBracketPayload() {
+  const results = await Promise.allSettled(ymdRange(WC_START, WC_END).map(fetchEspnDay));
+  const matches = [];
+  const seen = new Set();
+  for (const result of results) {
+    if (result.status !== "fulfilled") continue;
+    for (const m of result.value) {
+      const key = `${m.home}|${m.away}|${m.date || ""}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      matches.push(m);
+    }
+  }
+  return {
+    generatedAt: new Date().toISOString(),
+    source: "ESPN",
+    league: WC_LEAGUE,
+    count: matches.length,
+    matches,
+  };
+}
+
+app.get("/api/worldcup-bracket", async (_req, res, next) => {
+  try {
+    if (bracketCache && bracketCache.expiresAt > Date.now()) {
+      return res.json(bracketCache.payload);
+    }
+    const payload = await buildBracketPayload();
+    if (!payload.matches.length) throw new Error("No live matches returned from ESPN");
+    bracketCache = { expiresAt: Date.now() + CACHE_TTL_MS, payload };
     res.json(payload);
   } catch (error) {
     next(error);
