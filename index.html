@@ -2039,42 +2039,21 @@
       .bstand tr.adv .tm { font-weight: 600; color: var(--ink); }
 
       /* Neighborhood Nip Foundation view */
-      .fnd-hero {
-        position: relative;
-        border-radius: var(--radius);
-        overflow: hidden;
-        margin-bottom: 16px;
-        box-shadow: var(--shadow-md);
-        background: var(--black);
-      }
-      .fnd-hero-img {
-        width: 100%;
-        min-height: 280px;
-        max-height: 520px;
-        object-fit: cover;
-        object-position: center 22%;
-        display: block;
-      }
-      .fnd-hero-overlay {
-        position: absolute;
-        inset: auto 0 0 0;
-        padding: 30px 26px 22px;
-        background: linear-gradient(to top, rgba(10, 10, 10, 0.84), rgba(10, 10, 10, 0.28) 58%, transparent);
-        color: #fff;
-      }
-      .fnd-hero-overlay .kicker {
+      .fnd-head { margin-bottom: 14px; }
+      .fnd-head .kicker {
         font-family: var(--mono);
         font-size: 11px;
         letter-spacing: .14em;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.82);
-        margin-bottom: 8px;
+        color: var(--ink-3);
+        margin-bottom: 6px;
       }
-      .fnd-hero-overlay h2 {
-        font-size: clamp(20px, 3vw, 30px);
-        line-height: 1.18;
+      .fnd-head h2 {
+        font-size: clamp(18px, 2.4vw, 24px);
+        line-height: 1.2;
         font-weight: 700;
-        max-width: 24ch;
+        color: var(--ink);
+        max-width: 32ch;
       }
       .fnd-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
       .fnd-pill {
@@ -3178,19 +3157,22 @@
 
       function renderMarathon() {
         $("#marathon").innerHTML = `
-          <div class="fnd-hero">
-            <img class="fnd-hero-img" src="./assets/foundation/community.jpg"
-                 alt="Nipsey Hussle with students"
-                 loading="lazy"
-                 onerror="this.onerror=null; this.src='./assets/marathon/Nip.webp';" />
-            <div class="fnd-hero-overlay">
-              <div class="kicker">The Neighborhood Nip Foundation</div>
-              <h2>Extending Nipsey Hussle's legacy for the next generation.</h2>
-            </div>
+          <div class="fnd-head">
+            <div class="kicker">The Neighborhood Nip Foundation</div>
+            <h2>Extending Nipsey Hussle's legacy for the next generation.</h2>
           </div>
 
           <div class="marathon-grid">
             <div class="marathon-col">
+              <div class="card">
+                <div class="card-body flush">
+                  <div class="nipsey-hero">
+                    <img src="./assets/foundation/community.jpg" alt="Nipsey Hussle with students"
+                         loading="lazy"
+                         onerror="this.onerror=null; this.src='./assets/marathon/Nip.webp';" />
+                  </div>
+                </div>
+              </div>
               <div class="card">
                 <div class="card-body">
                   <div class="fnd-tabs" role="tablist" aria-label="The Neighborhood Nip Foundation">
