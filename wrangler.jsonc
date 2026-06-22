@@ -1,0 +1,14 @@
+{
+  // Cloudflare Workers static-assets deployment for the dashboard.
+  // The repo's production page is public/index.html (+ public/assets), so we
+  // serve that directory as static assets. The Express server.js cannot run on
+  // the Workers runtime; the dashboard already degrades gracefully without the
+  // /api/* routes (the bracket pulls live scores from ESPN directly in the
+  // browser), so an assets-only deploy serves the full UI.
+  "name": "defiantsportsdashboard",
+  "compatibility_date": "2025-09-01",
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "single-page-application"
+  }
+}
