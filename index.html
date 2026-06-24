@@ -2206,13 +2206,11 @@
     <script>
       // ───────────────── Data ─────────────────
       const views = [
-        ["overview",  "Overview",          "1", "▦"],
+        ["overview",  "Defiant Sports",    "1", "▦"],
         ["branding",  "Branding",          "2", "✦"],
         ["team",      "Team Defiant",      "3", "★"],
-        ["safety",    "Safety",            "4", "△"],
-        ["youth",     "Pogba Academy",     "5", "○"],
-        ["bracket",   "Bracket",           "6", "⌁"],
-        ["marathon",  "Neighborhood Nip Foundation", "7", "◆"]
+        ["youth",     "Pogba Academy",     "4", "○"],
+        ["marathon",  "Neighborhood Nip Foundation", "5", "◆"]
       ];
 
       const stadiums = [
@@ -2871,12 +2869,39 @@
       }
 
       // ───────────────── Section renderers ─────────────────
+      // Athlete brand dashboard modules (capabilities, not fabricated metrics).
+      const DASHBOARD_MODULES = [
+        ["Personal Brand Analytics", "See how your brand is perceived and where it is growing."],
+        ["Social Media Performance", "Track reach, engagement, and follower growth in one view."],
+        ["Sponsorship Opportunities", "Manage inbound interest and outbound pitches to brands."],
+        ["Content Calendar", "Plan and schedule posts, drops, and campaigns."],
+        ["Media Kit", "Keep a polished kit ready to send to any partner."],
+        ["Athlete Profile", "Manage your public profile, bio, and highlights."],
+        ["Campaign Tracking", "Monitor active campaigns and the results they drive."],
+        ["Partnership Opportunities", "Discover brands and organizations aligned with you."],
+        ["Community Engagement", "Run and measure programs that give back."],
+        ["Brand Growth Resources", "Guides, templates, and playbooks to level up."]
+      ];
+
       function renderOverview() {
         $("#overview").innerHTML = `
           ${renderKpis()}
-          ${renderLiveCard()}
-          ${renderMapCard("overview")}
-          ${renderRightRail()}
+          <div class="fnd-head">
+            <div class="kicker">Athlete Brand Dashboard</div>
+            <h2>Build influence, attract opportunity, and grow your brand.</h2>
+          </div>
+          <div class="branding-cta-row" style="margin:0 0 14px">
+            <a class="btn dark" href="mailto:info@thedefiantfoundation.com?subject=Build%20My%20Brand">Build My Brand</a>
+            <button class="btn" type="button" onclick="navigate('branding');return false;">Explore Services</button>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3>Your Brand, In One Place</h3><span class="meta">Everything to grow on and off the field</span></div>
+            <div class="card-body">
+              <div class="svc-grid">
+                ${DASHBOARD_MODULES.map(m => `<div class="svc-tile"><strong>${m[0]}</strong><span>${m[1]}</span></div>`).join("")}
+              </div>
+            </div>
+          </div>
         `;
       }
 
@@ -3021,26 +3046,6 @@
                 <h3 id="teamHeroTitle" class="team-hero-title">Team Defiant</h3>
                 <p class="lede">We are a collective of passionate creatives, fueled by a shared vision of a world where everyone has the opportunity to thrive.</p>
                 <p class="lede">Our mission? To empower individuals and communities to break the cycle of poverty. We're not just about handouts; we're about hand-ups. We're Defiant, and we won't stop until every voice is heard and every potential is realized.</p>
-              </div>
-            </section>
-            <section class="card" aria-label="Premium athlete membership">
-              <div class="card-head"><h3>Premium Athlete Membership</h3><span class="meta">Everything an athlete needs to grow a brand</span></div>
-              <div class="card-body">
-                <p class="lede" style="margin:0 0 12px">Team Defiant is a premium membership experience built to help athletes build influence, attract opportunity, and create lasting impact on and off the field.</p>
-                <div class="svc-grid">
-                  ${[
-                    ["Branding Resources", "Templates, playbooks, and brand assets on demand."],
-                    ["Marketing Support", "Hands-on help launching campaigns that convert."],
-                    ["Exclusive Networking", "Introductions to brands, creators, and partners."],
-                    ["Media Exposure", "Features, interviews, and platform opportunities."],
-                    ["Sponsorship Preparation", "Decks and metrics that get athletes deal-ready."],
-                    ["Content Creation", "Production resources for photo, video, and social."],
-                    ["Community Engagement", "Programs to give back and deepen your influence."]
-                  ].map(m => `<div class="svc-tile"><strong>${m[0]}</strong><span>${m[1]}</span></div>`).join("")}
-                </div>
-                <div class="branding-cta-row" style="margin-top:14px">
-                  <a class="btn dark" href="mailto:info@thedefiantfoundation.com?subject=Team%20Defiant%20Membership">Join Team Defiant</a>
-                </div>
               </div>
             </section>
             <section class="team-grid" aria-label="Leadership">
@@ -3303,12 +3308,10 @@
           ${renderKpis()}
           ${renderPogbaStrip()}
       <div class="fill" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 360px)); gap:12px; justify-content:start; align-content:start;">
-            ${simpleCard("Personal Branding Education", "Athletes learn to build and own a personal brand early, from identity to audience.")}
-            ${simpleCard("Leadership Development", "Character, discipline, and leadership that translate on and off the pitch.")}
-            ${simpleCard("Professional Preparation", "The media, business, and performance habits the next level demands.")}
-            ${simpleCard("Media Readiness", "Interview, camera, and social training so athletes shine in the spotlight.")}
-            ${simpleCard("Athlete Empowerment", "Mentorship and tools that put athletes in control of their own journey.")}
-            ${simpleCard("International Exposure", "Global competition, camps, and showcase access that widen the stage.")}
+            ${simpleCard("World Cup Access", "Youth from different cultural backgrounds receive soccer learning, match-day context, and safe fan experiences.")}
+            ${simpleCard("Futsal", "Compact tournaments for gyms, courts, mini-pitches, and community centers.")}
+            ${simpleCard("Meet Elite Athletes", "Briefly connect with elite athletes in your city, live or virtually, for guidance.")}
+            ${simpleCard("Mentor Network", "Coaches, translators, nonprofits, safety leads, and city partners operating together.")}
           </div>`;
       }
 
@@ -3867,12 +3870,12 @@
           overview: "Defiant Sports · athlete branding, marketing, and growth platform",
           branding: "Athlete branding and marketing · build influence on and off the field",
           live: "Verified FIFA · CDC · partner endpoints · streaming when reachable",
-          team: "Team Defiant · premium athlete membership and brand support",
+          team: "Team Defiant · the leadership building the foundation",
           grants: "Open grants & funding pathways · live status",
           business: "Local-market activation strategy",
           safety: "Stewardship, health, and fan-flow",
-          marathon: "The Neighborhood Nip Foundation · community impact, youth, and mentorship",
-          youth: "Pogba Academy · elite athlete development, leadership, and brand education",
+          marathon: "The Neighborhood Nip Foundation · extending Nipsey Hussle's legacy for youth",
+          youth: "Pogba Academy · World Cup access, futsal, athlete meet-ups, mentorship",
           records: "Narratives, campaigns, and rights",
           translate: "Multilingual coverage matrix",
           bracket: "Tournament framework"
@@ -4197,7 +4200,7 @@
           }
         }
         if (e.target.matches("input, select, textarea")) return;
-        const map = { "1":"overview","2":"branding","3":"team","4":"safety","5":"youth","6":"bracket","7":"marathon" };
+        const map = { "1":"overview","2":"branding","3":"team","4":"youth","5":"marathon" };
         if (map[e.key]) { navigate(map[e.key]); }
         if (e.key === "Escape") $("#modal").classList.remove("open");
       });
