@@ -3,10 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Defiant Sports, World Cup 2026 Operations</title>
+    <title>Defiant Sports | Athlete Branding and Marketing Agency</title>
     <meta
       name="description"
-      content="Defiant Sports operations intelligence for FIFA World Cup 2026: live fixtures, host-city stewardship, grants, transportation, safety, and cultural programming."
+      content="Defiant Sports is a full-service athlete branding and marketing company. We help athletes build personal brands, grow visibility, secure sponsorships, master NIL positioning, and maximize influence on and off the field."
+    />
+    <meta
+      name="keywords"
+      content="athlete branding, athlete marketing, sports marketing agency, personal branding for athletes, NIL branding services, athlete sponsorship opportunities, sports public relations, athlete media training, athlete digital marketing, sports brand management"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -2080,6 +2084,31 @@
         color: var(--ink-3);
       }
 
+      /* Athlete-branding services + outcomes grids */
+      .branding-sub {
+        margin: 12px 0 0;
+        max-width: 60ch;
+        font-size: 14px;
+        line-height: 1.55;
+        color: rgba(255, 255, 255, 0.86);
+      }
+      .svc-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 10px;
+      }
+      .svc-tile {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        background: var(--surface);
+        padding: 12px 13px;
+        transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+      }
+      .svc-tile:hover { border-color: var(--line-2); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+      .svc-tile strong { display: block; font-size: 13px; margin-bottom: 4px; color: var(--ink); }
+      .svc-tile span { font-size: 11.5px; line-height: 1.45; color: var(--ink-3); }
+      .out-tile strong { color: var(--accent); }
+
       /* Print */
       @media print {
         .rail, .topbar { display: none; }
@@ -2110,8 +2139,8 @@
       <main class="content">
         <header class="topbar">
           <div>
-            <h2 id="viewTitle">Operations Overview</h2>
-            <div class="crumb" id="viewCrumb">Real-time host-city intelligence · FIFA World Cup 2026</div>
+            <h2 id="viewTitle">Defiant Sports</h2>
+            <div class="crumb" id="viewCrumb">Athlete branding, marketing, and growth platform</div>
           </div>
           <div class="top-actions">
             <select class="select" id="languageSelect" aria-label="Translate">
@@ -2994,6 +3023,26 @@
                 <p class="lede">Our mission? To empower individuals and communities to break the cycle of poverty. We're not just about handouts; we're about hand-ups. We're Defiant, and we won't stop until every voice is heard and every potential is realized.</p>
               </div>
             </section>
+            <section class="card" aria-label="Premium athlete membership">
+              <div class="card-head"><h3>Premium Athlete Membership</h3><span class="meta">Everything an athlete needs to grow a brand</span></div>
+              <div class="card-body">
+                <p class="lede" style="margin:0 0 12px">Team Defiant is a premium membership experience built to help athletes build influence, attract opportunity, and create lasting impact on and off the field.</p>
+                <div class="svc-grid">
+                  ${[
+                    ["Branding Resources", "Templates, playbooks, and brand assets on demand."],
+                    ["Marketing Support", "Hands-on help launching campaigns that convert."],
+                    ["Exclusive Networking", "Introductions to brands, creators, and partners."],
+                    ["Media Exposure", "Features, interviews, and platform opportunities."],
+                    ["Sponsorship Preparation", "Decks and metrics that get athletes deal-ready."],
+                    ["Content Creation", "Production resources for photo, video, and social."],
+                    ["Community Engagement", "Programs to give back and deepen your influence."]
+                  ].map(m => `<div class="svc-tile"><strong>${m[0]}</strong><span>${m[1]}</span></div>`).join("")}
+                </div>
+                <div class="branding-cta-row" style="margin-top:14px">
+                  <a class="btn dark" href="mailto:info@thedefiantfoundation.com?subject=Team%20Defiant%20Membership">Join Team Defiant</a>
+                </div>
+              </div>
+            </section>
             <section class="team-grid" aria-label="Leadership">
               ${cards}
             </section>
@@ -3254,10 +3303,12 @@
           ${renderKpis()}
           ${renderPogbaStrip()}
       <div class="fill" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 360px)); gap:12px; justify-content:start; align-content:start;">
-            ${simpleCard("World Cup Access", "Youth from different cultural backgrounds receive soccer learning, match-day context, and safe fan experiences.")}
-            ${simpleCard("Futsal", "Compact tournaments for gyms, courts, mini-pitches, and community centers.")}
-            ${simpleCard("Meet Elite Athletes", "Briefly connect with elite athletes in your city, live or virtually, for guidance.")}
-            ${simpleCard("Mentor Network", "Coaches, translators, nonprofits, safety leads, and city partners operating together.")}
+            ${simpleCard("Personal Branding Education", "Athletes learn to build and own a personal brand early, from identity to audience.")}
+            ${simpleCard("Leadership Development", "Character, discipline, and leadership that translate on and off the pitch.")}
+            ${simpleCard("Professional Preparation", "The media, business, and performance habits the next level demands.")}
+            ${simpleCard("Media Readiness", "Interview, camera, and social training so athletes shine in the spotlight.")}
+            ${simpleCard("Athlete Empowerment", "Mentorship and tools that put athletes in control of their own journey.")}
+            ${simpleCard("International Exposure", "Global competition, camps, and showcase access that widen the stage.")}
           </div>`;
       }
 
@@ -3295,63 +3346,99 @@
         brandingRotatorTimer = setInterval(tick, 4000);
       }
 
+      // Core services + outcomes for the athlete-branding marketing page.
+      const SERVICES = [
+        ["Athlete Branding", "Define the identity, story, and visual language that set you apart."],
+        ["Personal Brand Development", "Build a consistent, authentic brand across every surface."],
+        ["Social Media Strategy", "Grow and engage the right audience with a clear content plan."],
+        ["Content Creation", "Photo, video, and editorial built to perform and to last."],
+        ["Media Relations", "Earn features, interviews, and press that raise your profile."],
+        ["NIL Branding Support", "Position your name, image, and likeness to win deals."],
+        ["Sponsorship Readiness", "Decks, metrics, and assets that make brands say yes."],
+        ["Public Relations", "Shape narrative, reputation, and the moments that matter."],
+        ["Digital Marketing", "Targeted campaigns that turn attention into opportunity."],
+        ["Career Positioning", "Strategy for the long game, on the field and beyond it."],
+        ["Community Engagement Campaigns", "Programs that deepen influence and give back."],
+        ["Professional Portfolio Development", "A polished media kit and profile that opens doors."]
+      ];
+
+      const BRANDING_WHY = [
+        "Attract sponsorships",
+        "Increase visibility",
+        "Grow social media audiences",
+        "Secure partnership opportunities",
+        "Build long-term career value",
+        "Strengthen community influence",
+        "Create opportunities beyond athletics"
+      ];
+
+      const BRANDING_OUTCOMES = [
+        ["Audience Growth", "Followers, reach, and engagement that compound."],
+        ["Sponsorship Partnerships", "Brand deals matched to your values and audience."],
+        ["Media Features", "Interviews, profiles, and press placements."],
+        ["Brand Collaborations", "Co-created products, campaigns, and content."],
+        ["Community Impact", "Campaigns that move your city and your cause."],
+        ["Career Advancement", "Positioning that opens the next opportunity."]
+      ];
+
       function renderBranding() {
         $("#branding").innerHTML = `
           ${renderKpis()}
           <div class="marathon-hero branding-hero">
-            <div class="kicker">Voice Capital</div>
-            <blockquote>The voice of an athlete moves markets, and movements.</blockquote>
-            <cite id="brandingTagline">partner with the world-class roster behind defiant sports</cite>
+            <div class="kicker">Athlete Branding and Marketing</div>
+            <blockquote>Building Brands. Elevating Athletes.</blockquote>
+            <p class="branding-sub">Defiant Sports helps athletes transform their talent into influence through strategic branding, marketing, media exposure, sponsorship positioning, and digital growth.</p>
+            <cite id="brandingTagline">${escapeHtml(BRANDING_TAGLINES[0])}</cite>
+          </div>
+
+          <div class="branding-cta-row" style="margin:0 0 14px">
+            <a class="btn dark" href="mailto:info@thedefiantfoundation.com?subject=Build%20My%20Brand">Build My Brand</a>
+            <button class="btn" type="button" onclick="document.getElementById('branding-services')?.scrollIntoView({behavior:'smooth'});return false;">Explore Services</button>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>About Defiant Sports</h3><span class="meta">Full-service athlete branding and marketing</span></div>
+            <div class="card-body">
+              <p class="lede">Defiant Sports is a full-service athlete branding and marketing company dedicated to helping athletes create powerful personal brands that attract opportunities, engage audiences, and create long-term impact beyond sports.</p>
+            </div>
+          </div>
+
+          <div class="card" id="branding-services">
+            <div class="card-head"><h3>Core Services</h3><span class="meta">Strategy to execution, end to end</span></div>
+            <div class="card-body">
+              <div class="svc-grid">
+                ${SERVICES.map(s => `<div class="svc-tile"><strong>${s[0]}</strong><span>${s[1]}</span></div>`).join("")}
+              </div>
+            </div>
           </div>
 
           <div class="grid-2 branding-pillars">
             <div class="card">
-              <div class="card-head">
-                <h3>Why partner with us</h3>
-                <span class="meta">Trust · Reach · Loyalty · Lift</span>
-              </div>
+              <div class="card-head"><h3>Why branding matters</h3><span class="meta">What a strong brand unlocks</span></div>
               <div class="card-body">
                 <div class="list">
-                  ${listRow("Authentic reach", "<span>Athletes lead, engagement compounds across owned, earned, and paid surfaces.</span>")}
-                  ${listRow("Cultural credibility", "<span>Sport, music, fashion, social movement, your message arrives pre-credentialed.</span>")}
-                  ${listRow("World-class roster", "<span>Champions and rising stars, signed against character standards.</span>")}
-                  ${listRow("Measurable lift", "<span>Brand-lift, conversion, sell-through, reported on every layer.</span>")}
+                  ${BRANDING_WHY.map(w => listRow(w, '<span style="color:var(--live); font-weight:700">✓</span>')).join("")}
                 </div>
               </div>
             </div>
-
             <div class="card">
-              <div class="card-head">
-                <h3>Beyond marketing, movement</h3>
-                <span class="meta">Social · Systemic · Industry change</span>
-              </div>
+              <div class="card-head"><h3>Success outcomes</h3><span class="meta">The results we build toward</span></div>
               <div class="card-body">
-                <p class="lede" style="margin:0 0 10px 0; font-size:12px">
-                  Athletes driving social, systemic, and industry change. Brands that align inherit the halo.
-                </p>
-                <div class="list">
-                  ${listRow("Social change", "<span>Youth access, mentor networks, equitable training pipelines.</span>")}
-                  ${listRow("Systemic change", "<span>Policy, funding, structural decisions for the next generation.</span>")}
-                  ${listRow("Industry change", "<span>Ownership, equity stakes, player-owned media.</span>")}
+                <div class="svc-grid">
+                  ${BRANDING_OUTCOMES.map(o => `<div class="svc-tile out-tile"><strong>${o[0]}</strong><span>${o[1]}</span></div>`).join("")}
                 </div>
               </div>
             </div>
           </div>
 
           <div class="card branding-bottom">
-            <div class="card-head">
-              <h3>Partnership lanes</h3>
-              <span class="meta">Pick the surface, we build the rest</span>
-            </div>
+            <div class="card-head"><h3>Ready to build your brand?</h3><span class="meta">Athletes · sponsors · partners · organizations</span></div>
             <div class="card-body branding-bottom-body">
-              <div class="branding-lanes">
-                <div class="lane lane--spotlight"><strong>Spotlight</strong><span>one athlete · product launch moment</span></div>
-                <div class="lane lane--movement"><strong>Movement</strong><span>many athletes · category-wide push</span></div>
-                <div class="lane lane--legacy"><strong>Legacy</strong><span>full roster · category leadership</span></div>
-              </div>
+              <p class="lede" style="margin:0 0 12px">Whether you are an athlete ready to grow or a brand looking to partner with the voices that move markets and movements, Defiant Sports builds the strategy, content, and relationships that turn talent into lasting influence.</p>
               <div class="branding-cta-row">
-                <a class="btn dark" href="https://thedefiantfoundation.org/" target="_blank" rel="noopener noreferrer">Visit The Defiant Foundation ↗</a>
-                <a class="btn" href="mailto:info@thedefiantfoundation.com?subject=Brand%20Partnership%20Inquiry">Email info@thedefiantfoundation.com</a>
+                <a class="btn dark" href="mailto:info@thedefiantfoundation.com?subject=Build%20My%20Brand">Build My Brand</a>
+                <a class="btn" href="mailto:info@thedefiantfoundation.com?subject=Brand%20Partnership%20Inquiry">Partner With Us</a>
+                <a class="btn" href="https://defiantsports.io" target="_blank" rel="noopener noreferrer">defiantsports.io ↗</a>
               </div>
             </div>
           </div>`;
@@ -3777,15 +3864,15 @@
         const meta = views.find(v => v[0] === state.view);
         $("#viewTitle").textContent = meta ? meta[1] : "Overview";
         const crumbs = {
-          overview: "Real-time host-city intelligence · FIFA World Cup 2026",
-          branding: "Athlete branding · Partner with the voices that move markets and movements",
+          overview: "Defiant Sports · athlete branding, marketing, and growth platform",
+          branding: "Athlete branding and marketing · build influence on and off the field",
           live: "Verified FIFA · CDC · partner endpoints · streaming when reachable",
-          team: "Team Defiant · the leadership building the foundation",
+          team: "Team Defiant · premium athlete membership and brand support",
           grants: "Open grants & funding pathways · live status",
           business: "Local-market activation strategy",
           safety: "Stewardship, health, and fan-flow",
-          marathon: "The Neighborhood Nip Foundation · extending Nipsey Hussle's legacy for youth",
-          youth: "Pogba Academy · World Cup access, futsal, athlete meet-ups, mentorship",
+          marathon: "The Neighborhood Nip Foundation · community impact, youth, and mentorship",
+          youth: "Pogba Academy · elite athlete development, leadership, and brand education",
           records: "Narratives, campaigns, and rights",
           translate: "Multilingual coverage matrix",
           bracket: "Tournament framework"
