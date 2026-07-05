@@ -1350,8 +1350,9 @@
         playSlide(idx);
       });
 
-      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (!prefersReduced) {
+      const reducedMotionMedia = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+      let prefersReduced = reducedMotionMedia ? reducedMotionMedia.matches : false;
+      {
         const MAX_HALO_SHIFT = 18;
         const HALO_SETTLE_THRESHOLD = 0.08;
         const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -1361,6 +1362,11 @@
         let currentX = 0;
         let currentY = 0;
         let rafId = 0;
+        let stageRect = null;
+
+        const updateStageRect = () => {
+          stageRect = stage.getBoundingClientRect();
+        };
 
         const animateHalo = () => {
           currentX += (targetX - currentX) * 0.18;
@@ -1383,10 +1389,14 @@
           queueHaloFrame();
         };
 
+        updateStageRect();
+        window.addEventListener('resize', updateStageRect, { passive: true });
+        stage.addEventListener('pointerenter', updateStageRect, { passive: true });
         stage.addEventListener('pointermove', event => {
-          const rect = stage.getBoundingClientRect();
-          const normX = ((event.clientX - rect.left) / rect.width) - 0.5;
-          const normY = ((event.clientY - rect.top) / rect.height) - 0.5;
+          if (prefersReduced) return;
+          if (!stageRect) updateStageRect();
+          const normX = ((event.clientX - stageRect.left) / stageRect.width) - 0.5;
+          const normY = ((event.clientY - stageRect.top) / stageRect.height) - 0.5;
           targetX = clamp(normX, -1, 1) * MAX_HALO_SHIFT;
           targetY = clamp(normY, -1, 1) * MAX_HALO_SHIFT;
           queueHaloFrame();
@@ -1396,6 +1406,13 @@
         stage.addEventListener('focusout', event => {
           if (!stage.contains(event.relatedTarget)) resetHalo();
         });
+
+        if (reducedMotionMedia) {
+          reducedMotionMedia.addEventListener('change', event => {
+            prefersReduced = event.matches;
+            resetHalo();
+          });
+        }
       }
 
       playSlide(0);
