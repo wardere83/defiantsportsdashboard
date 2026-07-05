@@ -1354,6 +1354,8 @@
       if (!prefersReduced) {
         const MAX_HALO_SHIFT = 18;
         const HALO_SETTLE_THRESHOLD = 0.08;
+        const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+        const hasSettled = (target, current) => Math.abs(target - current) <= HALO_SETTLE_THRESHOLD;
         let targetX = 0;
         let targetY = 0;
         let currentX = 0;
@@ -1365,7 +1367,7 @@
           currentY += (targetY - currentY) * 0.18;
           stage.style.setProperty('--halo-shift-x', `${currentX.toFixed(2)}px`);
           stage.style.setProperty('--halo-shift-y', `${currentY.toFixed(2)}px`);
-          if (Math.abs(targetX - currentX) > HALO_SETTLE_THRESHOLD || Math.abs(targetY - currentY) > HALO_SETTLE_THRESHOLD) {
+          if (!hasSettled(targetX, currentX) || !hasSettled(targetY, currentY)) {
             rafId = requestAnimationFrame(animateHalo);
           } else {
             rafId = 0;
@@ -1380,8 +1382,8 @@
           const rect = stage.getBoundingClientRect();
           const normX = ((event.clientX - rect.left) / rect.width) - 0.5;
           const normY = ((event.clientY - rect.top) / rect.height) - 0.5;
-          targetX = Math.max(-1, Math.min(1, normX)) * MAX_HALO_SHIFT;
-          targetY = Math.max(-1, Math.min(1, normY)) * MAX_HALO_SHIFT;
+          targetX = clamp(normX, -1, 1) * MAX_HALO_SHIFT;
+          targetY = clamp(normY, -1, 1) * MAX_HALO_SHIFT;
           queueHaloFrame();
         });
 
