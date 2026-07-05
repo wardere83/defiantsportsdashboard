@@ -254,6 +254,8 @@
       aspect-ratio: 1 / 1;
       display: flex; align-items: center; justify-content: center;
       margin: 0 auto 22px;
+      /* Keeps the moving halo above the portrait without leaking into
+         neighboring hero layers. */
       isolation: isolate;
     }
     .const-halo {
@@ -1350,6 +1352,8 @@
 
       const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (!prefersReduced) {
+        const MAX_HALO_SHIFT = 18;
+        const HALO_SETTLE_THRESHOLD = 0.08;
         let targetX = 0;
         let targetY = 0;
         let currentX = 0;
@@ -1361,7 +1365,7 @@
           currentY += (targetY - currentY) * 0.18;
           stage.style.setProperty('--halo-shift-x', `${currentX.toFixed(2)}px`);
           stage.style.setProperty('--halo-shift-y', `${currentY.toFixed(2)}px`);
-          if (Math.abs(targetX - currentX) > 0.08 || Math.abs(targetY - currentY) > 0.08) {
+          if (Math.abs(targetX - currentX) > HALO_SETTLE_THRESHOLD || Math.abs(targetY - currentY) > HALO_SETTLE_THRESHOLD) {
             rafId = requestAnimationFrame(animateHalo);
           } else {
             rafId = 0;
@@ -1376,8 +1380,8 @@
           const rect = stage.getBoundingClientRect();
           const normX = ((event.clientX - rect.left) / rect.width) - 0.5;
           const normY = ((event.clientY - rect.top) / rect.height) - 0.5;
-          targetX = Math.max(-1, Math.min(1, normX)) * 18;
-          targetY = Math.max(-1, Math.min(1, normY)) * 18;
+          targetX = Math.max(-1, Math.min(1, normX)) * MAX_HALO_SHIFT;
+          targetY = Math.max(-1, Math.min(1, normY)) * MAX_HALO_SHIFT;
           queueHaloFrame();
         });
 
