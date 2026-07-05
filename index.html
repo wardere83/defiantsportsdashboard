@@ -232,15 +232,6 @@
       background: radial-gradient(46% 42% at 50% 42%, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 40%, transparent 72%);
       pointer-events: none;
     }
-    /* Ambient particle network — canvas of bright dots that drift and
-       connect to their neighbors with GLOWING hairline lines. */
-    .const-network {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      z-index: 1; pointer-events: none;
-    }
-    /* Legacy SVG sky (hidden — network canvas replaces it) */
-    .const svg.sky { display: none; }
-
     .const-portrait-wrap {
       position: absolute; inset: 0; z-index: 2;
       display: flex; align-items: center; justify-content: center;
@@ -263,49 +254,79 @@
       aspect-ratio: 1 / 1;
       display: flex; align-items: center; justify-content: center;
       margin: 0 auto 22px;
+      isolation: isolate;
     }
-    /* Tracing overlay: a set of shining white paths that draw
-       around the athlete on entry (stroke-dashoffset 100 → 0), hold,
-       then draw OUT (0 → 100) when the slide leaves. All black bg,
-       white glow — same feel as the Icon Source hero. */
-    .const-trace {
-      position: absolute; inset: -6%;
-      width: 112%; height: 112%;
-      z-index: 2; pointer-events: none;
+    .const-halo {
+      position: absolute; inset: -7%;
+      z-index: 4; pointer-events: none;
+    }
+    .const-halo-svg {
+      width: 100%; height: 100%;
       overflow: visible;
     }
-    .const-trace path,
-    .const-trace line,
-    .const-trace polyline {
-      fill: none; stroke: rgba(255,255,255,0.85); stroke-width: 0.35;
-      stroke-linecap: round; stroke-linejoin: round;
+    .const-halo-svg .halo-segment {
+      transform: translate(
+        calc(var(--halo-shift-x, 0px) * var(--halo-depth, 0.6)),
+        calc(var(--halo-shift-y, 0px) * var(--halo-depth, 0.6))
+      );
+      transition: transform 180ms ease-out;
+    }
+    .const-halo-svg .halo-line {
+      fill: none;
+      stroke: rgba(255,255,255,0.92);
+      stroke-width: 0.55;
+      stroke-linecap: round;
+      stroke-linejoin: round;
       stroke-dasharray: 100;
       stroke-dashoffset: 100;
-      filter: drop-shadow(0 0 1.5px rgba(255,255,255,0.85))
-              drop-shadow(0 0 4px rgba(180,220,255,0.55));
-      opacity: 0.9;
+      opacity: 0;
+      filter: drop-shadow(0 0 2px rgba(255,255,255,0.9))
+              drop-shadow(0 0 10px rgba(185,220,255,0.38));
     }
-    .const-trace circle {
-      fill: #ffffff; r: 0.8; opacity: 0;
-      filter: drop-shadow(0 0 2px rgba(255,255,255,0.9));
-      transition: opacity 0.6s ease;
+    .const-halo-svg .halo-node {
+      fill: #fff;
+      opacity: 0;
+      transform-box: fill-box;
+      transform-origin: center;
+      filter: drop-shadow(0 0 4px rgba(255,255,255,0.92));
     }
-    /* IN animation on active slide */
-    .const-slide.active .const-trace path,
-    .const-slide.active .const-trace line,
-    .const-slide.active .const-trace polyline {
-      animation: traceIn 1.4s cubic-bezier(.35,.9,.35,1) forwards;
+    .const-slide.active .halo-line {
+      animation:
+        haloDraw 1.2s cubic-bezier(.35,.9,.35,1) var(--halo-delay, 0s) forwards,
+        haloPulse 5.8s ease-in-out calc(var(--halo-delay, 0s) + 1.2s) infinite;
     }
-    .const-slide.active .const-trace circle { opacity: 1; transition-delay: 1.1s; }
-    /* OUT animation while slide leaves (parent gets .leaving briefly) */
-    .const-slide.leaving .const-trace path,
-    .const-slide.leaving .const-trace line,
-    .const-slide.leaving .const-trace polyline {
-      animation: traceOut 0.7s ease-in forwards;
+    .const-slide.active .halo-node {
+      animation:
+        haloNodeIn 0.7s ease calc(var(--halo-delay, 0s) + 0.78s) forwards,
+        haloNodePulse 3.8s ease-in-out calc(var(--halo-delay, 0s) + 1.35s) infinite;
     }
-    .const-slide.leaving .const-trace circle { opacity: 0; transition-delay: 0s; }
-    @keyframes traceIn  { 0% { stroke-dashoffset: 100; opacity: 0; } 20% { opacity: 0.9; } 100% { stroke-dashoffset: 0;   opacity: 0.9; } }
-    @keyframes traceOut { 0% { stroke-dashoffset: 0;   opacity: 0.9; } 100% { stroke-dashoffset: -100; opacity: 0; } }
+    .const-slide.leaving .halo-line { animation: haloErase 0.55s ease forwards; }
+    .const-slide.leaving .halo-node { animation: haloNodeOut 0.35s ease forwards; }
+    @keyframes haloDraw {
+      0% { stroke-dashoffset: 100; opacity: 0; }
+      25% { opacity: 0.95; }
+      100% { stroke-dashoffset: 0; opacity: 0.95; }
+    }
+    @keyframes haloErase {
+      0% { stroke-dashoffset: 0; opacity: 0.95; }
+      100% { stroke-dashoffset: -100; opacity: 0; }
+    }
+    @keyframes haloPulse {
+      0%, 100% { opacity: 0.62; }
+      50% { opacity: 1; }
+    }
+    @keyframes haloNodeIn {
+      0% { opacity: 0; transform: scale(0.4); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes haloNodeOut {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.4); }
+    }
+    @keyframes haloNodePulse {
+      0%, 100% { opacity: 0.55; }
+      50% { opacity: 1; }
+    }
 
     /* Portrait — the full-body cutout displayed INSIDE the ring.
        Sized so his entire figure INCLUDING the ball fits comfortably
@@ -331,21 +352,6 @@
       transform: scale(1.02);
       opacity: 1;
     }
-
-    /* Overlay lines removed — only the shining constellation ring
-       and background particle network surround the athlete now. */
-
-    /* Ambient star field styling — black dots and hairline lines
-       drifting behind the ring, all set against the white card. */
-    .const-dot  { fill: #000; }
-    .const-line { stroke: #000; stroke-width: 0.5; opacity: 0.35; }
-    .const-dot.t { animation: twinkle 3.4s ease-in-out infinite; }
-    @keyframes twinkle { 0%,100% { opacity: 0.15; } 50% { opacity: 0.85; } }
-    .const-line.moving {
-      stroke-dasharray: 4 6;
-      animation: fieldDash 9s linear infinite;
-    }
-    @keyframes fieldDash { to { stroke-dashoffset: -80; } }
 
     /* Athlete meta caption. Kicker → name → typing tagline directly
        underneath (clubline row removed). Text sits on the darkest
@@ -683,11 +689,6 @@
              a constellation halo around the portrait and types out a
              tagline before transitioning to the next athlete. -->
         <div class="const" aria-label="Featured Defiant Sports athletes">
-          <!-- Particle-network canvas: dots drift and connect to their
-               neighbors with hairline black lines, matching the
-               Icon Source hero motif. -->
-          <canvas class="const-network" id="constNetwork" aria-hidden="true"></canvas>
-
           <div class="const-dots-nav" id="constNav" role="tablist" aria-label="Featured athlete carousel"></div>
           <div class="const-portrait-wrap" id="constStage"></div>
         </div>
@@ -1163,102 +1164,6 @@
       });
     })();
 
-    // ==================== HERO PARTICLE NETWORK ====================
-    // Interactive dot-and-line network — the exact motif from
-    // iconsource.com's hero. Dots drift with random velocity; any
-    // two within a threshold are connected with a hairline black
-    // line whose opacity fades with distance. The whole field
-    // recomputes every frame so lines are always in motion.
-    (function(){
-      const canvas = document.getElementById('constNetwork');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      const parent = canvas.parentElement;
-      let W = 0, H = 0, dots = [];
-      const DOT_COUNT = 56;
-      const LINK_DIST = 130;
-      const DOT_RADIUS = 1.6;
-      const SPEED = 0.28;
-
-      function resize(){
-        const rect = parent.getBoundingClientRect();
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
-        canvas.style.width = rect.width + 'px';
-        canvas.style.height = rect.height + 'px';
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        W = rect.width;
-        H = rect.height;
-      }
-      function init(){
-        dots = [];
-        for (let i = 0; i < DOT_COUNT; i++) {
-          dots.push({
-            x: Math.random() * W,
-            y: Math.random() * H,
-            vx: (Math.random() - 0.5) * SPEED,
-            vy: (Math.random() - 0.5) * SPEED,
-          });
-        }
-      }
-      function frame(){
-        ctx.clearRect(0, 0, W, H);
-        // Move dots + bounce off walls
-        for (const d of dots) {
-          d.x += d.vx;
-          d.y += d.vy;
-          if (d.x < 0 || d.x > W) d.vx *= -1;
-          if (d.y < 0 || d.y > H) d.vy *= -1;
-        }
-        // Draw shining connecting lines — bright white with soft glow
-        // via canvas shadowBlur.
-        ctx.lineWidth = 0.7;
-        ctx.shadowColor = 'rgba(180,220,255,0.8)';
-        ctx.shadowBlur = 4;
-        for (let i = 0; i < dots.length; i++) {
-          for (let j = i + 1; j < dots.length; j++) {
-            const dx = dots[i].x - dots[j].x;
-            const dy = dots[i].y - dots[j].y;
-            const dist = Math.hypot(dx, dy);
-            if (dist < LINK_DIST) {
-              const a = (1 - dist / LINK_DIST) * 0.55;
-              ctx.strokeStyle = 'rgba(255,255,255,' + a.toFixed(3) + ')';
-              ctx.beginPath();
-              ctx.moveTo(dots[i].x, dots[i].y);
-              ctx.lineTo(dots[j].x, dots[j].y);
-              ctx.stroke();
-            }
-          }
-        }
-        // Draw shining dots
-        ctx.fillStyle = 'rgba(255,255,255,0.95)';
-        ctx.shadowColor = 'rgba(200,230,255,0.9)';
-        ctx.shadowBlur = 6;
-        for (const d of dots) {
-          ctx.beginPath();
-          ctx.arc(d.x, d.y, DOT_RADIUS, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.shadowBlur = 0;
-        requestAnimationFrame(frame);
-      }
-      // Respect reduced-motion by pausing after first draw
-      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      resize(); init();
-      if (prefersReduced) { ctx.clearRect(0,0,W,H); /* single static draw */
-        ctx.lineWidth = 0.6;
-        for (let i = 0; i < dots.length; i++) for (let j = i+1; j < dots.length; j++) {
-          const d = Math.hypot(dots[i].x - dots[j].x, dots[i].y - dots[j].y);
-          if (d < LINK_DIST) { ctx.strokeStyle = 'rgba(0,0,0,' + ((1-d/LINK_DIST)*0.55).toFixed(3) + ')'; ctx.beginPath(); ctx.moveTo(dots[i].x, dots[i].y); ctx.lineTo(dots[j].x, dots[j].y); ctx.stroke(); }
-        }
-        ctx.fillStyle = '#000'; for (const d of dots) { ctx.beginPath(); ctx.arc(d.x,d.y,DOT_RADIUS,0,Math.PI*2); ctx.fill(); }
-      } else {
-        requestAnimationFrame(frame);
-      }
-      window.addEventListener('resize', () => { resize(); init(); }, { passive: true });
-    })();
-
     // ==================== FEATURED ATHLETE CAROUSEL ====================
     // Each slide binds a portrait + kicker + typing tagline. The
     // "typing" effect writes the tagline out character by character
@@ -1294,36 +1199,53 @@
       const nav = document.getElementById('constNav');
       if (!stage || !nav) return;
 
-      // Build the "tracing lines" overlay that animates around the
-      // athlete on entry and exit. Six angled connectors that anchor
-      // to points along the athlete's silhouette, plus small dots at
-      // each endpoint. Draws IN on activation (stroke-dashoffset 100
-      // → 0) and OUT before the next slide (0 → -100).
-      function buildTraceSvg() {
-        // Endpoints in a 100x100 viewBox — chosen to trace around
-        // the athlete's head, shoulders, midsection, and feet.
-        const pts = [
-          [ 8, 12], [30,  4], [66,  8], [92, 16],
-          [ 6, 40], [94, 44],
-          [10, 62], [90, 66],
-          [18, 90], [50, 96], [82, 92]
-        ];
-        const linkPairs = [
-          [0, 1], [1, 2], [2, 3],
-          [0, 4], [3, 5],
-          [4, 6], [5, 7],
-          [6, 8], [7, 10], [8, 9], [9, 10]
-        ];
-        const parts = [];
-        for (const [i, j] of linkPairs) {
-          const [x1, y1] = pts[i]; const [x2, y2] = pts[j];
-          const len = Math.hypot(x2 - x1, y2 - y1).toFixed(2);
-          parts.push(`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="stroke-dasharray:${len};stroke-dashoffset:${len};animation-delay:${(0.05 + Math.random()*0.35).toFixed(2)}s"/>`);
+      const HALO_SEGMENTS = [
+        {
+          d: 'M8 18 L28 18 L46 30 L60 26 L76 18 L92 18',
+          nodes: [[8, 18], [46, 30], [92, 18]],
+          depth: 0.28,
+          delay: 0.02
+        },
+        {
+          d: 'M12 34 L28 36 L42 44 L56 40 L74 42 L88 36',
+          nodes: [[12, 34], [56, 40], [88, 36]],
+          depth: 0.46,
+          delay: 0.12
+        },
+        {
+          d: 'M16 56 L34 52 L50 56 L66 54 L84 58',
+          nodes: [[16, 56], [50, 56], [84, 58]],
+          depth: 0.62,
+          delay: 0.2
+        },
+        {
+          d: 'M20 78 L36 66 L50 50 L66 36 L82 24',
+          nodes: [[20, 78], [50, 50], [82, 24]],
+          depth: 0.86,
+          delay: 0.28
+        },
+        {
+          d: 'M18 12 L32 30 L38 48 L34 68 L26 88',
+          nodes: [[18, 12], [38, 48], [26, 88]],
+          depth: 0.58,
+          delay: 0.16
+        },
+        {
+          d: 'M84 12 L68 30 L62 48 L66 70 L74 90',
+          nodes: [[84, 12], [62, 48], [74, 90]],
+          depth: 0.72,
+          delay: 0.24
         }
-        for (const [x, y] of pts) {
-          parts.push(`<circle cx="${x}" cy="${y}"/>`);
-        }
-        return `<svg class="const-trace" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${parts.join('')}</svg>`;
+      ];
+
+      function buildHaloSvg() {
+        const segments = HALO_SEGMENTS.map(segment => `
+          <g class="halo-segment" style="--halo-depth:${segment.depth};--halo-delay:${segment.delay}s;">
+            <path class="halo-line" pathLength="100" d="${segment.d}" />
+            ${segment.nodes.map(([x, y]) => `<circle class="halo-node" cx="${x}" cy="${y}" r="1.2" />`).join('')}
+          </g>
+        `).join('');
+        return `<div class="const-halo" aria-hidden="true"><svg class="const-halo-svg" viewBox="0 0 100 100" preserveAspectRatio="none">${segments}</svg></div>`;
       }
 
 
@@ -1336,7 +1258,7 @@
             <div class="const-portrait">
               <img src="${a.img}" alt="Portrait of ${a.name}" />
             </div>
-            ${buildTraceSvg()}
+            ${buildHaloSvg()}
           </div>
           <div class="const-meta">
             <span class="kicker">${a.kicker}</span>
@@ -1379,13 +1301,12 @@
         // Reset any leaving state before advancing
         slides.forEach(s => s.classList.remove('leaving'));
         slides.forEach(s => s.classList.toggle('active', +s.dataset.idx === idx));
-        // Rebuild the trace SVG so its stroke-dashoffset resets and
-        // the IN animation plays fresh every time this slide activates.
+        // Rebuild the halo SVG so its entry animation replays every time.
         const activeSlide = slides[idx];
-        const oldTrace = activeSlide.querySelector('.const-trace');
-        if (oldTrace) {
-          const clone = oldTrace.cloneNode(true);
-          oldTrace.parentNode.replaceChild(clone, oldTrace);
+        const oldHalo = activeSlide.querySelector('.const-halo');
+        if (oldHalo) {
+          const clone = oldHalo.cloneNode(true);
+          oldHalo.parentNode.replaceChild(clone, oldHalo);
         }
         nav.querySelectorAll('button').forEach((b, i) => {
           b.classList.toggle('active', i === idx);
@@ -1426,6 +1347,46 @@
         activeIdx = idx;
         playSlide(idx);
       });
+
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!prefersReduced) {
+        let targetX = 0;
+        let targetY = 0;
+        let currentX = 0;
+        let currentY = 0;
+        let rafId = 0;
+
+        const animateHalo = () => {
+          currentX += (targetX - currentX) * 0.18;
+          currentY += (targetY - currentY) * 0.18;
+          stage.style.setProperty('--halo-shift-x', `${currentX.toFixed(2)}px`);
+          stage.style.setProperty('--halo-shift-y', `${currentY.toFixed(2)}px`);
+          if (Math.abs(targetX - currentX) > 0.08 || Math.abs(targetY - currentY) > 0.08) {
+            rafId = requestAnimationFrame(animateHalo);
+          } else {
+            rafId = 0;
+          }
+        };
+
+        const queueHaloFrame = () => {
+          if (!rafId) rafId = requestAnimationFrame(animateHalo);
+        };
+
+        stage.addEventListener('pointermove', event => {
+          const rect = stage.getBoundingClientRect();
+          const normX = ((event.clientX - rect.left) / rect.width) - 0.5;
+          const normY = ((event.clientY - rect.top) / rect.height) - 0.5;
+          targetX = Math.max(-1, Math.min(1, normX)) * 18;
+          targetY = Math.max(-1, Math.min(1, normY)) * 18;
+          queueHaloFrame();
+        });
+
+        stage.addEventListener('pointerleave', () => {
+          targetX = 0;
+          targetY = 0;
+          queueHaloFrame();
+        });
+      }
 
       playSlide(0);
     })();
