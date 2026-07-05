@@ -1377,6 +1377,11 @@
         const queueHaloFrame = () => {
           if (!rafId) rafId = requestAnimationFrame(animateHalo);
         };
+        const resetHalo = () => {
+          targetX = 0;
+          targetY = 0;
+          queueHaloFrame();
+        };
 
         stage.addEventListener('pointermove', event => {
           const rect = stage.getBoundingClientRect();
@@ -1387,10 +1392,9 @@
           queueHaloFrame();
         });
 
-        stage.addEventListener('pointerleave', () => {
-          targetX = 0;
-          targetY = 0;
-          queueHaloFrame();
+        stage.addEventListener('pointerleave', resetHalo);
+        stage.addEventListener('focusout', event => {
+          if (!stage.contains(event.relatedTarget)) resetHalo();
         });
       }
 
