@@ -324,9 +324,41 @@
     .const:hover .halo-ring  { filter: drop-shadow(0 0 8px rgba(170,225,255,0.85)); }
     .const:hover .halo-light { box-shadow: 0 0 9px 3px rgba(180,225,255,1), 0 0 22px 7px rgba(130,195,255,0.55); }
     @keyframes haloSpin { to { transform: rotate(360deg); } }
-    /* Reduced motion: hold a soft static halo, no looping. */
+
+    /* Wrapper lines: smooth contour paths that hug the athlete and
+       WRAP around him. They draw IN (stroke-dashoffset → 0) as the
+       slide becomes active and draw OUT (→ -length) as it leaves, so
+       the wrap keeps transitioning in and out with every athlete —
+       the Icon Source hero "line wrapping" motion, recreated in-repo
+       over our own athlete rather than an external video. */
+    .const-wrap {
+      position: absolute; inset: -4%;
+      width: 108%; height: 108%;
+      z-index: 3; pointer-events: none; overflow: visible;
+    }
+    .const-wrap path {
+      fill: none; stroke: rgba(210,235,255,0.9); stroke-width: 0.5;
+      stroke-linecap: round; stroke-linejoin: round;
+      stroke-dasharray: 120; stroke-dashoffset: 120; opacity: 0;
+      filter: drop-shadow(0 0 1.4px rgba(255,255,255,0.85))
+              drop-shadow(0 0 4px rgba(150,215,255,0.55));
+    }
+    .const-wrap .node { fill: #fff; r: 0.85; opacity: 0;
+      filter: drop-shadow(0 0 2px rgba(180,225,255,0.95));
+      transition: opacity 0.5s ease; }
+    /* Draw IN while active */
+    .const-slide.active .const-wrap path { animation: wrapIn 1.5s cubic-bezier(.33,.9,.35,1) forwards; }
+    .const-slide.active .const-wrap .node { opacity: 1; transition-delay: 1.15s; }
+    /* Draw OUT while leaving */
+    .const-slide.leaving .const-wrap path { animation: wrapOut 0.72s ease-in forwards; }
+    .const-slide.leaving .const-wrap .node { opacity: 0; transition-delay: 0s; }
+    @keyframes wrapIn  { 0% { stroke-dashoffset: 120; opacity: 0; } 18% { opacity: 0.9; } 100% { stroke-dashoffset: 0; opacity: 0.9; } }
+    @keyframes wrapOut { 0% { stroke-dashoffset: 0; opacity: 0.9; } 100% { stroke-dashoffset: -120; opacity: 0; } }
+
+    /* Reduced motion: hold a soft static halo + wrap, no looping/draw. */
     @media (prefers-reduced-motion: reduce) {
       .halo-ring, .halo-orbit { animation: none; }
+      .const-slide.active .const-wrap path { animation: none; stroke-dashoffset: 0; opacity: 0.85; }
     }
 
     /* Portrait — the full-body cutout displayed INSIDE the ring.
@@ -354,9 +386,9 @@
       opacity: 1;
     }
 
-    /* The angled tracing lines were removed. The athlete is now framed
-       by looping halo lights (.const-halo) plus the background particle
-       network. */
+    /* The athlete is framed by looping halo lights (.const-halo), the
+       wrapping contour lines (.const-wrap) that draw in/out on each
+       transition, and the background particle network. */
 
     /* Ambient star field styling — black dots and hairline lines
        drifting behind the ring, all set against the white card. */
@@ -1335,6 +1367,30 @@
         );
       }
 
+      // Wrapper lines that hug the athlete and draw IN on entry / OUT on
+      // exit — smooth contour curves (shoulders, chest, waist, knees,
+      // ground) plus two side seams that bow around him so the set reads
+      // as lines "wrapping" the figure. Small nodes mark the seams.
+      function buildWrapSvg() {
+        const paths = [
+          'M12 30 Q50 18 88 30',   // shoulders
+          'M7 44 Q50 33 93 44',    // chest
+          'M9 60 Q50 50 91 60',    // waist
+          'M15 76 Q50 69 85 76',   // knees
+          'M22 90 Q50 85 78 90',   // ground
+          'M12 30 Q3 55 22 90',    // left side seam wrapping down
+          'M88 30 Q97 55 78 90'    // right side seam wrapping down
+        ];
+        const nodes = [
+          [12,30],[88,30],[7,44],[93,44],[9,60],[91,60],[22,90],[78,90]
+        ];
+        const parts = paths.map((d, i) =>
+          `<path d="${d}" style="animation-delay:${(0.04 + i * 0.09).toFixed(2)}s"/>`
+        );
+        for (const [x, y] of nodes) parts.push(`<circle class="node" cx="${x}" cy="${y}"/>`);
+        return `<svg class="const-wrap" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${parts.join('')}</svg>`;
+      }
+
 
       // Slides. Athlete's full picture with a soft aura behind him and
       // halo lights that loop continuously around him — the Icon Source
@@ -1346,6 +1402,7 @@
               <img src="${a.img}" alt="Portrait of ${a.name}" />
             </div>
             ${buildHalo()}
+            ${buildWrapSvg()}
           </div>
           <div class="const-meta">
             <span class="kicker">${a.kicker}</span>
@@ -1388,8 +1445,13 @@
         // Reset any leaving state before advancing
         slides.forEach(s => s.classList.remove('leaving'));
         slides.forEach(s => s.classList.toggle('active', +s.dataset.idx === idx));
-        // The halo lights loop continuously via CSS, so there's nothing
-        // to reset per slide — the fade of .active handles the hand-off.
+        // The halo lights loop continuously via CSS. The wrapper lines,
+        // though, need their stroke-dashoffset reset so the draw-IN
+        // animation replays fresh every time this slide activates —
+        // clone-replace the SVG to restart its keyframes.
+        const activeSlide = slides[idx];
+        const oldWrap = activeSlide.querySelector('.const-wrap');
+        if (oldWrap) oldWrap.parentNode.replaceChild(oldWrap.cloneNode(true), oldWrap);
         nav.querySelectorAll('button').forEach((b, i) => {
           b.classList.toggle('active', i === idx);
           b.setAttribute('aria-selected', i === idx ? 'true' : 'false');
