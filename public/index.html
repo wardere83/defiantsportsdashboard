@@ -381,32 +381,9 @@
       transform: scale(1.02);
       opacity: 1;
     }
-    /* The video has a solid black background (no alpha like the poster
-       PNG), and the athlete wears a dark kit — so colour/luma keying
-       would eat his uniform along with the background. Instead we melt
-       the black rectangle into the card with a soft dark backdrop just
-       behind the video: it's darkest where the video sits and feathers
-       out to transparent, so the box edge is never a hard line — he
-       reads as emerging from shadow. The video stays fully opaque, so
-       his kit is untouched. */
-    .const-portrait::before {
-      content: ""; position: absolute; inset: -22% -14% -10%;
-      z-index: -1; pointer-events: none;
-      background: radial-gradient(ellipse 66% 64% at 50% 50%,
-        #04060a 0%, #04060a 66%, rgba(4,6,10,0.6) 82%, transparent 100%);
-    }
-    /* Feather the video's left/right edges into that dark backdrop so
-       the box has no hard vertical sides. His head (top) and the ball
-       (bottom) sit at the frame edges, so those are left crisp and the
-       dark backdrop above/below swallows the top/bottom strips. */
-    .const-portrait video {
-      -webkit-mask: linear-gradient(to right, transparent 10%, #000 24%, #000 76%, transparent 90%);
-              mask: linear-gradient(to right, transparent 10%, #000 24%, #000 76%, transparent 90%);
-    }
-
-    /* The athlete is framed by looping halo lights (.const-halo), a
-       single line (.const-coil) that coils down him and draws in/out on
-       each transition, and the background particle network. */
+    /* The athlete video is a true cut-out now (transparent WebM, keyed
+       from his white Canva background), so no backdrop or edge mask is
+       needed — he floats on the card and only the coil line wraps him. */
 
     /* Ambient star field styling — black dots and hairline lines
        drifting behind the ring, all set against the white card. */
@@ -454,8 +431,11 @@
 
     /* Carousel controls (dots) */
     .const-dots-nav {
+      /* Single athlete → the nav dash top-left is removed per design.
+         Kept in the DOM (the carousel init needs the node) but hidden. */
+      display: none;
       position: absolute; left: 24px; top: 20px; z-index: 5;
-      display: flex; gap: 6px;
+      gap: 6px;
     }
     .const-dots-nav button {
       width: 22px; height: 3px; border-radius: 2px;
@@ -752,15 +732,12 @@
         </div>
 
         <!-- Athlete carousel — Janis Antiste is the seed; more athletes
-             will slot in as the user adds portraits. Each slide wraps
-             the portrait in looping halo lights and types out a tagline
-             before transitioning to the next athlete. -->
+             will slot in as the user adds portraits. The portrait is a
+             transparent cut-out video; a single line coils around him,
+             drawing in for ~2s before the video plays, then repeating. -->
         <div class="const" aria-label="Featured Defiant Sports athletes">
-          <!-- Particle-network canvas: dots drift and connect to their
-               neighbors with hairline black lines, matching the
-               Icon Source hero motif. -->
-          <canvas class="const-network" id="constNetwork" aria-hidden="true"></canvas>
-
+          <!-- constNav kept (carousel init needs the node) but hidden via
+               CSS; the particle network + halo were removed per design. -->
           <div class="const-dots-nav" id="constNav" role="tablist" aria-label="Featured athlete carousel"></div>
           <div class="const-portrait-wrap" id="constStage"></div>
         </div>
@@ -1374,22 +1351,6 @@
       const nav = document.getElementById('constNav');
       if (!stage || !nav) return;
 
-      // Build the halo-lights overlay that loops around the athlete:
-      // two rotating rings of light plus three orbiting light points.
-      // The whole halo runs on continuous CSS keyframes (haloSpin), so
-      // the light circles the athlete cleanly and never stops.
-      function buildHalo() {
-        return (
-          '<div class="const-halo" aria-hidden="true">' +
-            '<span class="halo-ring"></span>' +
-            '<span class="halo-ring fine"></span>' +
-            '<span class="halo-orbit"><i class="halo-light"></i></span>' +
-            '<span class="halo-orbit b"><i class="halo-light"></i></span>' +
-            '<span class="halo-orbit c"><i class="halo-light"></i></span>' +
-          '</div>'
-        );
-      }
-
       // A single line that COILS around the athlete from head to feet,
       // like a wire wound down him. It's a helix projected to 2D: x is a
       // sine (the loop swings side to side), y descends steadily with a
@@ -1432,13 +1393,12 @@
           <div class="const-frame">
             <div class="const-portrait">
               ${a.video
-                ? `<video class="const-video" poster="${a.img}" autoplay muted loop playsinline webkit-playsinline preload="auto" aria-label="${a.name}">
-                     <source src="${a.video}" type="video/mp4" />
+                ? `<video class="const-video" poster="${a.img}" muted playsinline webkit-playsinline preload="auto" aria-label="${a.name}">
                      <source src="${a.video.replace(/\.mp4$/, '.webm')}" type="video/webm" />
+                     <source src="${a.video}" type="video/mp4" />
                    </video>`
                 : `<img src="${a.img}" alt="Portrait of ${a.name}" />`}
             </div>
-            ${buildHalo()}
             ${buildCoilSvg()}
           </div>
           <div class="const-meta">
@@ -1482,13 +1442,8 @@
         // Reset any leaving state before advancing
         slides.forEach(s => s.classList.remove('leaving'));
         slides.forEach(s => s.classList.toggle('active', +s.dataset.idx === idx));
-        // The halo lights loop continuously via CSS. The coil line,
-        // though, needs its stroke-dashoffset reset so the draw-IN
-        // animation replays fresh every time this slide activates —
-        // clone-replace the SVG to restart its keyframes.
-        const activeSlide = slides[idx];
-        const oldCoil = activeSlide.querySelector('.const-coil');
-        if (oldCoil) oldCoil.parentNode.replaceChild(oldCoil.cloneNode(true), oldCoil);
+        // The coil is driven by the hero sequence (coil → video → loop)
+        // below, tied to the video, not reset per slide here.
         nav.querySelectorAll('button').forEach((b, i) => {
           b.classList.toggle('active', i === idx);
           b.setAttribute('aria-selected', i === idx ? 'true' : 'false');
@@ -1502,19 +1457,19 @@
             // If this athlete has more taglines, cycle to the next one
             // and retype on the same slide; otherwise advance to the
             // next athlete in the carousel.
-            if (athlete.taglines.length > 1 && (taglineIdx + 1) % athlete.taglines.length !== 0) {
-              taglineIdx++;
-              playSlide(idx);
-            } else {
-              taglineIdx = 0;
+            // Cycle to the next tagline. With one athlete we simply retype
+            // on the same slide (no fade-out); with several we advance to
+            // the next athlete once all of this one's taglines have shown.
+            taglineIdx = (taglineIdx + 1) % athlete.taglines.length;
+            if (ATHLETES.length > 1 && taglineIdx === 0) {
               const next = (idx + 1) % ATHLETES.length;
               activeIdx = next;
-              // Trigger the OUT-tracing on the current slide, then
-              // advance once the exit lines have drawn out.
               const currentSlide = slides[idx];
               currentSlide.classList.add('leaving');
               currentSlide.classList.remove('active');
               advanceTimer = setTimeout(() => playSlide(next), 780);
+            } else {
+              playSlide(idx);
             }
           });
         }, 620);
@@ -1529,40 +1484,42 @@
         playSlide(idx);
       });
 
-      // Interactive halo: nudge the ring of light toward the pointer so
-      // the halo tracks the cursor as it moves across the athlete card.
-      // Custom props inherit down to every .const-halo. Cleared on leave.
-      const card = stage.closest('.const');
-      if (card) {
-        const MAX_SHIFT = 10; // px of parallax at the card edge
-        card.addEventListener('pointermove', e => {
-          const r = card.getBoundingClientRect();
-          const dx = ((e.clientX - r.left) / r.width  - 0.5) * 2; // -1..1
-          const dy = ((e.clientY - r.top)  / r.height - 0.5) * 2;
-          card.style.setProperty('--halo-x', (dx * MAX_SHIFT).toFixed(1) + 'px');
-          card.style.setProperty('--halo-y', (dy * MAX_SHIFT).toFixed(1) + 'px');
-        }, { passive: true });
-        card.addEventListener('pointerleave', () => {
-          card.style.setProperty('--halo-x', '0px');
-          card.style.setProperty('--halo-y', '0px');
-        });
-      }
-
       playSlide(0);
 
-      // Nudge the hero video(s) to autoplay. They're muted + playsinline
-      // so browsers allow it; if one is still blocked, retry once on the
-      // first user gesture. Missing file just leaves the poster showing.
-      function ensureHeroVideoPlays(){
-        stage.querySelectorAll('video.const-video').forEach(v => {
-          const p = v.play();
+      // Hero sequence: the coil line draws around the athlete for ~2s
+      // (video held on its first frame), then the video plays; when the
+      // video ends the whole thing repeats — coil, then play, on a loop.
+      (function runHeroSequence(){
+        const slide = stage.querySelector('.const-slide');
+        const video = slide && slide.querySelector('video.const-video');
+        const COIL_MS = 2000; // matches the coilIn animation duration
+
+        function replayCoil(){
+          const oldCoil = slide && slide.querySelector('.const-coil');
+          if (oldCoil) oldCoil.parentNode.replaceChild(oldCoil.cloneNode(true), oldCoil);
+        }
+        function playVideo(){
+          if (!video) return;
+          const p = video.play();
           if (p && p.catch) p.catch(() => {
-            const kick = () => { v.play().catch(()=>{}); window.removeEventListener('pointerdown', kick); };
+            // Autoplay blocked: resume on the first user gesture.
+            const kick = () => { video.play().catch(()=>{}); window.removeEventListener('pointerdown', kick); };
             window.addEventListener('pointerdown', kick, { once: true });
           });
-        });
-      }
-      ensureHeroVideoPlays();
+        }
+        function cycle(){
+          replayCoil();                              // coil draws in (~2s)
+          if (video) { try { video.pause(); video.currentTime = 0; } catch(e){} }
+          setTimeout(playVideo, COIL_MS);            // then the video plays
+        }
+        if (video) {
+          video.addEventListener('ended', cycle);    // loop: coil, then play
+          cycle();
+        } else {
+          cycle();
+          setInterval(replayCoil, 9000);             // no video: just re-coil
+        }
+      })();
     })();
 
     const NIL_ROWS = [
