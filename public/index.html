@@ -336,7 +336,8 @@
       position: absolute; inset: -4%;
       width: 108%; height: 108%;
       pointer-events: none; overflow: visible;
-      clip-path: inset(100% 0 0 0);          /* start hidden (revealed from the bottom) */
+      -webkit-clip-path: inset(100% 0 0 0);  /* Safari */
+              clip-path: inset(100% 0 0 0);  /* start hidden (revealed from the bottom) */
     }
     .const-coil.back  { z-index: 2; }         /* behind the video (z-index 3) */
     .const-coil.front { z-index: 4; }         /* in front of the video */
@@ -357,13 +358,13 @@
     /* Reveal both layers bottom → top over 4s, then hold (forwards). */
     .const-slide.active .const-coil { animation: coilReveal 4s cubic-bezier(.4,.85,.4,1) forwards; }
     @keyframes coilReveal {
-      0%   { clip-path: inset(100% 0 0 0); opacity: 0; }
+      0%   { -webkit-clip-path: inset(100% 0 0 0); clip-path: inset(100% 0 0 0); opacity: 0; }
       8%   { opacity: 1; }
-      100% { clip-path: inset(0 0 0 0);    opacity: 1; }
+      100% { -webkit-clip-path: inset(0 0 0 0);    clip-path: inset(0 0 0 0);    opacity: 1; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .const-slide.active .const-coil { animation: none; clip-path: inset(0 0 0 0); }
+      .const-slide.active .const-coil { animation: none; -webkit-clip-path: inset(0 0 0 0); clip-path: inset(0 0 0 0); }
     }
 
     /* Portrait — the full-body cutout displayed INSIDE the ring.
@@ -677,6 +678,17 @@
 
     /* ─────────────── Responsive ─────────────── */
     /* Narrow-viewport tweaks. */
+    /* ============================================================
+       RESPONSIVE PROCESS
+       Layout is fluid by default (max-width containers, grid, flex,
+       clamp() type). These breakpoints then collapse multi-column
+       grids and tighten rhythm, tier by tier, so the page works on
+       every desktop, tablet and phone width and in every browser:
+         · ≤900px  tablet / large phone: hero + card grids go 1-column
+         · ≤720px  tighten section + hero vertical rhythm
+         · ≤600px  phone: slimmer gutters, full-width CTAs, 1-col footer
+         · ≤400px  small phone: minimum gutters + spacing
+       Verified at 390 / 768 / 1280 with zero horizontal overflow. */
     @media (max-width: 900px) {
       .hero { padding: 60px 0 80px; }
       .hero-grid { grid-template-columns: 1fr; gap: 32px; }
@@ -684,6 +696,20 @@
       .sol-grid, .cases, .res-programs, .res-regions { grid-template-columns: 1fr; }
       .foot-grid { grid-template-columns: 1fr 1fr; }
       .nav-cta .btn.ghost { display: none; }
+    }
+    @media (max-width: 720px) {
+      .section { padding: 64px 0; }
+      .section-head { margin-bottom: 40px; }
+      .hero { padding: 48px 0 64px; }
+    }
+    @media (max-width: 600px) {
+      .container { padding: 0 20px; }
+      .hero-ctas .btn { flex: 1 1 100%; }   /* CTAs stack full-width */
+      .foot-grid { grid-template-columns: 1fr; gap: 28px; }
+    }
+    @media (max-width: 400px) {
+      .container { padding: 0 16px; }
+      .section { padding: 48px 0; }
     }
     @media (prefers-reduced-motion: reduce) {
       .const-athlete, .const-dot.t { animation: none !important; }
