@@ -1461,8 +1461,8 @@
             <div class="const-portrait">
               ${a.video
                 ? `<video class="const-video" autoplay loop muted playsinline webkit-playsinline preload="auto" aria-label="${a.name}">
+                     <source src="${a.video}" type='video/mp4; codecs="hvc1"' />
                      <source src="${a.video.replace(/\.mp4$/, '.webm')}" type="video/webm" />
-                     <source src="${a.video}" type="video/mp4" />
                    </video>`
                 : `<img src="${a.img}" alt="Portrait of ${a.name}" />`}
             </div>
