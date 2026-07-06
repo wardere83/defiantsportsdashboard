@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -216,15 +217,14 @@
     .hero .btn.outline-white { background: transparent; color: #fff; border-color: #fff; }
     .hero .btn.outline-white:hover { background: #fff; color: #000; }
 
-    /* Athlete card. Solid dark tone (#0d1413) that exactly matches the
-       colour the Safari MP4 fallback is composited over, so on Safari
-       the video blends into the card with no visible box; on other
-       browsers the transparent cut-out floats on the same tone. */
+    /* Athlete card. Iconsource.com's exact hero gradient — deep
+       teal-black — as the minimalist backdrop that blends with the
+       athlete and keeps the caption underneath legible. */
     .const {
       position: relative; height: 560px; border-radius: 8px;
-      background: #ffffff;
-      overflow: hidden; border: 1px solid rgba(0,0,0,0.05);
-      box-shadow: 0 30px 80px rgba(0,0,0,0.1);
+      background: linear-gradient(180deg, #001E1A 0%, #141919 62%, #0a0f0f 100%);
+      overflow: hidden; border: 1px solid rgba(255,255,255,0.05);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.55);
     }
     /* Soft radial aura behind the athlete — the "light around him"
        that gives the composition depth like Icon Source's hero. */
@@ -235,6 +235,9 @@
     }
     /* Ambient particle network — canvas of bright dots that drift and
        connect to their neighbors with GLOWING hairline lines. */
+    /* The card catches pointer events; canvas stays behind but the
+       parent hero card element sends its cursor position into the
+       network so the constellation reacts to the visitor. */
     .const-network {
       position: absolute; inset: 0; width: 100%; height: 100%;
       z-index: 1; pointer-events: none;
@@ -255,9 +258,9 @@
     }
     .const-slide.active { opacity: 1; }
 
-    /* Frame that holds the athlete portrait plus the halo lights that
-       loop around him — a continuous ring of light that orbits the
-       silhouette, mirroring iconsource.com's glowing hero treatment. */
+    /* Frame that holds the athlete portrait plus the tracing lines
+       that draw IN when the slide activates and draw OUT before the
+       next slide — mirroring iconsource.com's hero transition. */
     .const-frame {
       position: relative;
       width: min(88%, 400px);
@@ -265,113 +268,8 @@
       display: flex; align-items: center; justify-content: center;
       margin: 0 auto 22px;
     }
-    /* Halo layer: two rotating light rings + three orbiting light
-       points that loop cleanly around the athlete. Pointer parallax
-       (--halo-x / --halo-y, set from JS) nudges the whole halo toward
-       the cursor so it feels interactive; hover lifts the glow. */
-    .const-halo {
-      position: absolute; inset: -5%;
-      z-index: 2; pointer-events: none;
-      border-radius: 50%;
-      transform: translate(var(--halo-x, 0px), var(--halo-y, 0px));
-      transition: transform 0.4s cubic-bezier(.2,.8,.2,1);
-      opacity: 0; will-change: transform;
-    }
-    .const-slide.active .const-halo { opacity: 1; transition: transform 0.4s cubic-bezier(.2,.8,.2,1), opacity 1s ease 0.2s; }
-    /* A ring of light: a conic sweep masked into a thin hairline circle
-       so one bright arc chases continuously around the athlete. */
-    .halo-ring {
-      position: absolute; inset: 0; border-radius: 50%;
-      background: conic-gradient(from 0deg,
-        transparent 0deg,
-        rgba(150,215,255,0) 190deg,
-        rgba(160,220,255,0.65) 288deg,
-        rgba(255,255,255,0.98) 336deg,
-        rgba(160,220,255,0) 360deg);
-      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2.5px));
-              mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2.5px));
-      filter: drop-shadow(0 0 5px rgba(150,215,255,0.65));
-      animation: haloSpin 6.5s linear infinite;
-    }
-    /* Second, finer counter-rotating ring for a layered light loop. */
-    .halo-ring.fine {
-      inset: 6%;
-      background: conic-gradient(from 120deg,
-        transparent 0deg,
-        rgba(200,235,255,0) 210deg,
-        rgba(210,240,255,0.5) 320deg,
-        rgba(255,255,255,0.9) 350deg,
-        rgba(210,240,255,0) 360deg);
-      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1.5px));
-              mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1.5px));
-      filter: drop-shadow(0 0 4px rgba(200,235,255,0.55));
-      animation: haloSpin 9s linear infinite reverse;
-    }
-    /* Orbiting light points — each rides the rim of the halo and loops
-       around the athlete. Offsets/directions keep them evenly spread. */
-    .halo-orbit { position: absolute; inset: 0; border-radius: 50%; animation: haloSpin 7s linear infinite; }
-    .halo-orbit.b { inset: 6%;  animation-duration: 8.5s; animation-direction: reverse; }
-    .halo-orbit.c { inset: -2%; animation-duration: 6s;   animation-delay: -3s; }
-    .halo-light {
-      position: absolute; top: -3px; left: 50%; margin-left: -3px;
-      width: 6px; height: 6px; border-radius: 50%; background: #fff;
-      box-shadow: 0 0 6px 2px rgba(150,215,255,0.9),
-                  0 0 16px 5px rgba(120,190,255,0.45);
-    }
-    .halo-orbit.b .halo-light { width: 4px; height: 4px; margin-left: -2px; }
-    .halo-orbit.c .halo-light { width: 5px; height: 5px; margin-left: -2.5px;
-      box-shadow: 0 0 5px 2px rgba(210,240,255,0.9), 0 0 14px 4px rgba(150,215,255,0.4); }
-    /* Hover lifts the whole halo brighter — the interactive cue. */
-    .const:hover .halo-ring  { filter: drop-shadow(0 0 8px rgba(170,225,255,0.85)); }
-    .const:hover .halo-light { box-shadow: 0 0 9px 3px rgba(180,225,255,1), 0 0 22px 7px rgba(130,195,255,0.55); }
-    @keyframes haloSpin { to { transform: rotate(360deg); } }
-
-    /* Coil that WRAPS the athlete like a hula-hoop. It's built as two
-       layers from one helix: the "back" half of every loop (the strand
-       on the far side of his body) sits BEHIND the cut-out video, so his
-       body occludes it; the "front" half sits in front. Together they
-       read as a single line spiralling around his whole 3D figure.
-       Both layers reveal together bottom → top via a clip-path wipe. */
-    .const-coil {
-      position: absolute; inset: -4%;
-      width: 108%; height: 108%;
-      pointer-events: none; overflow: visible;
-      -webkit-clip-path: inset(100% 0 0 0);  /* Safari */
-              clip-path: inset(100% 0 0 0);  /* start hidden (revealed from the bottom) */
-    }
-    .const-coil.back  { z-index: 2; }         /* behind the video (z-index 3) */
-    .const-coil.front { z-index: 4; }         /* in front of the video */
-    .const-coil path {
-      fill: none; stroke-linecap: round; stroke-linejoin: round;
-    }
-    /* Front strand: bright, in focus. Back strand: dimmer + thinner, so
-       it reads as the far side receding behind him. */
-    .const-coil.front path {
-      stroke: rgba(0,0,0,0.95); stroke-width: 0.75;
-      filter: drop-shadow(0 0 1.6px rgba(0,0,0,0.4))
-              drop-shadow(0 0 5px rgba(0,0,0,0.2));
-    }
-    .const-coil.back path {
-      stroke: rgba(0,0,0,0.5); stroke-width: 0.55;
-      filter: drop-shadow(0 0 2px rgba(0,0,0,0.2));
-    }
-    /* A band of the coil TRAVELS up his body: a ~38%-tall clip window
-       sweeps bottom → top over 4s, so the coil rises around him rather
-       than accumulating. When the band exits the top the coil is gone
-       (fill stays at the final, empty frame) until the next loop replays
-       it. Both back + front layers sweep together, in sync. */
-    .const-slide.active .const-coil { animation: coilSweep 4s cubic-bezier(.35,.75,.4,1) forwards; }
-    @keyframes coilSweep {
-      0%   { -webkit-clip-path: inset(100% 0 0 0);   clip-path: inset(100% 0 0 0);   opacity: 0; }
-      10%  { -webkit-clip-path: inset(62% 0 0 0);    clip-path: inset(62% 0 0 0);    opacity: 1; }
-      50%  { -webkit-clip-path: inset(31% 0 31% 0);  clip-path: inset(31% 0 31% 0);  opacity: 1; }
-      90%  { -webkit-clip-path: inset(0 0 62% 0);    clip-path: inset(0 0 62% 0);    opacity: 1; }
-      100% { -webkit-clip-path: inset(0 0 100% 0);   clip-path: inset(0 0 100% 0);   opacity: 0; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .const-slide.active .const-coil { animation: none; -webkit-clip-path: inset(30% 0 30% 0); clip-path: inset(30% 0 30% 0); }
-    }
+    /* Tracing lines around the athlete removed. Only the interactive
+       constellation particle network on the canvas remains. */
 
     /* Portrait — the full-body cutout displayed INSIDE the ring.
        Sized so his entire figure INCLUDING the ball fits comfortably
@@ -382,8 +280,7 @@
       display: flex; align-items: center; justify-content: center;
       z-index: 3;
     }
-    .const-portrait img,
-    .const-portrait video {
+    .const-portrait img {
       width: 100%; height: 100%;
       /* Contain so his ENTIRE figure — head to ball — is visible
          inside the circular ring. Anchored to the bottom so the ball
@@ -393,22 +290,14 @@
       -webkit-filter: grayscale(1) contrast(1.12) brightness(1.08);
       opacity: 0;
       transition: opacity 0.9s ease, transform 8s ease;
-      /* Fix the loop glitch/flicker */
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-      perspective: 1000;
-      -webkit-perspective: 1000;
     }
-    .const-slide.active .const-portrait img,
-    .const-slide.active .const-portrait video {
-      transform: scale(1.02) translateZ(0);
+    .const-slide.active .const-portrait img {
+      transform: scale(1.02);
       opacity: 1;
     }
-    /* The athlete video is a true cut-out now (transparent WebM, keyed
-       from his white Canva background), so no backdrop or edge mask is
-       needed — he floats on the card and only the coil line wraps him. */
+
+    /* Overlay lines removed — only the shining constellation ring
+       and background particle network surround the athlete now. */
 
     /* Ambient star field styling — black dots and hairline lines
        drifting behind the ring, all set against the white card. */
@@ -427,24 +316,24 @@
        part of the gradient so it stays legible against the athlete. */
     .const-meta {
       position: relative; z-index: 4; text-align: center;
-      color: #000; width: 100%; max-width: 360px; margin: 0 auto;
+      color: #fff; width: 100%; max-width: 360px; margin: 0 auto;
       padding: 0 12px;
     }
     .const-meta .kicker {
       display: inline-block;
       font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
-      color: rgba(0,0,0,0.85); padding: 3px 10px;
-      border: 1px solid rgba(0,0,0,0.32); border-radius: 999px;
+      color: rgba(255,255,255,0.85); padding: 3px 10px;
+      border: 1px solid rgba(255,255,255,0.32); border-radius: 999px;
       margin-bottom: 10px;
     }
     .const-meta .name {
       font-family: var(--serif); font-weight: 800;
       font-size: 22px; line-height: 1.15; margin: 0 0 6px;
-      letter-spacing: -0.01em; color: #000;
+      letter-spacing: -0.01em; color: #fff;
     }
     .type-line {
       font-family: var(--sans); font-size: 12.5px; line-height: 1.45;
-      color: rgba(0,0,0,0.92); min-height: 34px;
+      color: rgba(255,255,255,0.92); min-height: 34px;
       max-width: 340px; margin: 0 auto;
     }
     .type-cursor {
@@ -456,18 +345,15 @@
 
     /* Carousel controls (dots) */
     .const-dots-nav {
-      /* Single athlete → the nav dash top-left is removed per design.
-         Kept in the DOM (the carousel init needs the node) but hidden. */
-      display: none;
       position: absolute; left: 24px; top: 20px; z-index: 5;
-      gap: 6px;
+      display: flex; gap: 6px;
     }
     .const-dots-nav button {
       width: 22px; height: 3px; border-radius: 2px;
-      background: rgba(0,0,0,0.28); border: 0; padding: 0;
+      background: rgba(255,255,255,0.28); border: 0; padding: 0;
       cursor: pointer; transition: background 0.2s ease, width 0.2s ease;
     }
-    .const-dots-nav button.active { background: #000; width: 34px; }
+    .const-dots-nav button.active { background: #fff; width: 34px; }
 
     /* ─────────────── Trusted strip ─────────────── */
     .trusted {
@@ -691,17 +577,6 @@
 
     /* ─────────────── Responsive ─────────────── */
     /* Narrow-viewport tweaks. */
-    /* ============================================================
-       RESPONSIVE PROCESS
-       Layout is fluid by default (max-width containers, grid, flex,
-       clamp() type). These breakpoints then collapse multi-column
-       grids and tighten rhythm, tier by tier, so the page works on
-       every desktop, tablet and phone width and in every browser:
-         · ≤900px  tablet / large phone: hero + card grids go 1-column
-         · ≤720px  tighten section + hero vertical rhythm
-         · ≤600px  phone: slimmer gutters, full-width CTAs, 1-col footer
-         · ≤400px  small phone: minimum gutters + spacing
-       Verified at 390 / 768 / 1280 with zero horizontal overflow. */
     @media (max-width: 900px) {
       .hero { padding: 60px 0 80px; }
       .hero-grid { grid-template-columns: 1fr; gap: 32px; }
@@ -709,20 +584,6 @@
       .sol-grid, .cases, .res-programs, .res-regions { grid-template-columns: 1fr; }
       .foot-grid { grid-template-columns: 1fr 1fr; }
       .nav-cta .btn.ghost { display: none; }
-    }
-    @media (max-width: 720px) {
-      .section { padding: 64px 0; }
-      .section-head { margin-bottom: 40px; }
-      .hero { padding: 48px 0 64px; }
-    }
-    @media (max-width: 600px) {
-      .container { padding: 0 20px; }
-      .hero-ctas .btn { flex: 1 1 100%; }   /* CTAs stack full-width */
-      .foot-grid { grid-template-columns: 1fr; gap: 28px; }
-    }
-    @media (max-width: 400px) {
-      .container { padding: 0 16px; }
-      .section { padding: 48px 0; }
     }
     @media (prefers-reduced-motion: reduce) {
       .const-athlete, .const-dot.t { animation: none !important; }
@@ -782,12 +643,15 @@
         </div>
 
         <!-- Athlete carousel — Janis Antiste is the seed; more athletes
-             will slot in as the user adds portraits. The portrait is a
-             transparent cut-out video; a single line coils around him,
-             drawing in for ~2s before the video plays, then repeating. -->
+             will slot in as the user adds portraits. Each slide draws
+             a constellation halo around the portrait and types out a
+             tagline before transitioning to the next athlete. -->
         <div class="const" aria-label="Featured Defiant Sports athletes">
-          <!-- constNav kept (carousel init needs the node) but hidden via
-               CSS; the particle network + halo were removed per design. -->
+          <!-- Particle-network canvas: dots drift and connect to their
+               neighbors with hairline black lines, matching the
+               Icon Source hero motif. -->
+          <canvas class="const-network" id="constNetwork" aria-hidden="true"></canvas>
+
           <div class="const-dots-nav" id="constNav" role="tablist" aria-label="Featured athlete carousel"></div>
           <div class="const-portrait-wrap" id="constStage"></div>
         </div>
@@ -797,10 +661,10 @@
     <!-- Trusted -->
     <div class="trusted">
       <div class="container trusted-inner">
-        <span class="label">Support across every level</span>
+        <span class="label">Ownership across every level</span>
         <div class="trusted-logos">
-          <span>NCAA</span><span>NBA</span><span>NFL</span>
-          <span>MLS</span><span>WNBA</span>
+          <span>NCAA</span><span>NBA</span><span>NFL</span><span>Serie A</span>
+          <span>MLS</span><span>WNBA</span><span>Olympic</span><span>HBCU</span>
         </div>
       </div>
     </div>
@@ -1263,24 +1127,24 @@
       });
     })();
 
-    // ==================== HERO PARTICLE NETWORK ====================
-    // Interactive dot-and-line network — the exact motif from
-    // iconsource.com's hero. Dots drift with random velocity; any
-    // two within a threshold are connected with a hairline black
-    // line whose opacity fades with distance. The whole field
-    // recomputes every frame so lines are always in motion.
+    // ==================== INTERACTIVE CONSTELLATION NETWORK ====================
+    // A sparse, evenly-distributed particle network that responds to
+    // the cursor — the exact interactive motif from iconsource.com's
+    // hero. Dots drift slowly; near-neighbors connect with hairline
+    // white lines; and cursor proximity draws bright shining lines
+    // from the pointer to the closest dots plus a subtle attraction.
     (function(){
       const canvas = document.getElementById('constNetwork');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const parent = canvas.parentElement;
       let W = 0, H = 0, dots = [];
-      // Kept sparse so the ambient field reads as soft depth behind the
-      // athlete and the looping halo lights stay the clear focus.
-      const DOT_COUNT = 30;
-      const LINK_DIST = 108;
+      const DOT_COUNT = 32;      // sparser field — cleaner alignment
+      const LINK_DIST = 110;
       const DOT_RADIUS = 1.4;
-      const SPEED = 0.24;
+      const SPEED = 0.22;
+      const MOUSE_RADIUS = 150;
+      const mouse = { x: -1e4, y: -1e4, active: false };
 
       function resize(){
         const rect = parent.getBoundingClientRect();
@@ -1294,37 +1158,61 @@
         H = rect.height;
       }
       function init(){
+        // Grid-jittered placement — dots spread evenly across the
+        // card, then nudged by a small random offset so the field
+        // reads organic but not clumpy.
         dots = [];
-        for (let i = 0; i < DOT_COUNT; i++) {
-          dots.push({
-            x: Math.random() * W,
-            y: Math.random() * H,
-            vx: (Math.random() - 0.5) * SPEED,
-            vy: (Math.random() - 0.5) * SPEED,
-          });
+        const cols = 8;
+        const rows = 4;
+        const cw = W / cols;
+        const rh = H / rows;
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            if (dots.length >= DOT_COUNT) break;
+            const jx = (Math.random() - 0.5) * cw * 0.6;
+            const jy = (Math.random() - 0.5) * rh * 0.6;
+            dots.push({
+              x: cw * (c + 0.5) + jx,
+              y: rh * (r + 0.5) + jy,
+              vx: (Math.random() - 0.5) * SPEED,
+              vy: (Math.random() - 0.5) * SPEED,
+            });
+          }
         }
       }
       function frame(){
         ctx.clearRect(0, 0, W, H);
-        // Move dots + bounce off walls
+        // Move dots — apply subtle attraction toward cursor when near
         for (const d of dots) {
+          if (mouse.active) {
+            const dx = mouse.x - d.x;
+            const dy = mouse.y - d.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < MOUSE_RADIUS) {
+              const pull = (1 - dist / MOUSE_RADIUS) * 0.06;
+              d.vx += (dx / (dist || 1)) * pull;
+              d.vy += (dy / (dist || 1)) * pull;
+            }
+          }
+          // Cap velocity so dots stay slow and elegant
+          const s = Math.hypot(d.vx, d.vy);
+          if (s > SPEED * 1.8) { d.vx *= 0.9; d.vy *= 0.9; }
           d.x += d.vx;
           d.y += d.vy;
           if (d.x < 0 || d.x > W) d.vx *= -1;
           if (d.y < 0 || d.y > H) d.vy *= -1;
         }
-        // Draw shining connecting lines — bright white with soft glow
-        // via canvas shadowBlur.
-        ctx.lineWidth = 0.7;
-        ctx.shadowColor = 'rgba(180,220,255,0.8)';
-        ctx.shadowBlur = 4;
+        // Neighbor lines — hairline, soft
+        ctx.lineWidth = 0.6;
+        ctx.shadowColor = 'rgba(180,220,255,0.7)';
+        ctx.shadowBlur = 3;
         for (let i = 0; i < dots.length; i++) {
           for (let j = i + 1; j < dots.length; j++) {
             const dx = dots[i].x - dots[j].x;
             const dy = dots[i].y - dots[j].y;
             const dist = Math.hypot(dx, dy);
             if (dist < LINK_DIST) {
-              const a = (1 - dist / LINK_DIST) * 0.38;
+              const a = (1 - dist / LINK_DIST) * 0.45;
               ctx.strokeStyle = 'rgba(255,255,255,' + a.toFixed(3) + ')';
               ctx.beginPath();
               ctx.moveTo(dots[i].x, dots[i].y);
@@ -1333,10 +1221,29 @@
             }
           }
         }
-        // Draw shining dots
+        // Cursor-to-nearest-dots — bright shining connectors that
+        // give the network its interactive feel.
+        if (mouse.active) {
+          ctx.lineWidth = 0.9;
+          ctx.shadowBlur = 5;
+          for (const d of dots) {
+            const dx = mouse.x - d.x;
+            const dy = mouse.y - d.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < MOUSE_RADIUS) {
+              const a = (1 - dist / MOUSE_RADIUS) * 0.85;
+              ctx.strokeStyle = 'rgba(255,255,255,' + a.toFixed(3) + ')';
+              ctx.beginPath();
+              ctx.moveTo(mouse.x, mouse.y);
+              ctx.lineTo(d.x, d.y);
+              ctx.stroke();
+            }
+          }
+        }
+        // Dots themselves
         ctx.fillStyle = 'rgba(255,255,255,0.95)';
         ctx.shadowColor = 'rgba(200,230,255,0.9)';
-        ctx.shadowBlur = 6;
+        ctx.shadowBlur = 5;
         for (const d of dots) {
           ctx.beginPath();
           ctx.arc(d.x, d.y, DOT_RADIUS, 0, Math.PI * 2);
@@ -1345,16 +1252,32 @@
         ctx.shadowBlur = 0;
         requestAnimationFrame(frame);
       }
-      // Respect reduced-motion by pausing after first draw
       const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       resize(); init();
-      if (prefersReduced) { ctx.clearRect(0,0,W,H); /* single static draw */
-        ctx.lineWidth = 0.6;
-        for (let i = 0; i < dots.length; i++) for (let j = i+1; j < dots.length; j++) {
-          const d = Math.hypot(dots[i].x - dots[j].x, dots[i].y - dots[j].y);
-          if (d < LINK_DIST) { ctx.strokeStyle = 'rgba(0,0,0,' + ((1-d/LINK_DIST)*0.55).toFixed(3) + ')'; ctx.beginPath(); ctx.moveTo(dots[i].x, dots[i].y); ctx.lineTo(dots[j].x, dots[j].y); ctx.stroke(); }
-        }
-        ctx.fillStyle = '#000'; for (const d of dots) { ctx.beginPath(); ctx.arc(d.x,d.y,DOT_RADIUS,0,Math.PI*2); ctx.fill(); }
+
+      // Interactive: attach cursor listeners to the parent card so
+      // the network reacts even where the athlete portrait sits.
+      parent.addEventListener('mousemove', e => {
+        const rect = parent.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+        mouse.active = true;
+      }, { passive: true });
+      parent.addEventListener('mouseleave', () => { mouse.active = false; }, { passive: true });
+      // Touch support
+      parent.addEventListener('touchmove', e => {
+        const rect = parent.getBoundingClientRect();
+        const t = e.touches[0];
+        if (!t) return;
+        mouse.x = t.clientX - rect.left;
+        mouse.y = t.clientY - rect.top;
+        mouse.active = true;
+      }, { passive: true });
+      parent.addEventListener('touchend', () => { mouse.active = false; }, { passive: true });
+
+      if (prefersReduced) {
+        // Single static draw
+        for (const d of dots) { ctx.beginPath(); ctx.arc(d.x,d.y,DOT_RADIUS,0,Math.PI*2); ctx.fillStyle='rgba(255,255,255,0.9)'; ctx.fill(); }
       } else {
         requestAnimationFrame(frame);
       }
@@ -1381,14 +1304,11 @@
         name: "Janis Antiste",
         kicker: "Currently in Italy's Serie A",
         taglines: [
-          "Owning his brand! An authentic, transformational leader on the field and in the locker room.",
-          "Cross-marketed across the US and globally by Defiant Sports and partners, AJ owns every step of his narrative."
-        ],
-        // Looping hero video for this athlete. Lives in our own repo
-        // (assets/hero + public/assets/hero). Until the file is uploaded
-        // the <video> falls back to the poster, which is his portrait
-        // above, so the card never breaks.
-        video: "./assets/hero/janis-antiste.mp4"
+          "Owning his brand — striker first, business second, story always his own.",
+          "Cross-marketed across sport, music, and culture through Defiant Records and partners.",
+          "From Toulouse to Serie A, Janis Antiste owns every step of his narrative.",
+          "Defiant athlete. Serie A footprint. Global brand, on his terms."
+        ]
       }
       // Next athletes will slot in here — soccer, basketball, football —
       // after user provides their portraits.
@@ -1399,74 +1319,18 @@
       const nav = document.getElementById('constNav');
       if (!stage || !nav) return;
 
-      // A line that WRAPS the athlete like a hula-hoop. It's a helix
-      // projected to 2D: x swings side to side (sine), y descends with a
-      // small cosine wobble so each turn reads as an ellipse; the width
-      // tapers at head/feet and bulges at the torso. Each sample is
-      // tagged front/back by its depth (cos of the angle): the far side
-      // of every loop (back) is emitted into one SVG that sits BEHIND
-      // the cut-out video, the near side (front) into another that sits
-      // in front — so his body occludes the back strand and the coil
-      // reads as truly encircling him. Returns both SVGs.
-      function buildCoilSvg() {
-        const cx = 50, turns = 5, top = 9, bottom = 90;
-        const H = bottom - top, steps = turns * 48;
-        const pts = [];
-        for (let s = 0; s <= steps; s++) {
-          const f = s / steps;             // 0 at head → 1 at feet
-          const t = f * turns * Math.PI * 2;
-          const rx = 5 + 13 * Math.sin(Math.PI * Math.min(1, Math.max(0, f)));
-          const x = cx + rx * Math.sin(t);
-          const y = top + f * H - 2.2 * Math.cos(t);   // 2.2 = loop wobble
-          pts.push({ x, y, front: Math.cos(t) >= 0 });  // near side = front
-        }
-        // Split into runs of consistent depth; bridge each run to the
-        // previous sample so front/back strands meet with no gaps.
-        const runs = [];
-        let cur = null;
-        for (let i = 0; i < pts.length; i++) {
-          const p = pts[i];
-          if (!cur || cur.front !== p.front) {
-            cur = { front: p.front, pts: [] };
-            if (i > 0) cur.pts.push([pts[i-1].x, pts[i-1].y]);
-            runs.push(cur);
-          }
-          cur.pts.push([p.x, p.y]);
-        }
-        // Catmull-Rom → cubic-bezier smoothing for one run of points.
-        function toPath(a) {
-          if (a.length < 2) return '';
-          let d = `M${a[0][0].toFixed(2)} ${a[0][1].toFixed(2)}`;
-          for (let i = 0; i < a.length - 1; i++) {
-            const p0 = a[i-1] || a[i], p1 = a[i], p2 = a[i+1], p3 = a[i+2] || p2;
-            const c1x = (p1[0] + (p2[0]-p0[0])/6).toFixed(2), c1y = (p1[1] + (p2[1]-p0[1])/6).toFixed(2);
-            const c2x = (p2[0] - (p3[0]-p1[0])/6).toFixed(2), c2y = (p2[1] - (p3[1]-p1[1])/6).toFixed(2);
-            d += ` C${c1x} ${c1y} ${c2x} ${c2y} ${p2[0].toFixed(2)} ${p2[1].toFixed(2)}`;
-          }
-          return d;
-        }
-        const front = runs.filter(r => r.front).map(r => `<path d="${toPath(r.pts)}"/>`).join('');
-        const back  = runs.filter(r => !r.front).map(r => `<path d="${toPath(r.pts)}"/>`).join('');
-        const svg = (cls, body) => `<svg class="const-coil ${cls}" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${body}</svg>`;
-        return svg('back', back) + svg('front', front);
-      }
+      // Tracing SVG builder removed — no lines around the athlete.
 
 
-      // Slides. Athlete's full picture with a soft aura behind him and
-      // halo lights that loop continuously around him — the Icon Source
-      // glowing hero feel.
+      // Slides. Athlete's full picture with a soft aura behind him
+      // and tracing lines that draw IN on entry, OUT on exit — the
+      // Icon Source hero transition feel.
       stage.innerHTML = ATHLETES.map((a, i) => `
         <div class="const-slide${i === 0 ? ' active' : ''}" data-idx="${i}" role="tabpanel" aria-label="${a.name}">
           <div class="const-frame">
             <div class="const-portrait">
-              ${a.video
-                ? `<video class="const-video" autoplay loop muted playsinline webkit-playsinline preload="auto" aria-label="${a.name}">
-                     <source src="${a.video}" type='video/mp4; codecs="hvc1"' />
-                     <source src="${a.video.replace(/\.mp4$/, '.webm')}" type="video/webm" />
-                   </video>`
-                : `<img src="${a.img}" alt="Portrait of ${a.name}" />`}
+              <img src="${a.img}" alt="Portrait of ${a.name}" />
             </div>
-            ${buildCoilSvg()}
           </div>
           <div class="const-meta">
             <span class="kicker">${a.kicker}</span>
@@ -1506,11 +1370,7 @@
       function playSlide(idx){
         clearInterval(typingTimer); clearTimeout(holdTimer); clearTimeout(advanceTimer);
         const slides = stage.querySelectorAll('.const-slide');
-        // Reset any leaving state before advancing
-        slides.forEach(s => s.classList.remove('leaving'));
         slides.forEach(s => s.classList.toggle('active', +s.dataset.idx === idx));
-        // The coil is driven by the hero sequence (coil → video → loop)
-        // below, tied to the video, not reset per slide here.
         nav.querySelectorAll('button').forEach((b, i) => {
           b.classList.toggle('active', i === idx);
           b.setAttribute('aria-selected', i === idx ? 'true' : 'false');
@@ -1524,19 +1384,14 @@
             // If this athlete has more taglines, cycle to the next one
             // and retype on the same slide; otherwise advance to the
             // next athlete in the carousel.
-            // Cycle to the next tagline. With one athlete we simply retype
-            // on the same slide (no fade-out); with several we advance to
-            // the next athlete once all of this one's taglines have shown.
-            taglineIdx = (taglineIdx + 1) % athlete.taglines.length;
-            if (ATHLETES.length > 1 && taglineIdx === 0) {
+            if (athlete.taglines.length > 1 && (taglineIdx + 1) % athlete.taglines.length !== 0) {
+              taglineIdx++;
+              playSlide(idx);
+            } else {
+              taglineIdx = 0;
               const next = (idx + 1) % ATHLETES.length;
               activeIdx = next;
-              const currentSlide = slides[idx];
-              currentSlide.classList.add('leaving');
-              currentSlide.classList.remove('active');
-              advanceTimer = setTimeout(() => playSlide(next), 780);
-            } else {
-              playSlide(idx);
+              advanceTimer = setTimeout(() => playSlide(next), 500);
             }
           });
         }, 620);
@@ -1552,47 +1407,6 @@
       });
 
       playSlide(0);
-
-      // Hero sequence: the video plays CONTINUOUSLY and loops natively
-      // (seamless — no JS seek/freeze, which avoids the loop glitch). The
-      // coil band sweeps up his body and vanishes at the top; it re-fires
-      // on every video loop so it "returns after the loop".
-      (function runHeroSequence(){
-        const slide = stage.querySelector('.const-slide');
-        const video = slide && slide.querySelector('video.const-video');
-
-        function replayCoil(){
-          // Restart both coil layers (back + front) together so their
-          // bottom→top sweep stays in sync.
-          if (!slide) return;
-          slide.querySelectorAll('.const-coil').forEach(el => {
-            el.parentNode.replaceChild(el.cloneNode(true), el);
-          });
-        }
-        function playVideo(){
-          if (!video) return;
-          const p = video.play();
-          if (p && p.catch) p.catch(() => {
-            // Autoplay blocked: resume on the first user gesture.
-            const kick = () => { video.play().catch(()=>{}); window.removeEventListener('pointerdown', kick); };
-            window.addEventListener('pointerdown', kick, { once: true });
-          });
-        }
-        if (video) {
-          // Re-fire the coil each time the loop wraps (currentTime resets).
-          let last = 0;
-          video.addEventListener('timeupdate', () => {
-            const t = video.currentTime;
-            if (t < last - 0.25) replayCoil();
-            last = t;
-          });
-          replayCoil();   // first sweep
-          playVideo();    // plays; the loop attribute keeps it going
-        } else {
-          replayCoil();
-          setInterval(replayCoil, 9000);
-        }
-      })();
     })();
 
     const NIL_ROWS = [
