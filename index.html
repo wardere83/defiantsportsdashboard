@@ -355,16 +355,22 @@
       stroke: rgba(190,220,245,0.5); stroke-width: 0.55;
       filter: drop-shadow(0 0 2px rgba(150,215,255,0.4));
     }
-    /* Reveal both layers bottom → top over 4s, then hold (forwards). */
-    .const-slide.active .const-coil { animation: coilReveal 4s cubic-bezier(.4,.85,.4,1) forwards; }
-    @keyframes coilReveal {
-      0%   { -webkit-clip-path: inset(100% 0 0 0); clip-path: inset(100% 0 0 0); opacity: 0; }
-      8%   { opacity: 1; }
-      100% { -webkit-clip-path: inset(0 0 0 0);    clip-path: inset(0 0 0 0);    opacity: 1; }
+    /* A band of the coil TRAVELS up his body: a ~38%-tall clip window
+       sweeps bottom → top over 4s, so the coil rises around him rather
+       than accumulating. When the band exits the top the coil is gone
+       (fill stays at the final, empty frame) until the next loop replays
+       it. Both back + front layers sweep together, in sync. */
+    .const-slide.active .const-coil { animation: coilSweep 4s cubic-bezier(.35,.75,.4,1) forwards; }
+    @keyframes coilSweep {
+      0%   { -webkit-clip-path: inset(100% 0 0 0);   clip-path: inset(100% 0 0 0);   opacity: 0; }
+      10%  { -webkit-clip-path: inset(62% 0 0 0);    clip-path: inset(62% 0 0 0);    opacity: 1; }
+      50%  { -webkit-clip-path: inset(31% 0 31% 0);  clip-path: inset(31% 0 31% 0);  opacity: 1; }
+      90%  { -webkit-clip-path: inset(0 0 62% 0);    clip-path: inset(0 0 62% 0);    opacity: 1; }
+      100% { -webkit-clip-path: inset(0 0 100% 0);   clip-path: inset(0 0 100% 0);   opacity: 0; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .const-slide.active .const-coil { animation: none; -webkit-clip-path: inset(0 0 0 0); clip-path: inset(0 0 0 0); }
+      .const-slide.active .const-coil { animation: none; -webkit-clip-path: inset(30% 0 30% 0); clip-path: inset(30% 0 30% 0); }
     }
 
     /* Portrait — the full-body cutout displayed INSIDE the ring.
@@ -1449,7 +1455,7 @@
           <div class="const-frame">
             <div class="const-portrait">
               ${a.video
-                ? `<video class="const-video" poster="${a.img}" muted playsinline webkit-playsinline preload="auto" aria-label="${a.name}">
+                ? `<video class="const-video" poster="${a.img}" autoplay loop muted playsinline webkit-playsinline preload="auto" aria-label="${a.name}">
                      <source src="${a.video.replace(/\.mp4$/, '.webm')}" type="video/webm" />
                      <source src="${a.video}" type="video/mp4" />
                    </video>`
@@ -1542,17 +1548,17 @@
 
       playSlide(0);
 
-      // Hero sequence: the coil line draws around the athlete for ~2s
-      // (video held on its first frame), then the video plays; when the
-      // video ends the whole thing repeats — coil, then play, on a loop.
+      // Hero sequence: the video plays CONTINUOUSLY and loops natively
+      // (seamless — no JS seek/freeze, which avoids the loop glitch). The
+      // coil band sweeps up his body and vanishes at the top; it re-fires
+      // on every video loop so it "returns after the loop".
       (function runHeroSequence(){
         const slide = stage.querySelector('.const-slide');
         const video = slide && slide.querySelector('video.const-video');
-        const COIL_MS = 4000; // matches the coilReveal animation duration
 
         function replayCoil(){
-          // Restart both coil layers (back + front) together so the
-          // bottom→top reveal stays in sync across them.
+          // Restart both coil layers (back + front) together so their
+          // bottom→top sweep stays in sync.
           if (!slide) return;
           slide.querySelectorAll('.const-coil').forEach(el => {
             el.parentNode.replaceChild(el.cloneNode(true), el);
@@ -1567,17 +1573,19 @@
             window.addEventListener('pointerdown', kick, { once: true });
           });
         }
-        function cycle(){
-          replayCoil();                              // coil wraps up (~4s)
-          if (video) { try { video.pause(); video.currentTime = 0; } catch(e){} }
-          setTimeout(playVideo, COIL_MS);            // then the video plays
-        }
         if (video) {
-          video.addEventListener('ended', cycle);    // loop: coil, then play
-          cycle();
+          // Re-fire the coil each time the loop wraps (currentTime resets).
+          let last = 0;
+          video.addEventListener('timeupdate', () => {
+            const t = video.currentTime;
+            if (t < last - 0.25) replayCoil();
+            last = t;
+          });
+          replayCoil();   // first sweep
+          playVideo();    // plays; the loop attribute keeps it going
         } else {
-          cycle();
-          setInterval(replayCoil, 9000);             // no video: just re-coil
+          replayCoil();
+          setInterval(replayCoil, 9000);
         }
       })();
     })();
