@@ -370,7 +370,8 @@
       display: flex; align-items: center; justify-content: center;
       z-index: 3;
     }
-    .const-portrait img {
+    .const-portrait img,
+    .const-portrait video {
       width: 100%; height: 100%;
       /* Contain so his ENTIRE figure — head to ball — is visible
          inside the circular ring. Anchored to the bottom so the ball
@@ -381,7 +382,8 @@
       opacity: 0;
       transition: opacity 0.9s ease, transform 8s ease;
     }
-    .const-slide.active .const-portrait img {
+    .const-slide.active .const-portrait img,
+    .const-slide.active .const-portrait video {
       transform: scale(1.02);
       opacity: 1;
     }
@@ -1340,7 +1342,12 @@
           "Cross-marketed across sport, music, and culture through Defiant Records and partners.",
           "From Toulouse to Serie A, Janis Antiste owns every step of his narrative.",
           "Defiant athlete. Serie A footprint. Global brand, on his terms."
-        ]
+        ],
+        // Looping hero video for this athlete. Lives in our own repo
+        // (assets/hero + public/assets/hero). Until the file is uploaded
+        // the <video> falls back to the poster, which is his portrait
+        // above, so the card never breaks.
+        video: "./assets/hero/janis-antiste.mp4"
       }
       // Next athletes will slot in here — soccer, basketball, football —
       // after user provides their portraits.
@@ -1399,7 +1406,11 @@
         <div class="const-slide${i === 0 ? ' active' : ''}" data-idx="${i}" role="tabpanel" aria-label="${a.name}">
           <div class="const-frame">
             <div class="const-portrait">
-              <img src="${a.img}" alt="Portrait of ${a.name}" />
+              ${a.video
+                ? `<video class="const-video" poster="${a.img}" autoplay muted loop playsinline preload="metadata" aria-label="${a.name}">
+                     <source src="${a.video}" type="video/mp4" />
+                   </video>`
+                : `<img src="${a.img}" alt="Portrait of ${a.name}" />`}
             </div>
             ${buildHalo()}
             ${buildWrapSvg()}
@@ -1512,6 +1523,20 @@
       }
 
       playSlide(0);
+
+      // Nudge the hero video(s) to autoplay. They're muted + playsinline
+      // so browsers allow it; if one is still blocked, retry once on the
+      // first user gesture. Missing file just leaves the poster showing.
+      function ensureHeroVideoPlays(){
+        stage.querySelectorAll('video.const-video').forEach(v => {
+          const p = v.play();
+          if (p && p.catch) p.catch(() => {
+            const kick = () => { v.play().catch(()=>{}); window.removeEventListener('pointerdown', kick); };
+            window.addEventListener('pointerdown', kick, { once: true });
+          });
+        });
+      }
+      ensureHeroVideoPlays();
     })();
 
     const NIL_ROWS = [
