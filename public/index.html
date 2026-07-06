@@ -1365,10 +1365,12 @@
         for (let s = 0; s <= steps; s++) {
           const f = s / steps;             // 0 at head → 1 at feet
           const t = f * turns * Math.PI * 2;
-          // Horizontal radius: tapered at the ends, widest mid-torso.
-          const rx = 7 + 26 * Math.sin(Math.PI * Math.min(1, Math.max(0, f)));
+          // Horizontal radius: tight so the coil hugs his body and only
+          // just grazes his sides — tapered at head/feet, fullest at the
+          // torso.
+          const rx = 4 + 12 * Math.sin(Math.PI * Math.min(1, Math.max(0, f)));
           const x = cx + rx * Math.sin(t);
-          const y = top + f * H - 2.6 * Math.cos(t);   // 2.6 = loop wobble
+          const y = top + f * H - 2.2 * Math.cos(t);   // 2.2 = loop wobble
           pts.push([x.toFixed(2), y.toFixed(2)]);
         }
         // Smooth the polyline with a Catmull-Rom → cubic-bezier pass.
