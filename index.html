@@ -222,9 +222,9 @@
        browsers the transparent cut-out floats on the same tone. */
     .const {
       position: relative; height: 560px; border-radius: 8px;
-      background: #0d1413;
-      overflow: hidden; border: 1px solid rgba(255,255,255,0.05);
-      box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+      background: #ffffff;
+      overflow: hidden; border: 1px solid rgba(0,0,0,0.05);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.1);
     }
     /* Soft radial aura behind the athlete — the "light around him"
        that gives the composition depth like Icon Source's hero. */
@@ -347,13 +347,13 @@
     /* Front strand: bright, in focus. Back strand: dimmer + thinner, so
        it reads as the far side receding behind him. */
     .const-coil.front path {
-      stroke: rgba(222,242,255,0.95); stroke-width: 0.75;
-      filter: drop-shadow(0 0 1.6px rgba(255,255,255,0.9))
-              drop-shadow(0 0 5px rgba(150,215,255,0.6));
+      stroke: rgba(0,0,0,0.95); stroke-width: 0.75;
+      filter: drop-shadow(0 0 1.6px rgba(0,0,0,0.4))
+              drop-shadow(0 0 5px rgba(0,0,0,0.2));
     }
     .const-coil.back path {
-      stroke: rgba(190,220,245,0.5); stroke-width: 0.55;
-      filter: drop-shadow(0 0 2px rgba(150,215,255,0.4));
+      stroke: rgba(0,0,0,0.5); stroke-width: 0.55;
+      filter: drop-shadow(0 0 2px rgba(0,0,0,0.2));
     }
     /* A band of the coil TRAVELS up his body: a ~38%-tall clip window
        sweeps bottom → top over 4s, so the coil rises around him rather
@@ -427,24 +427,24 @@
        part of the gradient so it stays legible against the athlete. */
     .const-meta {
       position: relative; z-index: 4; text-align: center;
-      color: #fff; width: 100%; max-width: 360px; margin: 0 auto;
+      color: #000; width: 100%; max-width: 360px; margin: 0 auto;
       padding: 0 12px;
     }
     .const-meta .kicker {
       display: inline-block;
       font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
-      color: rgba(255,255,255,0.85); padding: 3px 10px;
-      border: 1px solid rgba(255,255,255,0.32); border-radius: 999px;
+      color: rgba(0,0,0,0.85); padding: 3px 10px;
+      border: 1px solid rgba(0,0,0,0.32); border-radius: 999px;
       margin-bottom: 10px;
     }
     .const-meta .name {
       font-family: var(--serif); font-weight: 800;
       font-size: 22px; line-height: 1.15; margin: 0 0 6px;
-      letter-spacing: -0.01em; color: #fff;
+      letter-spacing: -0.01em; color: #000;
     }
     .type-line {
       font-family: var(--sans); font-size: 12.5px; line-height: 1.45;
-      color: rgba(255,255,255,0.92); min-height: 34px;
+      color: rgba(0,0,0,0.92); min-height: 34px;
       max-width: 340px; margin: 0 auto;
     }
     .type-cursor {
@@ -464,10 +464,10 @@
     }
     .const-dots-nav button {
       width: 22px; height: 3px; border-radius: 2px;
-      background: rgba(255,255,255,0.28); border: 0; padding: 0;
+      background: rgba(0,0,0,0.28); border: 0; padding: 0;
       cursor: pointer; transition: background 0.2s ease, width 0.2s ease;
     }
-    .const-dots-nav button.active { background: #fff; width: 34px; }
+    .const-dots-nav button.active { background: #000; width: 34px; }
 
     /* ─────────────── Trusted strip ─────────────── */
     .trusted {
