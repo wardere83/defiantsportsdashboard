@@ -1,6 +1,6 @@
 
 <!doctype html>
-<!-- build: tagline-copy-v2 (cache buster — bump when a deploy looks stale) -->
+<!-- build: tagline-copy-v2 (cache buster, bump when a deploy looks stale) -->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -55,7 +55,8 @@
     /* Type architecture: every heading shares the same family, weight
        and tighter tracking so the hierarchy reads as one clean system;
        tabular numerals keep stat digits perfectly column-aligned. */
-    h1, h2, h3, h4, h5 { font-weight: 700; letter-spacing: -0.02em; }
+    h1, h2, h3, h4, h5 { font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
+    .section-head p, .hero-lede { text-wrap: pretty; }
     .case .stat .n, .sol-card .num { font-variant-numeric: tabular-nums; }
 
     .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
@@ -95,7 +96,7 @@
       height: 34px; width: auto; display: block;
       user-select: none; -webkit-user-drag: none;
     }
-    /* Three-line hamburger — vertically centered, progressive line
+    /* Three-line hamburger, vertically centered, progressive line
        widths: top longest, middle medium, bottom shortest. This is
        the exact stacked-lines profile the user asked for. */
     .nav-hamburger {
@@ -130,7 +131,7 @@
       font-size: 11px; font-weight: 500;
       letter-spacing: 0.15em; text-transform: uppercase;
     }
-    /* Nav links are hidden by default (both mobile and desktop) —
+    /* Nav links are hidden by default (both mobile and desktop) -
        they only appear when the user clicks the hamburger. Same
        pattern as iconsource.com's mobile / collapsed nav. */
     .nav-links {
@@ -165,7 +166,7 @@
     .nav-links .drop a:hover { color: var(--ink); }
     .nav-links > a { padding: 4px 0; color: var(--ink); }
     .nav-links > a:hover { text-decoration: underline; text-underline-offset: 4px; }
-    /* Right grid column — kept as a spacer even when empty so the
+    /* Right grid column, kept as a spacer even when empty so the
        brand-group in the middle column stays perfectly centered. */
     .nav-cta { display: flex; align-items: center; gap: 12px; justify-self: end; min-height: 30px; }
 
@@ -200,8 +201,11 @@
     }
     .hero-grid {
       display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px;
-      align-items: center;
+      /* Top-align so the eyebrow/headline share the athlete card's top
+         edge, one clean line across both columns. */
+      align-items: start;
     }
+    .hero-grid > div:first-child { padding-top: 8px; }
     .hero-eyebrow {
       font-size: 12px; font-weight: 600; letter-spacing: 0.24em;
       text-transform: uppercase; color: rgba(255,255,255,0.6);
@@ -216,7 +220,7 @@
       margin: 0 0 20px;
       color: #fff;
     }
-    /* Tonal accent instead of italics — cleaner in a one-family system. */
+    /* Tonal accent instead of italics, cleaner in a one-family system. */
     .hero h1 em { font-style: normal; color: rgba(255,255,255,0.55); }
     .hero-lede {
       font-size: 17px; line-height: 1.55; color: rgba(255,255,255,0.82);
@@ -228,8 +232,8 @@
     .hero .btn.outline-white { background: transparent; color: #fff; border-color: #fff; }
     .hero .btn.outline-white:hover { background: #fff; color: #000; }
 
-    /* Athlete card. Iconsource.com's exact hero gradient — deep
-       teal-black — as the minimalist backdrop that blends with the
+    /* Athlete card. Iconsource.com's exact hero gradient, deep
+       teal-black, as the minimalist backdrop that blends with the
        athlete and keeps the caption underneath legible. */
     .const {
       position: relative; height: 560px; border-radius: 8px;
@@ -237,14 +241,14 @@
       overflow: hidden; border: 1px solid rgba(255,255,255,0.05);
       box-shadow: 0 30px 80px rgba(0,0,0,0.55);
     }
-    /* Soft radial aura behind the athlete — the "light around him"
+    /* Soft radial aura behind the athlete, the "light around him"
        that gives the composition depth like Icon Source's hero. */
     .const::before {
       content: ""; position: absolute; inset: 0; z-index: 0;
       background: radial-gradient(46% 42% at 50% 42%, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 40%, transparent 72%);
       pointer-events: none;
     }
-    /* Ambient particle network — canvas of bright dots that drift and
+    /* Ambient particle network, canvas of bright dots that drift and
        connect to their neighbors with GLOWING hairline lines. */
     /* The card catches pointer events; canvas stays behind but the
        parent hero card element sends its cursor position into the
@@ -253,7 +257,7 @@
       position: absolute; inset: 0; width: 100%; height: 100%;
       z-index: 1; pointer-events: none;
     }
-    /* Legacy SVG sky (hidden — network canvas replaces it) */
+    /* Legacy SVG sky (hidden, network canvas replaces it) */
     .const svg.sky { display: none; }
 
     .const-portrait-wrap {
@@ -271,7 +275,7 @@
 
     /* Frame that holds the athlete portrait plus the tracing lines
        that draw IN when the slide activates and draw OUT before the
-       next slide — mirroring iconsource.com's hero transition. */
+       next slide, mirroring iconsource.com's hero transition. */
     .const-frame {
       position: relative;
       width: min(88%, 400px);
@@ -284,7 +288,7 @@
     /* Tracing lines around the athlete removed. Only the interactive
        constellation particle network on the canvas remains. */
 
-    /* Portrait — the full-body cutout displayed INSIDE the ring.
+    /* Portrait, the full-body cutout displayed INSIDE the ring.
        Sized so his entire figure INCLUDING the ball fits comfortably
        inside the circular ring boundary without touching it. */
     .const-portrait {
@@ -296,7 +300,7 @@
     }
     .const-portrait img {
       width: 100%; height: 100%;
-      /* Contain so his ENTIRE figure — head to ball — is visible
+      /* Contain so his ENTIRE figure, head to ball, is visible
          inside the circular ring. Anchored to the bottom so the ball
          at his feet stays in frame. */
       object-fit: contain; object-position: center bottom;
@@ -310,10 +314,10 @@
       opacity: 1;
     }
 
-    /* Overlay lines removed — only the shining constellation ring
+    /* Overlay lines removed, only the shining constellation ring
        and background particle network surround the athlete now. */
 
-    /* Ambient star field styling — black dots and hairline lines
+    /* Ambient star field styling, black dots and hairline lines
        drifting behind the ring, all set against the white card. */
     .const-dot  { fill: #000; }
     .const-line { stroke: #000; stroke-width: 0.5; opacity: 0.35; }
@@ -553,7 +557,7 @@
     .foot-brand { font-family: var(--serif); font-weight: 700; font-size: 24px; color: #fff; }
     .foot-brand img {
       height: 36px; width: auto; display: block; margin-bottom: 4px;
-      filter: invert(1); /* logo is black — invert to white for the black footer */
+      filter: invert(1); /* logo is black, invert to white for the black footer */
     }
     .foot-brand p {
       font-family: var(--sans); font-weight: 400; font-size: 13.5px;
@@ -613,7 +617,7 @@
         <a href="#home" class="brand-mark" data-route="home" aria-label="Defiant Sports home">
           <img class="brand-logo" src="data:image/webp;base64,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" alt="Defiant Sports" />
         </a>
-        <!-- Hamburger menu — three horizontal lines, positioned to the
+        <!-- Hamburger menu, three horizontal lines, positioned to the
              right of the logo like iconsource.com's menu affordance. -->
         <button class="nav-hamburger" id="navToggle" aria-label="Toggle menu" aria-expanded="false" type="button">
           <span></span><span></span><span></span>
@@ -647,14 +651,10 @@
         <div>
           <p class="hero-eyebrow">Athlete Branding · Reclaiming Ownership</p>
           <h1>Athletes, <em>meet your brand.</em> All of it.</h1>
-          <p class="hero-lede">Defiant Sports is revolutionizing the industry by making sure athletes regain their presence in the U.S. and global market as the holistic owners of their own brand — story, image, contracts, equity, and legacy. Every athlete is cross-marketed with the artists and partners of Defiant Records and the wider Defiant network, so their name compounds across sport, music, and culture.</p>
-          <div class="hero-ctas">
-            <a class="btn white" href="https://defiantsports.io" target="_blank" rel="noopener">Athlete Sign Up</a>
-            <a class="btn outline-white" href="https://defiantsports.io" target="_blank" rel="noopener">Brand Sign Up</a>
-          </div>
+          <p class="hero-lede">Defiant Sports is revolutionizing the industry by making sure athletes regain their presence in the U.S. and global market as the holistic owners of their own brand, story, image, contracts, equity, and legacy. Every athlete is cross-marketed with the artists and partners of Defiant Records and the wider Defiant network, so their name compounds across sport, music, and culture.</p>
         </div>
 
-        <!-- Athlete carousel — Janis Antiste is the seed; more athletes
+        <!-- Athlete carousel, Janis Antiste is the seed; more athletes
              will slot in as the user adds portraits. Each slide draws
              a constellation halo around the portrait and types out a
              tagline before transitioning to the next athlete. -->
@@ -687,13 +687,13 @@
         <div class="section-head">
           <p class="eyebrow">The Defiant Standard</p>
           <h2>Athletes own their brand. Holistically.</h2>
-          <p>Defiant Sports is rewriting how athletes show up in the U.S. and global market — not as a marketing asset someone rents, but as the owner of a compounding brand that lives through the career and beyond it.</p>
+          <p>Defiant Sports is rewriting how athletes show up in the U.S. and global market, not as a marketing asset someone rents, but as the owner of a compounding brand that lives through the career and beyond it.</p>
         </div>
         <div class="sol-grid">
           <article class="sol-card">
             <div class="num">01</div>
             <h3>Own the Story</h3>
-            <p>Athletes control their narrative — how they show up, what they say, and which partnerships fit. Defiant structures the contracts so nothing gets sold that shouldn't be.</p>
+            <p>Athletes control their narrative, how they show up, what they say, and which partnerships fit. Defiant structures the contracts so nothing gets sold that shouldn't be.</p>
             <div class="links">
               <a href="#athletes" data-route="athletes">Athletes</a>
             </div>
@@ -750,7 +750,7 @@
           <article class="case">
             <span class="badge">Case Study · Telecom</span>
             <h4>First-in-class college NIL deal, done clean.</h4>
-            <p>A national telecom brand launched a landmark college NIL campaign through Defiant Sports — signed, contracted, and covered by multiple outlets.</p>
+            <p>A national telecom brand launched a landmark college NIL campaign through Defiant Sports, signed, contracted, and covered by multiple outlets.</p>
             <div class="stats">
               <div class="stat"><div class="n">1st</div><div class="l">Regional NIL Deal</div></div>
               <div class="stat"><div class="n">5+</div><div class="l">News Outlets</div></div>
@@ -774,7 +774,6 @@
         <h2>Athletes, reclaim your brand.</h2>
         <p>The U.S. and global market can rent your image or invest in your legacy. Defiant Sports makes sure it's the second one.</p>
         <div class="btns">
-          <a class="btn white" href="https://defiantsports.io" target="_blank" rel="noopener">Athlete Sign Up</a>
           <a class="btn outline-white" href="#resources" data-route="resources">Explore Resources</a>
         </div>
       </div>
@@ -785,8 +784,8 @@
   <main id="route-nil" class="route">
     <section class="nil-hero">
       <div class="container">
-        <h2>Defiant NIL — by State</h2>
-        <p>Name, Image, and Likeness rules vary state to state. Defiant Sports tracks every U.S. state's current status so college athletes signed to Defiant — and the brands who partner with them — know exactly where they stand. Click any state for context.</p>
+        <h2>Defiant NIL by State</h2>
+        <p>Name, Image, and Likeness rules vary state to state. Defiant Sports tracks every U.S. state's current status so college athletes signed to Defiant, and the brands who partner with them, know exactly where they stand. Click any state for context.</p>
         <div class="nil-legend" role="list" aria-label="Status legend">
           <span role="listitem"><i class="nil-dot in-place"></i>In Place</span>
           <span role="listitem"><i class="nil-dot passed"></i>Law Passed</span>
@@ -808,22 +807,12 @@
         <div class="nil-explainer">
           <h3>What is NIL?</h3>
           <p>Short for Name, Image, and Likeness, NIL is how college athletes can now receive compensation. A brand "uses" an athlete's NIL when it leverages their name, image, or likeness in marketing and promotion.</p>
-          <p>The NCAA made it legal for athletes to profit from their NILs on July 1, 2021. States have since layered on their own rules — and universities their own programs — which is why the map above matters.</p>
+          <p>The NCAA made it legal for athletes to profit from their NILs on July 1, 2021. States have since layered on their own rules, and universities their own programs, which is why the map above matters.</p>
           <p><strong>Defiant Sports</strong> exists to make that landscape workable. We source, vet, and structure endorsements so athletes keep their equity, brands know exactly what they're getting, and every deal survives an audit.</p>
         </div>
       </div>
     </section>
 
-    <section class="cta-band">
-      <div class="container">
-        <h2>Sign with Defiant NIL.</h2>
-        <p>College and pro athletes, brands, and marketing agencies all work the same marketplace.</p>
-        <div class="btns">
-          <a class="btn white" href="https://defiantsports.io" target="_blank" rel="noopener">Athlete Sign Up</a>
-          <a class="btn outline-white" href="https://defiantsports.io" target="_blank" rel="noopener">Brand Sign Up</a>
-        </div>
-      </div>
-    </section>
   </main>
 
   <!-- ==================== RESOURCES ==================== -->
@@ -845,7 +834,7 @@
           <article class="res-card">
             <div class="icon">2</div>
             <h4>Financial Literacy</h4>
-            <p>Taxes, entity setup, banking, credit, investing, and long-tail royalties — taught in athletes' language, on their schedule.</p>
+            <p>Taxes, entity setup, banking, credit, investing, and long-tail royalties, taught in athletes' language, on their schedule.</p>
           </article>
           <article class="res-card">
             <div class="icon">3</div>
@@ -896,7 +885,7 @@
         <div class="section-head">
           <p class="eyebrow">About Us</p>
           <h2>An athlete-first endorsement marketplace.</h2>
-          <p>Defiant Sports connects athletes with brands ready to invest in ownership — not just optics. Every deal that runs through us is structured to protect the athlete's equity and give the brand receipts.</p>
+          <p>Defiant Sports connects athletes with brands ready to invest in ownership, not just optics. Every deal that runs through us is structured to protect the athlete's equity and give the brand receipts.</p>
         </div>
         <div class="sol-grid">
           <article class="sol-card">
@@ -912,7 +901,7 @@
           <article class="sol-card">
             <div class="num">✦</div>
             <h3>Our Reach</h3>
-            <p>Athletes across Division I, professional leagues, HBCU athletics, and the Olympic pipeline — with workshops on both coasts and the Pacific Northwest.</p>
+            <p>Athletes across Division I, professional leagues, HBCU athletics, and the Olympic pipeline, with workshops on both coasts and the Pacific Northwest.</p>
           </article>
         </div>
       </div>
@@ -931,26 +920,15 @@
         <div class="sol-grid">
           <article class="sol-card">
             <div class="num">01</div>
-            <h3>Sign Up</h3>
-            <p>Complete your athlete profile in under a minute. Sport, school, socials, story.</p>
-          </article>
-          <article class="sol-card">
-            <div class="num">02</div>
             <h3>Get Matched</h3>
             <p>Brands and agencies searching Defiant see fit-first athletes. You're approached with deals, not spammed.</p>
           </article>
           <article class="sol-card">
-            <div class="num">03</div>
+            <div class="num">02</div>
             <h3>Own Your Story</h3>
             <p>Workshops, contract review, and stewardship come standard. You keep 100% of your NIL rights.</p>
           </article>
         </div>
-      </div>
-    </section>
-    <section class="cta-band">
-      <div class="container">
-        <h2>Ready to sign?</h2>
-        <div class="btns"><a class="btn white" href="https://defiantsports.io" target="_blank" rel="noopener">Athlete Sign Up</a></div>
       </div>
     </section>
   </main>
@@ -973,7 +951,7 @@
           <article class="sol-card">
             <div class="num">02</div>
             <h3>Sign</h3>
-            <p>Deal terms are structured up front. Contracts, timelines, deliverables, and payments — no surprises.</p>
+            <p>Deal terms are structured up front. Contracts, timelines, deliverables, and payments, no surprises.</p>
           </article>
           <article class="sol-card">
             <div class="num">03</div>
@@ -981,12 +959,6 @@
             <p>Defiant sits on the partnership through delivery and after. You get performance receipts. The athlete gets support.</p>
           </article>
         </div>
-      </div>
-    </section>
-    <section class="cta-band">
-      <div class="container">
-        <h2>Start a campaign.</h2>
-        <div class="btns"><a class="btn white" href="https://defiantsports.io" target="_blank" rel="noopener">Brand Sign Up</a></div>
       </div>
     </section>
   </main>
@@ -1017,12 +989,6 @@
             <p>Athlete workshops on financial literacy and leadership come standard.</p>
           </article>
         </div>
-      </div>
-    </section>
-    <section class="cta-band">
-      <div class="container">
-        <h2>Bring Defiant to your campus.</h2>
-        <div class="btns"><a class="btn white" href="https://defiantsports.io" target="_blank" rel="noopener">University Sign Up</a></div>
       </div>
     </section>
   </main>
@@ -1058,8 +1024,6 @@
           <h6>Company</h6>
           <ul>
             <li><a href="#about" data-route="about">About Us</a></li>
-            <li><a href="https://defiantsports.io" target="_blank" rel="noopener">Log In</a></li>
-            <li><a href="https://defiantsports.io" target="_blank" rel="noopener">Sign Up</a></li>
             <li><a href="https://thedefiantfoundation.org/donate/" target="_blank" rel="noopener">The Defiant Foundation</a></li>
           </ul>
         </div>
@@ -1118,7 +1082,7 @@
 
     document.getElementById('yr').textContent = new Date().getFullYear();
 
-    // Hamburger menu toggle — expands the nav links list into a
+    // Hamburger menu toggle, expands the nav links list into a
     // dropdown on mobile / narrow screens, and rotates the icon to
     // an "X" when open. Same interaction pattern as iconsource.com.
     (function(){
@@ -1141,7 +1105,7 @@
 
     // ==================== INTERACTIVE CONSTELLATION NETWORK ====================
     // A sparse, evenly-distributed particle network that responds to
-    // the cursor — the exact interactive motif from iconsource.com's
+    // the cursor, the exact interactive motif from iconsource.com's
     // hero. Dots drift slowly; near-neighbors connect with hairline
     // white lines; and cursor proximity draws bright shining lines
     // from the pointer to the closest dots plus a subtle attraction.
@@ -1151,7 +1115,7 @@
       const ctx = canvas.getContext('2d');
       const parent = canvas.parentElement;
       let W = 0, H = 0, dots = [];
-      const DOT_COUNT = 32;      // sparser field — cleaner alignment
+      const DOT_COUNT = 32;      // sparser field, cleaner alignment
       const LINK_DIST = 110;
       const DOT_RADIUS = 1.4;
       const SPEED = 0.22;
@@ -1170,7 +1134,7 @@
         H = rect.height;
       }
       function init(){
-        // Grid-jittered placement — dots spread evenly across the
+        // Grid-jittered placement, dots spread evenly across the
         // card, then nudged by a small random offset so the field
         // reads organic but not clumpy.
         dots = [];
@@ -1194,7 +1158,7 @@
       }
       function frame(){
         ctx.clearRect(0, 0, W, H);
-        // Move dots — apply subtle attraction toward cursor when near
+        // Move dots, apply subtle attraction toward cursor when near
         for (const d of dots) {
           if (mouse.active) {
             const dx = mouse.x - d.x;
@@ -1214,7 +1178,7 @@
           if (d.x < 0 || d.x > W) d.vx *= -1;
           if (d.y < 0 || d.y > H) d.vy *= -1;
         }
-        // Neighbor lines — hairline, soft
+        // Neighbor lines, hairline, soft
         ctx.lineWidth = 0.6;
         ctx.shadowColor = 'rgba(180,220,255,0.7)';
         ctx.shadowBlur = 3;
@@ -1233,7 +1197,7 @@
             }
           }
         }
-        // Cursor-to-nearest-dots — bright shining connectors that
+        // Cursor-to-nearest-dots, bright shining connectors that
         // give the network its interactive feel.
         if (mouse.active) {
           ctx.lineWidth = 0.9;
@@ -1320,7 +1284,7 @@
           "Cross-marketed across the U.S. and globally by Defiant Sports and its partners, AJ owns every step of his narrative."
         ]
       }
-      // Next athletes will slot in here — soccer, basketball, football —
+      // Next athletes will slot in here, soccer, basketball, football -
       // after user provides their portraits.
     ];
 
@@ -1329,11 +1293,11 @@
       const nav = document.getElementById('constNav');
       if (!stage || !nav) return;
 
-      // Tracing SVG builder removed — no lines around the athlete.
+      // Tracing SVG builder removed, no lines around the athlete.
 
 
       // Slides. Athlete's full picture with a soft aura behind him
-      // and tracing lines that draw IN on entry, OUT on exit — the
+      // and tracing lines that draw IN on entry, OUT on exit, the
       // Icon Source hero transition feel.
       stage.innerHTML = ATHLETES.map((a, i) => `
         <div class="const-slide${i === 0 ? ' active' : ''}" data-idx="${i}" role="tabpanel" aria-label="${a.name}">
