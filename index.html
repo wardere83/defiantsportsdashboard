@@ -393,10 +393,17 @@
       -webkit-filter: grayscale(1) contrast(1.12) brightness(1.08);
       opacity: 0;
       transition: opacity 0.9s ease, transform 8s ease;
+      /* Fix the loop glitch/flicker */
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      perspective: 1000;
+      -webkit-perspective: 1000;
     }
     .const-slide.active .const-portrait img,
     .const-slide.active .const-portrait video {
-      transform: scale(1.02);
+      transform: scale(1.02) translateZ(0);
       opacity: 1;
     }
     /* The athlete video is a true cut-out now (transparent WebM, keyed
@@ -1455,7 +1462,7 @@
           <div class="const-frame">
             <div class="const-portrait">
               ${a.video
-                ? `<video class="const-video" poster="${a.img}" autoplay loop muted playsinline webkit-playsinline preload="auto" aria-label="${a.name}">
+                ? `<video class="const-video" autoplay loop muted playsinline webkit-playsinline preload="auto" aria-label="${a.name}">
                      <source src="${a.video.replace(/\.mp4$/, '.webm')}" type="video/webm" />
                      <source src="${a.video}" type="video/mp4" />
                    </video>`
