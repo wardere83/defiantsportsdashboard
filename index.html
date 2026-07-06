@@ -267,7 +267,9 @@
       width: min(88%, 400px);
       aspect-ratio: 1 / 1;
       display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 22px;
+      /* The caption sits a "double-space" (~16px) under the athlete:
+         a slim bottom margin plus the portrait's small bottom inset. */
+      margin: 0 auto 5px;
     }
     /* Tracing lines around the athlete removed. Only the interactive
        constellation particle network on the canvas remains. */
@@ -277,7 +279,8 @@
        inside the circular ring boundary without touching it. */
     .const-portrait {
       position: absolute;
-      inset: 8%;
+      /* Slimmer bottom inset so his feet sit just above the caption. */
+      inset: 8% 8% 4%;
       display: flex; align-items: center; justify-content: center;
       z-index: 3;
     }
