@@ -604,6 +604,46 @@
 
     /* ─────────────── Responsive ─────────────── */
     /* Narrow-viewport tweaks. */
+    /* ─────────────── Neighborhood Nip Foundation ─────────────── */
+    .fnd-grid {
+      display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px;
+      align-items: start;
+    }
+    .fnd-photo {
+      margin: 0; border-radius: 10px; overflow: hidden;
+      border: 1px solid var(--line); background: #000;
+    }
+    .fnd-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .fnd-col { display: flex; flex-direction: column; gap: 28px; }
+    .fnd-card {
+      background: #fff; border: 1px solid var(--line);
+      border-radius: 10px; padding: 28px;
+    }
+    .fnd-card h3 { font-size: 18px; margin: 0 0 14px; }
+    .fnd-video { border-radius: 8px; overflow: hidden; background: #000; }
+    .fnd-video video { width: 100%; display: block; }
+    .fnd-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .fnd-pill {
+      border: 1px solid var(--line); background: #fff; color: var(--ink-2);
+      padding: 7px 14px; border-radius: 999px;
+      font-family: var(--sans); font-size: 12px; font-weight: 600; cursor: pointer;
+      transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+    }
+    .fnd-pill:hover { border-color: var(--ink-4); }
+    .fnd-pill.on { background: #000; color: #fff; border-color: #000; }
+    .fnd-panel { min-height: 88px; font-size: 15px; line-height: 1.6; margin: 0; color: var(--ink-2); }
+    .fnd-meta {
+      margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--line);
+      font-size: 11px; letter-spacing: 0.08em; color: var(--ink-4);
+    }
+    .fnd-quote blockquote {
+      margin: 0; font-size: 17px; line-height: 1.5; font-weight: 600;
+      color: var(--ink); min-height: 52px;
+    }
+    .fnd-quote.popping blockquote { animation: fndPop 0.45s ease; }
+    @keyframes fndPop { 0% { opacity: 0; transform: translateY(4px); } 100% { opacity: 1; transform: none; } }
+    @media (max-width: 900px) { .fnd-grid { grid-template-columns: 1fr; } }
+
     /* ============================================================
        RESPONSIVE TIERS
        Fluid base (max-width containers, grid, flex, clamp type),
@@ -668,6 +708,7 @@
         </div>
         <a href="#nil" data-route="nil">Defiant NIL</a>
         <a href="#resources" data-route="resources">Resources</a>
+        <a href="#foundation" data-route="foundation">Nip Foundation</a>
       </nav>
       <!-- Auth buttons removed; the hamburger menu is the
            only nav affordance and lives in the true center of the bar. -->
@@ -781,15 +822,6 @@
       </div>
     </section>
 
-    <section class="cta-band">
-      <div class="container">
-        <h2>Athletes, reclaim your brand.</h2>
-        <p>The U.S. and global market can rent your image or invest in your legacy. Defiant Sports makes sure it's the second one.</p>
-        <div class="btns">
-          <a class="btn outline-white" href="#resources" data-route="resources">Explore Resources</a>
-        </div>
-      </div>
-    </section>
   </main>
 
   <!-- ==================== DEFIANT NIL ==================== -->
@@ -932,13 +964,18 @@
         <div class="sol-grid">
           <article class="sol-card">
             <div class="num">01</div>
-            <h3>Get Matched</h3>
+            <h3>Efficacy in Matching</h3>
             <p>Brands and agencies searching Defiant see fit-first athletes. You're approached with deals, not spammed.</p>
           </article>
           <article class="sol-card">
             <div class="num">02</div>
             <h3>Own Your Story</h3>
             <p>Workshops, contract review, and stewardship come standard. You keep 100% of your NIL rights.</p>
+          </article>
+          <article class="sol-card">
+            <div class="num">03</div>
+            <h3>Own Your Journey</h3>
+            <p>Your path, your pace, your power. Defiant walks every mile of it with you.</p>
           </article>
         </div>
       </div>
@@ -1005,6 +1042,51 @@
     </section>
   </main>
 
+  <!-- ==================== NEIGHBORHOOD NIP FOUNDATION ==================== -->
+  <!-- Ported from the previous FIFA dashboard build: community photo,
+       Nip Forever video, the Mission / Plaza / Vision pill panel, and
+       the rotating "In His Words" quotes. -->
+  <main id="route-foundation" class="route">
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">The Neighborhood Nip Foundation</p>
+          <h2>Extending Nipsey Hussle's legacy for the next generation.</h2>
+          <p>Created in 2019 to inspire the community through initiatives that benefit underprivileged youth, from Crenshaw to everywhere the Marathon reaches.</p>
+        </div>
+        <div class="fnd-grid">
+          <figure class="fnd-photo">
+            <img src="./assets/foundation/community.jpg" alt="Nipsey Hussle with students" loading="lazy"
+                 onerror="this.onerror=null; this.src='./assets/marathon/Nip.webp';" />
+          </figure>
+          <div class="fnd-col">
+            <div class="fnd-card">
+              <h3>Nip Forever</h3>
+              <div class="fnd-video">
+                <video autoplay loop muted playsinline preload="metadata"
+                       disablepictureinpicture poster="./assets/marathon/Nip.webp">
+                  <source src="./assets/marathon/nip.mp4" type="video/mp4" />
+                  <source src="./assets/marathon/nip.mov" type="video/quicktime" />
+                </video>
+              </div>
+            </div>
+            <div class="fnd-card">
+              <div class="fnd-tabs" role="tablist" aria-label="The Neighborhood Nip Foundation"></div>
+              <p class="fnd-panel" id="fndPanel"></p>
+              <div class="fnd-meta">Est. 2019 · Crenshaw, Los Angeles · Programming begins 2025</div>
+            </div>
+            <div class="fnd-card">
+              <h3>In His Words</h3>
+              <div class="fnd-quote" id="fndQuote">
+                <blockquote id="fndQuoteText"></blockquote>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
   <!-- ==================== FOOTER ==================== -->
   <footer>
     <div class="container">
@@ -1036,6 +1118,7 @@
           <h6>Company</h6>
           <ul>
             <li><a href="#about" data-route="about">About Us</a></li>
+            <li><a href="#foundation" data-route="foundation">Neighborhood Nip Foundation</a></li>
             <li><a href="https://thedefiantfoundation.org/donate/" target="_blank" rel="noopener">The Defiant Foundation</a></li>
           </ul>
         </div>
@@ -1054,7 +1137,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    const ROUTES = ['home','about','athletes','brands','universities','nil','resources'];
+    const ROUTES = ['home','about','athletes','brands','universities','nil','resources','foundation'];
     function showRoute(name){
       if (!ROUTES.includes(name)) name = 'home';
       document.querySelectorAll('.route').forEach(el => {
@@ -1065,7 +1148,8 @@
       });
       window.scrollTo({top: 0, behavior: 'smooth'});
       const nice = { home:'Home', about:'About Us', athletes:'Athletes', brands:'Brands',
-                     universities:'Universities', nil:'Defiant NIL', resources:'Resources' }[name];
+                     universities:'Universities', nil:'Defiant NIL', resources:'Resources',
+                     foundation:'Neighborhood Nip Foundation' }[name];
       document.title = nice === 'Home'
         ? 'Defiant Sports | Athlete Branding, Endorsements & NIL Marketplace'
         : 'Defiant Sports | ' + nice;
@@ -1083,6 +1167,64 @@
       showRoute(r);
     });
     showRoute((location.hash || '#home').slice(1));
+
+    // ── Neighborhood Nip Foundation (ported from the FIFA dashboard) ──
+    // Three pills swap a short blurb; a quote rotator cycles Nipsey's
+    // words every 6 seconds. Markup is static, so wire once at load.
+    (function initFoundation(){
+      const FOUNDATION_TABS = [
+        ["Mission", "The Neighborhood Nip Foundation was created in 2019 to extend Nipsey Hussle's legacy and inspire the community through initiatives that benefit underprivileged youth."],
+        ["The Plaza", "Programming kicks off in 2025 with a complete reconstruction of the Nipsey Hussle Plaza, the original location of The Marathon Store."],
+        ["The Vision", "Honoring Hussle's passion for helping youth reach their highest potential, the renovated site becomes an interdisciplinary community center for elementary through high school students, from academic studies to music and studio-specific access."]
+      ];
+      const NIPSEY_QUOTES = [
+        "The Marathon Continues.",
+        "We honor the people that ain't quit, we honor the people that stayed down.",
+        "Have vision and patience for the long game.",
+        "It's not about how you start, it's about how you finish.",
+        "All money in, no money out.",
+        "Stay focused. Stay solid. Build your foundation.",
+        "Hard work pays off, there are no shortcuts.",
+        "When you write your own story, you can put a happy ending."
+      ];
+      const tabs = document.querySelector('#route-foundation .fnd-tabs');
+      const panel = document.getElementById('fndPanel');
+      if (!tabs || !panel) return;
+      tabs.innerHTML = FOUNDATION_TABS.map((t, i) =>
+        `<button type="button" class="fnd-pill${i === 0 ? ' on' : ''}" role="tab" aria-selected="${i === 0 ? 'true' : 'false'}" data-fnd="${i}">${t[0]}</button>`
+      ).join('');
+      panel.textContent = FOUNDATION_TABS[0][1];
+      tabs.querySelectorAll('.fnd-pill').forEach(p => p.addEventListener('click', () => {
+        tabs.querySelectorAll('.fnd-pill').forEach(x => { x.classList.remove('on'); x.setAttribute('aria-selected', 'false'); });
+        p.classList.add('on');
+        p.setAttribute('aria-selected', 'true');
+        panel.textContent = FOUNDATION_TABS[+p.dataset.fnd][1];
+      }));
+      const qRoot = document.getElementById('fndQuote');
+      const qText = document.getElementById('fndQuoteText');
+      if (qRoot && qText) {
+        let i = 0;
+        const tick = () => {
+          qRoot.classList.remove('popping');
+          void qRoot.offsetWidth;
+          qText.textContent = NIPSEY_QUOTES[i % NIPSEY_QUOTES.length];
+          qRoot.classList.add('popping');
+          i++;
+        };
+        tick();
+        setInterval(tick, 6000);
+      }
+      // Nudge the Nip Forever video when the tab first shows (muted, so
+      // browsers allow it; poster covers any browser that declines).
+      const v = document.querySelector('#route-foundation video');
+      if (v) {
+        const p = v.play();
+        if (p && p.catch) p.catch(() => {
+          const kick = () => { v.play().catch(()=>{}); window.removeEventListener('pointerdown', kick); };
+          window.addEventListener('pointerdown', kick, { once: true });
+        });
+      }
+    })();
 
     function toast(msg){
       const t = document.getElementById('toast');
