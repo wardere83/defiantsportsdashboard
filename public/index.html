@@ -9,7 +9,7 @@
   <meta name="description" content="Defiant Sports is an athlete endorsements and NIL marketplace. We help college athletes, pros, brands, and universities sign clean partnerships and build lasting brands." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     /* ================================================================
        DEFIANT SPORTS · Minimalist Black-and-White Marketing Site
@@ -19,21 +19,26 @@
        ================================================================ */
 
     :root {
-      --bg: #ffffff;
-      --ink: #000000;
-      --ink-2: #1a1a1a;
-      --ink-3: #4a4a4a;
-      --ink-4: #808080;
-      --line: #e5e5e5;
-      --line-2: #d1d1d1;
-      --panel: #f7f7f7;
-      --panel-2: #ececec;
+      /* Defiant Foundation palette: charcoal canvas, white type, lime
+         accent, brick-red CTA, white cards. */
+      --bg: #161616;
+      --ink: #f5f5f5;
+      --ink-2: rgba(255,255,255,0.85);
+      --ink-3: rgba(255,255,255,0.64);
+      --ink-4: rgba(255,255,255,0.45);
+      --line: rgba(255,255,255,0.14);
+      --line-2: rgba(255,255,255,0.26);
+      --panel: #1d1d1d;
+      --panel-2: #242424;
+      --accent: #d1f452;
+      --cta: #bd3836;
+      --cta-hover: #a53230;
       --radius: 4px;
       /* One-family minimalist type system: headings and body both run on
          Inter. --serif is kept as the "display" alias so every heading
          rule keeps working; it now resolves to the same clean sans. */
-      --serif: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
-      --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+      --serif: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+      --sans: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
       --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
       --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
       --shadow-lg: 0 20px 60px rgba(0,0,0,0.14);
@@ -64,7 +69,7 @@
     /* ─────────────── Top nav ─────────────── */
     .topnav {
       position: sticky; top: 0; z-index: 50;
-      background: rgba(255,255,255,0.96);
+      background: rgba(22,22,22,0.96);
       backdrop-filter: saturate(1.4) blur(8px);
       border-bottom: 1px solid var(--line);
     }
@@ -96,6 +101,7 @@
        assets/defiant-sports-logo.jpeg so it renders instantly. */
     .brand-logo {
       height: 34px; width: auto; display: block;
+      filter: invert(1); /* black mark -> white on the dark nav */ 
       user-select: none; -webkit-user-drag: none;
     }
     /* Three-line hamburger, vertically centered, progressive line
@@ -111,10 +117,10 @@
       border-radius: 4px;
       transition: background 0.15s ease;
     }
-    .nav-hamburger:hover { background: rgba(0,0,0,0.06); }
+    .nav-hamburger:hover { background: rgba(255,255,255,0.08); }
     .nav-hamburger span {
       display: block; height: 2px;
-      background: #000; border-radius: 1px;
+      background: #fff; border-radius: 1px;
       transition: transform 0.25s ease, opacity 0.25s ease, width 0.25s ease;
     }
     .nav-hamburger span:nth-child(1) { width: 26px; }
@@ -140,7 +146,7 @@
     .nav-links {
       display: none;
       position: absolute; top: 74px; left: 0; right: 0;
-      background: #ffffff; border-bottom: 1px solid var(--line);
+      background: #191919; border-bottom: 1px solid var(--line);
       flex-direction: column; align-items: flex-start;
       padding: 22px 32px 28px; gap: 14px;
       box-shadow: var(--shadow-md);
@@ -156,7 +162,7 @@
       border-bottom: 2px solid transparent;
     }
     .nav-links a:hover { color: var(--ink); }
-    .nav-links a.active { color: var(--ink); border-bottom-color: #000; }
+    .nav-links a.active { color: var(--ink); border-bottom-color: var(--accent); }
     /* Inside the collapsed menu each nav item is a full-width row.
        The "How It Works" group renders its sub-pages inline as an
        indented list. */
@@ -183,12 +189,13 @@
       border: 2px solid transparent; white-space: nowrap;
       font-family: var(--sans);
     }
-    .btn.solid { background: #000; color: #fff; }
-    .btn.solid:hover { background: #1f1f1f; }
-    .btn.ghost { background: transparent; color: #000; border-color: #000; }
-    .btn.ghost:hover { background: #000; color: #fff; }
-    .btn.white { background: #fff; color: #000; }
-    .btn.white:hover { background: #f0f0f0; }
+    /* Primary CTAs wear the Foundation brick red (Donate Now style). */
+    .btn.solid { background: var(--cta); color: #fff; }
+    .btn.solid:hover { background: var(--cta-hover); }
+    .btn.ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+    .btn.ghost:hover { background: var(--ink); color: #161616; }
+    .btn.white { background: var(--cta); color: #fff; }
+    .btn.white:hover { background: var(--cta-hover); }
     .btn.outline-white { background: transparent; color: #fff; border-color: #fff; }
     .btn.outline-white:hover { background: #fff; color: #000; }
 
@@ -212,13 +219,13 @@
     .hero-grid > div:first-child { padding-top: 8px; }
     .hero-eyebrow {
       font-size: 12px; font-weight: 600; letter-spacing: 0.24em;
-      text-transform: uppercase; color: rgba(255,255,255,0.6);
+      text-transform: uppercase; color: var(--accent);
       margin: 0 0 20px;
     }
     .hero h1 {
       font-family: var(--serif);
       font-weight: 700;
-      font-size: clamp(40px, 4.5vw, 62px);
+      font-size: clamp(34px, 4.5vw, 62px);
       line-height: 1.05;
       letter-spacing: -0.03em;
       margin: 0 0 20px;
@@ -231,8 +238,8 @@
       margin: 0 0 32px; max-width: 520px;
     }
     .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
-    .hero .btn.white { background: #fff; color: #000; }
-    .hero .btn.white:hover { background: #f0f0f0; }
+    .hero .btn.white { background: var(--cta); color: #fff; }
+    .hero .btn.white:hover { background: var(--cta-hover); }
     .hero .btn.outline-white { background: transparent; color: #fff; border-color: #fff; }
     .hero .btn.outline-white:hover { background: #fff; color: #000; }
 
@@ -394,7 +401,7 @@
 
     /* ─────────────── Trusted strip ─────────────── */
     .trusted {
-      background: #fff; border-bottom: 1px solid var(--line);
+      background: transparent; border-bottom: 1px solid var(--line);
       padding: 34px 0;
     }
     .trusted-inner {
@@ -417,11 +424,15 @@
     .section.dark { background: #000; color: #fff; }
     .section.panel { background: var(--panel); }
     .section-head { text-align: center; max-width: 720px; margin: 0 auto 72px; }
+    .section-head h2::after {
+      content: ""; display: block; width: 56px; height: 3px;
+      background: var(--cta); margin: 18px auto 0; border-radius: 2px;
+    }
     .section-head .eyebrow {
       font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase;
-      color: var(--ink-4); font-weight: 600; margin: 0 0 12px;
+      color: var(--accent); font-weight: 600; margin: 0 0 12px;
     }
-    .section.dark .section-head .eyebrow { color: rgba(255,255,255,0.6); }
+    .section.dark .section-head .eyebrow { color: var(--accent); }
     .section-head h2 {
       font-family: var(--serif); font-weight: 700;
       font-size: clamp(30px, 4.4vw, 44px);
@@ -611,6 +622,14 @@
       z-index: 200;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+    /* White cards on the dark canvas (Foundation style): re-scope the
+       ink/line tokens inside every card so their text stays dark. */
+    .sol-card, .case, .nil-state, .nil-explainer, .res-card, .fnd-card {
+      --ink: #101010; --ink-2: #2b2b2b; --ink-3: #4a4a4a; --ink-4: #8a8a8a;
+      --line: #e5e5e5; --line-2: #d1d1d1;
+      color: #101010;
+    }
 
     /* ─────────────── Responsive ─────────────── */
     /* Narrow-viewport tweaks. */
