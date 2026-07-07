@@ -442,6 +442,16 @@
     .sol-card h3 { font-family: var(--serif); font-weight: 700; font-size: 22px; margin: 0 0 10px; }
     .sol-card p { font-size: 14.5px; color: var(--ink-3); line-height: 1.55; margin: 0; }
 
+    /* The Defiant Standard cards: locked alignment. Equal card heights
+       (grid items stretch to the tallest), identical padding, and fixed
+       number/heading rows so the number, heading, and body text each
+       start on the same horizontal line in every card, at every
+       breakpoint. */
+    .standards .sol-grid { align-items: stretch; }
+    .standards .sol-card { display: flex; flex-direction: column; }
+    .standards .sol-card .num { height: 44px; }
+    .standards .sol-card h3 { min-height: 35px; }
+
     /* ─────────────── Case studies ─────────────── */
     .cases { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
     .case {
@@ -711,7 +721,7 @@
     </div>
 
     <!-- BRANDING NARRATIVE -->
-    <section class="section">
+    <section class="section standards">
       <div class="container">
         <div class="section-head">
           <p class="eyebrow">The Defiant Standard</p>
@@ -722,17 +732,17 @@
           <article class="sol-card">
             <div class="num">01</div>
             <h3>Own the Story</h3>
-            <p>Athletes control their narrative, how they show up, what they say, and which partnerships fit. Defiant structures the contracts so nothing gets sold that shouldn't be.</p>
+            <p>Athletes decide how they show up, what they say, and which partnerships fit. Defiant structures every contract to protect that voice.</p>
           </article>
           <article class="sol-card">
             <div class="num">02</div>
             <h3>Own the Deals</h3>
-            <p>Every brand partnership routes through Defiant with terms up front, receipts on delivery, and stewardship after. Athletes are cross-marketed with the artists and partners of Defiant Records and the wider Defiant network, so every deal reaches sport, music, and culture at once.</p>
+            <p>Every partnership arrives with terms up front, receipts on delivery, and stewardship after. Defiant cross-markets each deal across sport, music, and culture.</p>
           </article>
           <article class="sol-card">
             <div class="num">03</div>
             <h3>Own the Legacy</h3>
-            <p>Workshops, financial literacy, and transformational leadership are built into every athlete relationship. The brand outlives the season, the contract, the headline.</p>
+            <p>Every relationship builds in workshops, financial literacy, and transformational leadership. Defiant grows a brand that outlives the season and the headline.</p>
           </article>
         </div>
       </div>
@@ -749,23 +759,23 @@
         <div class="cases">
           <article class="case">
             <span class="badge">Case Study · Footwear</span>
-            <h4>Athletic footwear brand meets four Defiant athletes.</h4>
-            <p>The brand wanted authentic influencer marketing to emphasize the universality of their product. Defiant Sports surfaced four fit-first athletes in under a week.</p>
+            <h4>Four athletes signed for a footwear launch.</h4>
+            <p>A footwear brand needed authentic athlete voices for a universal product story. Defiant Sports surfaced four fit-first athletes within one week.</p>
           </article>
           <article class="case">
             <span class="badge">Case Study · Media</span>
-            <h4>A sports podcast books athletes weekly, without a scramble.</h4>
-            <p>A top-ranked conference sports podcast used Defiant Sports to find and contact athletes perfect for boosting viewership, week over week.</p>
+            <h4>Weekly podcast bookings secured without the scramble.</h4>
+            <p>A top-ranked conference podcast needed fresh athlete guests every single week. Defiant Sports matched the right voices reliably, week over week.</p>
           </article>
           <article class="case">
             <span class="badge">Case Study · Telecom</span>
-            <h4>First-in-class college NIL deal, done clean.</h4>
-            <p>A national telecom brand launched a landmark college NIL campaign through Defiant Sports, signed, contracted, and covered by multiple outlets.</p>
+            <h4>A landmark college NIL deal, signed clean.</h4>
+            <p>A national telecom brand needed a landmark college NIL campaign done right. Defiant Sports delivered it signed, contracted, and widely covered.</p>
           </article>
           <article class="case">
             <span class="badge">Case Study · Digital</span>
-            <h4>A digital brand builds an athlete network across campuses.</h4>
-            <p>A fast-growing digital brand needed athlete voices across schools, states, and sports. Defiant Sports assembled the roster in a single quarter.</p>
+            <h4>A campus athlete network built in one quarter.</h4>
+            <p>A fast-growing digital brand needed athlete voices across schools, states, and sports. Defiant Sports assembled the full roster in one quarter.</p>
           </article>
         </div>
       </div>
