@@ -88,6 +88,8 @@
     .nav-cta { justify-self: end; }
     .brand-mark {
       display: inline-flex; align-items: center;
+      /* 44px touch target around the logo. */
+      min-height: 44px; padding: 5px 0;
       color: var(--ink);
     }
     /* Official Defiant Sports logo, inlined from the repo's
@@ -103,7 +105,8 @@
       display: inline-flex; flex-direction: column;
       align-items: flex-start; justify-content: center;
       gap: 5px;
-      width: 30px; height: 30px; padding: 0;
+      /* 44px touch target; the visible lines stay the same size. */
+      width: 44px; height: 44px; padding: 7px;
       background: transparent; border: 0; cursor: pointer;
       border-radius: 4px;
       transition: background 0.15s ease;
@@ -148,8 +151,8 @@
     .nav-links a {
       color: var(--ink-2);
       transition: color 0.15s ease;
-      /* Comfortable touch target: ~40px row height in the menu. */
-      padding: 10px 0;
+      /* 44px+ touch rows in the menu. */
+      padding: 12px 0;
       border-bottom: 2px solid transparent;
     }
     .nav-links a:hover { color: var(--ink); }
@@ -163,9 +166,9 @@
       font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700;
     }
     .nav-links .drop { display: flex; flex-direction: column; padding: 4px 0 4px 12px; gap: 2px; }
-    .nav-links .drop a { font-size: 14px; color: var(--ink-2); padding: 8px 0; }
+    .nav-links .drop a { font-size: 14px; color: var(--ink-2); padding: 11px 0; }
     .nav-links .drop a:hover { color: var(--ink); }
-    .nav-links > a { padding: 10px 0; color: var(--ink); }
+    .nav-links > a { padding: 12px 0; color: var(--ink); }
     .nav-links > a:hover { text-decoration: underline; text-underline-offset: 4px; }
     /* Right grid column, kept as a spacer even when empty so the
        brand-group in the middle column stays perfectly centered. */
@@ -376,8 +379,11 @@
 
     /* Carousel controls (dots) */
     .const-dots-nav {
+      /* Single athlete: hide the 3px-tall carousel dots (untappable and
+         visual clutter on mobile). Node kept for the carousel init. */
+      display: none;
       position: absolute; left: 24px; top: 20px; z-index: 5;
-      display: flex; gap: 6px;
+      gap: 6px;
     }
     .const-dots-nav button {
       width: 22px; height: 3px; border-radius: 2px;
@@ -577,7 +583,9 @@
       text-transform: uppercase; margin: 0 0 16px; font-weight: 700;
     }
     footer ul { list-style: none; margin: 0; padding: 0; }
-    footer li { margin-bottom: 10px; font-size: 13.5px; }
+    footer li { margin-bottom: 2px; font-size: 13.5px; }
+    /* 44px touch rows for footer links. */
+    footer li a { display: inline-block; padding: 12px 0; }
     footer a { color: rgba(255,255,255,0.7); }
     footer a:hover { color: #fff; }
     .foot-bottom {
@@ -585,7 +593,9 @@
       display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
       font-size: 12px; color: rgba(255,255,255,0.55);
     }
-    .socials { display: flex; gap: 14px; }
+    .socials { display: flex; gap: 14px; align-items: center; }
+    /* 44px touch rows for social links. */
+    .socials a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; }
 
     /* ─────────────── Router: one route panel at a time ─────────────── */
     .route { display: none; }
@@ -625,7 +635,9 @@
     .fnd-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
     .fnd-pill {
       border: 1px solid var(--line); background: #fff; color: var(--ink-2);
-      padding: 7px 14px; border-radius: 999px;
+      /* 44px touch target. */
+      min-height: 44px; display: inline-flex; align-items: center;
+      padding: 10px 18px; border-radius: 999px;
       font-family: var(--sans); font-size: 12px; font-weight: 600; cursor: pointer;
       transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
     }
@@ -678,6 +690,9 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .const-athlete, .const-dot.t { animation: none !important; }
+      .fnd-quote.popping blockquote { animation: none; }
+      .sol-card, .btn { transition: none; }
+      html { scroll-behavior: auto; }
     }
   </style>
 </head>
@@ -1066,7 +1081,6 @@
                 <video autoplay loop muted playsinline preload="metadata"
                        disablepictureinpicture poster="./assets/marathon/Nip.webp">
                   <source src="./assets/marathon/nip.mp4" type="video/mp4" />
-                  <source src="./assets/marathon/nip.mov" type="video/quicktime" />
                 </video>
               </div>
             </div>
@@ -1146,7 +1160,7 @@
       document.querySelectorAll('.nav-links a').forEach(a => {
         a.classList.toggle('active', a.dataset.route === name);
       });
-      window.scrollTo({top: 0, behavior: 'smooth'});
+      window.scrollTo({top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
       const nice = { home:'Home', about:'About Us', athletes:'Athletes', brands:'Brands',
                      universities:'Universities', nil:'Defiant NIL', resources:'Resources',
                      foundation:'Neighborhood Nip Foundation' }[name];
