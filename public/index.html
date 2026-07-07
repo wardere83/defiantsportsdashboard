@@ -57,7 +57,7 @@
        tabular numerals keep stat digits perfectly column-aligned. */
     h1, h2, h3, h4, h5 { font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
     .section-head p, .hero-lede { text-wrap: pretty; }
-    .case .stat .n, .sol-card .num { font-variant-numeric: tabular-nums; }
+    .sol-card .num { font-variant-numeric: tabular-nums; }
 
     .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
 
@@ -70,7 +70,7 @@
     }
     /* Three-column grid: spacer · brand-group (centered) · nav-cta.
        This centers the logo+hamburger pair horizontally in the nav
-       bar while keeping Log In / Sign Up pinned to the right. */
+       bar with the right column kept as an empty spacer. */
     .topnav-inner {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -148,7 +148,8 @@
     .nav-links a {
       color: var(--ink-2);
       transition: color 0.15s ease;
-      padding: 4px 0;
+      /* Comfortable touch target: ~40px row height in the menu. */
+      padding: 10px 0;
       border-bottom: 2px solid transparent;
     }
     .nav-links a:hover { color: var(--ink); }
@@ -161,10 +162,10 @@
       display: block; padding: 4px 0; color: var(--ink-4);
       font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700;
     }
-    .nav-links .drop { display: flex; flex-direction: column; padding: 4px 0 4px 12px; gap: 10px; }
-    .nav-links .drop a { font-size: 14px; color: var(--ink-2); }
+    .nav-links .drop { display: flex; flex-direction: column; padding: 4px 0 4px 12px; gap: 2px; }
+    .nav-links .drop a { font-size: 14px; color: var(--ink-2); padding: 8px 0; }
     .nav-links .drop a:hover { color: var(--ink); }
-    .nav-links > a { padding: 4px 0; color: var(--ink); }
+    .nav-links > a { padding: 10px 0; color: var(--ink); }
     .nav-links > a:hover { text-decoration: underline; text-underline-offset: 4px; }
     /* Right grid column, kept as a spacer even when empty so the
        brand-group in the middle column stays perfectly centered. */
@@ -334,7 +335,7 @@
        part of the gradient so it stays legible against the athlete. */
     .const-meta {
       position: relative; z-index: 4; text-align: center;
-      color: #fff; width: 100%; max-width: 360px; margin: 0 auto;
+      color: #fff; width: 100%; max-width: 404px; margin: 0 auto;
       padding: 0 12px;
     }
     .const-meta .kicker {
@@ -350,9 +351,21 @@
       letter-spacing: -0.01em; color: #fff;
     }
     .type-line {
-      font-family: var(--sans); font-size: 12.5px; line-height: 1.45;
-      color: rgba(255,255,255,0.92); min-height: 34px;
-      max-width: 340px; margin: 0 auto;
+      font-family: var(--sans); font-size: 12.5px; line-height: 18px;
+      color: rgba(255,255,255,0.92);
+      /* Fixed two-line box: exactly 2 x 18px lines, overflow hidden, so
+         the rotating text can NEVER change this container's height and
+         nothing above or below it shifts as the words cycle. */
+      height: 36px; overflow: hidden;
+      max-width: 380px; margin: 0 auto;
+    }
+    /* Small screens: smaller type + slimmer caption gutters so the
+       longest phrase still renders in two lines inside the narrower
+       card. Box height tracks the two-line size exactly (no shift). */
+    @media (max-width: 480px) {
+      .type-line { font-size: 10px; line-height: 15px; height: 30px; }
+      .const-slide { padding-left: 12px; padding-right: 12px; }
+      .const-meta { padding: 0 4px; }
     }
     .type-cursor {
       display: inline-block; width: 1.5px; height: 1em; background: #fff;
@@ -376,7 +389,7 @@
     /* ─────────────── Trusted strip ─────────────── */
     .trusted {
       background: #fff; border-bottom: 1px solid var(--line);
-      padding: 26px 0;
+      padding: 34px 0;
     }
     .trusted-inner {
       display: flex; flex-wrap: wrap; align-items: center;
@@ -394,10 +407,10 @@
     .trusted-logos span { font-family: var(--serif); font-size: 20px; letter-spacing: 0.02em; }
 
     /* ─────────────── Section shell ─────────────── */
-    .section { padding: 96px 0; }
+    .section { padding: 120px 0; }
     .section.dark { background: #000; color: #fff; }
     .section.panel { background: var(--panel); }
-    .section-head { text-align: center; max-width: 720px; margin: 0 auto 56px; }
+    .section-head { text-align: center; max-width: 720px; margin: 0 auto 72px; }
     .section-head .eyebrow {
       font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase;
       color: var(--ink-4); font-weight: 600; margin: 0 0 12px;
@@ -415,33 +428,25 @@
     .sol-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
     .sol-card {
       background: #fff; border: 1px solid var(--line);
-      border-radius: 8px; padding: 32px 28px 28px;
+      border-radius: 10px; padding: 40px 32px 36px;
       transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
       position: relative; overflow: hidden;
     }
     .sol-card:hover {
-      transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--ink);
+      transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--ink-4);
     }
     .sol-card .num {
       font-family: var(--serif); font-weight: 700; font-size: 44px;
       color: var(--ink); line-height: 1; margin-bottom: 24px; opacity: 0.15;
     }
     .sol-card h3 { font-family: var(--serif); font-weight: 700; font-size: 22px; margin: 0 0 10px; }
-    .sol-card p { font-size: 14.5px; color: var(--ink-3); line-height: 1.55; margin: 0 0 20px; }
-    .sol-card .links { display: flex; gap: 12px; flex-wrap: wrap; }
-    .sol-card .links a {
-      font-size: 12.5px; font-weight: 700; letter-spacing: 0.08em;
-      text-transform: uppercase; padding: 8px 14px;
-      border: 1.5px solid var(--ink); border-radius: 4px;
-      transition: background 0.15s, color 0.15s;
-    }
-    .sol-card .links a:hover { background: var(--ink); color: #fff; }
+    .sol-card p { font-size: 14.5px; color: var(--ink-3); line-height: 1.55; margin: 0; }
 
     /* ─────────────── Case studies ─────────────── */
-    .cases { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .cases { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
     .case {
       background: #fff; border: 1px solid var(--line);
-      border-radius: 8px; padding: 32px 28px;
+      border-radius: 10px; padding: 40px 36px;
       display: flex; flex-direction: column; gap: 18px;
     }
     .case .badge {
@@ -450,12 +455,6 @@
     }
     .case h4 { font-family: var(--serif); font-weight: 700; font-size: 24px; margin: 0; line-height: 1.15; }
     .case p { font-size: 14.5px; color: var(--ink-3); line-height: 1.6; margin: 0; }
-    .case .stats {
-      display: grid; grid-template-columns: repeat(2, 1fr);
-      gap: 16px; border-top: 1px solid var(--line); padding-top: 18px;
-    }
-    .case .stat .n { font-family: var(--serif); font-weight: 700; font-size: 28px; letter-spacing: -0.01em; }
-    .case .stat .l { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-4); font-weight: 600; }
 
     /* ─────────────── Defiant NIL ─────────────── */
     .nil-hero { background: #000; color: #fff; padding: 84px 0; text-align: center; }
@@ -539,7 +538,7 @@
     .res-region .note { font-size: 12.5px; color: var(--ink-4); }
 
     /* ─────────────── CTA band ─────────────── */
-    .cta-band { background: #000; color: #fff; padding: 84px 0; text-align: center; }
+    .cta-band { background: #000; color: #fff; padding: 110px 0; text-align: center; }
     .cta-band h2 {
       font-family: var(--serif); font-weight: 700;
       font-size: clamp(30px, 4.4vw, 44px);
@@ -549,7 +548,7 @@
     .cta-band .btns { display: inline-flex; gap: 12px; flex-wrap: wrap; }
 
     /* ─────────────── Footer ─────────────── */
-    footer { background: #000; color: rgba(255,255,255,0.72); padding: 60px 0 40px; }
+    footer { background: #000; color: rgba(255,255,255,0.72); padding: 88px 0 48px; }
     .foot-grid {
       display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 40px;
       margin-bottom: 40px;
@@ -595,6 +594,15 @@
 
     /* ─────────────── Responsive ─────────────── */
     /* Narrow-viewport tweaks. */
+    /* ============================================================
+       RESPONSIVE TIERS
+       Fluid base (max-width containers, grid, flex, clamp type),
+       then tiered collapses. The athlete card + hero text column are
+       left as designed; they only reflow naturally at small sizes.
+         · ≤900px  tablet: hero and card grids go one column
+         · ≤720px  tighten section rhythm
+         · ≤600px  phone: slimmer gutters, full-width CTAs, 1-col footer
+         · ≤400px  small phone: minimum gutters and spacing            */
     @media (max-width: 900px) {
       .hero { padding: 60px 0 80px; }
       .hero-grid { grid-template-columns: 1fr; gap: 32px; }
@@ -602,6 +610,21 @@
       .sol-grid, .cases, .res-programs, .res-regions { grid-template-columns: 1fr; }
       .foot-grid { grid-template-columns: 1fr 1fr; }
       .nav-cta .btn.ghost { display: none; }
+    }
+    @media (max-width: 720px) {
+      .section { padding: 76px 0; }
+      .section-head { margin-bottom: 48px; }
+      .cta-band { padding: 76px 0; }
+      footer { padding: 64px 0 40px; }
+    }
+    @media (max-width: 600px) {
+      .container { padding: 0 20px; }
+      .hero-ctas .btn { flex: 1 1 100%; }
+      .foot-grid { grid-template-columns: 1fr; gap: 28px; }
+    }
+    @media (max-width: 400px) {
+      .container { padding: 0 16px; }
+      .section { padding: 56px 0; }
     }
     @media (prefers-reduced-motion: reduce) {
       .const-athlete, .const-dot.t { animation: none !important; }
@@ -636,7 +659,7 @@
         <a href="#nil" data-route="nil">Defiant NIL</a>
         <a href="#resources" data-route="resources">Resources</a>
       </nav>
-      <!-- Log In / Sign Up buttons removed; the hamburger menu is the
+      <!-- Auth buttons removed; the hamburger menu is the
            only nav affordance and lives in the true center of the bar. -->
       <div class="nav-cta" aria-hidden="true"></div>
     </div>
@@ -652,6 +675,12 @@
           <p class="hero-eyebrow">Athlete Branding · Reclaiming Ownership</p>
           <h1>Athletes, <em>meet your brand.</em> All of it.</h1>
           <p class="hero-lede">Defiant Sports is revolutionizing the industry by making sure athletes regain their presence in the U.S. and global market as the holistic owners of their own brand, story, image, contracts, equity, and legacy. Every athlete is cross-marketed with the artists and partners of Defiant Records and the wider Defiant network, so their name compounds across sport, music, and culture.</p>
+          <!-- Sign-up buttons route back to the home view (no external
+               auth flow); design, placement and labels preserved. -->
+          <div class="hero-ctas">
+            <a class="btn white" href="#home" data-route="home">Athlete Sign Up</a>
+            <a class="btn outline-white" href="#home" data-route="home">Brand Sign Up</a>
+          </div>
         </div>
 
         <!-- Athlete carousel, Janis Antiste is the seed; more athletes
@@ -694,27 +723,16 @@
             <div class="num">01</div>
             <h3>Own the Story</h3>
             <p>Athletes control their narrative, how they show up, what they say, and which partnerships fit. Defiant structures the contracts so nothing gets sold that shouldn't be.</p>
-            <div class="links">
-              <a href="#athletes" data-route="athletes">Athletes</a>
-            </div>
           </article>
           <article class="sol-card">
             <div class="num">02</div>
             <h3>Own the Deals</h3>
             <p>Every brand partnership routes through Defiant with terms up front, receipts on delivery, and stewardship after. Athletes are cross-marketed with the artists and partners of Defiant Records and the wider Defiant network, so every deal reaches sport, music, and culture at once.</p>
-            <div class="links">
-              <a href="#brands" data-route="brands">Brands</a>
-              <a href="#brands" data-route="brands">Agencies</a>
-            </div>
           </article>
           <article class="sol-card">
             <div class="num">03</div>
             <h3>Own the Legacy</h3>
             <p>Workshops, financial literacy, and transformational leadership are built into every athlete relationship. The brand outlives the season, the contract, the headline.</p>
-            <div class="links">
-              <a href="#resources" data-route="resources">Resources</a>
-              <a href="#universities" data-route="universities">Universities</a>
-            </div>
           </article>
         </div>
       </div>
@@ -733,37 +751,21 @@
             <span class="badge">Case Study · Footwear</span>
             <h4>Athletic footwear brand meets four Defiant athletes.</h4>
             <p>The brand wanted authentic influencer marketing to emphasize the universality of their product. Defiant Sports surfaced four fit-first athletes in under a week.</p>
-            <div class="stats">
-              <div class="stat"><div class="n">7.6M</div><div class="l">Impressions</div></div>
-              <div class="stat"><div class="n">369K</div><div class="l">Engagements</div></div>
-            </div>
           </article>
           <article class="case">
             <span class="badge">Case Study · Media</span>
             <h4>A sports podcast books athletes weekly, without a scramble.</h4>
             <p>A top-ranked conference sports podcast used Defiant Sports to find and contact athletes perfect for boosting viewership, week over week.</p>
-            <div class="stats">
-              <div class="stat"><div class="n">7</div><div class="l">Athletes</div></div>
-              <div class="stat"><div class="n">+</div><div class="l">Weekly Streams</div></div>
-            </div>
           </article>
           <article class="case">
             <span class="badge">Case Study · Telecom</span>
             <h4>First-in-class college NIL deal, done clean.</h4>
             <p>A national telecom brand launched a landmark college NIL campaign through Defiant Sports, signed, contracted, and covered by multiple outlets.</p>
-            <div class="stats">
-              <div class="stat"><div class="n">1st</div><div class="l">Regional NIL Deal</div></div>
-              <div class="stat"><div class="n">5+</div><div class="l">News Outlets</div></div>
-            </div>
           </article>
           <article class="case">
             <span class="badge">Case Study · Digital</span>
             <h4>A digital brand builds an athlete network across campuses.</h4>
             <p>A fast-growing digital brand needed athlete voices across schools, states, and sports. Defiant Sports assembled the roster in a single quarter.</p>
-            <div class="stats">
-              <div class="stat"><div class="n">100+</div><div class="l">Athletes</div></div>
-              <div class="stat"><div class="n">10</div><div class="l">Colleges</div></div>
-            </div>
           </article>
         </div>
       </div>
