@@ -503,6 +503,39 @@
     }
     .grammy h4 { font-family: var(--serif); font-weight: 700; font-size: 18px; margin: 0; line-height: 1.25; }
     .grammy p { font-size: 13.5px; color: var(--ink-3); line-height: 1.5; margin: 0; }
+    /* Interactive: the card is a link to the winning record. Hover lifts
+       the card and zooms the artist photo; a red play chip signals it. */
+    a.grammy { cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+    a.grammy:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--ink-4); }
+    .g-media {
+      position: relative; display: block; aspect-ratio: 10 / 7;
+      border-radius: 6px; overflow: hidden; background: #161616;
+      margin-bottom: 4px;
+    }
+    .g-media img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      filter: grayscale(1); transition: transform 0.4s ease;
+    }
+    a.grammy:hover .g-media img { transform: scale(1.05); }
+    /* Monogram tile shows until a matching artist photo exists. */
+    .g-mono {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 42px; letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.85);
+      background: linear-gradient(135deg, #262626 0%, #101010 100%);
+    }
+    .g-play {
+      position: absolute; right: 10px; bottom: 10px;
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--cta); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; transition: transform 0.2s ease;
+    }
+    a.grammy:hover .g-play { transform: scale(1.1); }
+    @media (prefers-reduced-motion: reduce) {
+      a.grammy, .g-media img, .g-play { transition: none; }
+    }
     @media (max-width: 600px) {
       .ceo-bio { flex-direction: column; text-align: center; gap: 20px; }
     }
@@ -867,43 +900,11 @@
             <p>Steven Carless, also known as "Steve-O", is a 7-time Grammy award winner, an entrepreneur, talent manager, tech advisor and philanthropist.</p>
           </div>
         </div>
-        <div class="grammys">
-          <article class="grammy">
-            <span class="g-year">2020</span>
-            <h4>Best Rap Performance</h4>
-            <p>Racks in the Middle by Nipsey Hussle</p>
-          </article>
-          <article class="grammy">
-            <span class="g-year">2020</span>
-            <h4>Best Rap/Sung Performance</h4>
-            <p>Higher by Nipsey Hussle</p>
-          </article>
-          <article class="grammy">
-            <span class="g-year">2021</span>
-            <h4>Best Music Video</h4>
-            <p>Brown Skin Girl by Beyoncé</p>
-          </article>
-          <article class="grammy">
-            <span class="g-year">2021</span>
-            <h4>Best R&amp;B Performance</h4>
-            <p>Black Parade by Beyoncé</p>
-          </article>
-          <article class="grammy">
-            <span class="g-year">2021</span>
-            <h4>Best Rap Song</h4>
-            <p>Savage Remix by Megan Thee Stallion &amp; Beyoncé</p>
-          </article>
-          <article class="grammy">
-            <span class="g-year">2021</span>
-            <h4>Best Rap Performance</h4>
-            <p>Savage Remix by Megan Thee Stallion &amp; Beyoncé</p>
-          </article>
-          <article class="grammy">
-            <span class="g-year">2023</span>
-            <h4>Best Melodic Rap Performance</h4>
-            <p>Wait for U by Future ft. Drake</p>
-          </article>
-        </div>
+        <!-- Interactive Grammy cards: artist photo (auto-upgrades when a
+             matching file lands in assets/artists/, monogram fallback
+             until then), hover lift + photo zoom, click plays the
+             winning record on YouTube. Rendered from GRAMMY_CARDS. -->
+        <div class="grammys" id="grammyGrid"></div>
       </div>
     </section>
 
@@ -1260,6 +1261,40 @@
       showRoute(r);
     });
     showRoute((location.hash || '#home').slice(1));
+
+    // ── Grammy cards: interactive artist media ──
+    // Each card links to the winning record on YouTube (search URLs are
+    // deterministic, so they can't break). The photo slot auto-upgrades:
+    // it tries assets/artists/<img>; while the file doesn't exist the
+    // branded monogram tile shows instead, so uploading beyonce.jpg,
+    // megan.jpg or future.jpg later lights the cards up with no code
+    // change. Nipsey's two cards use photos already in the repo.
+    (function renderGrammys(){
+      const GRAMMY_CARDS = [
+        { year: "2020", award: "Best Rap Performance",         line: "Racks in the Middle by Nipsey Hussle",                 img: "nipsey.jpg",  mono: "NH", q: "Nipsey Hussle Racks in the Middle" },
+        { year: "2020", award: "Best Rap/Sung Performance",    line: "Higher by Nipsey Hussle",                              img: "nipsey2.jpg", mono: "NH", q: "DJ Khaled Higher Nipsey Hussle John Legend" },
+        { year: "2021", award: "Best Music Video",             line: "Brown Skin Girl by Beyoncé",                      img: "beyonce.jpg", mono: "B",  q: "Beyoncé Brown Skin Girl official video" },
+        { year: "2021", award: "Best R&amp;B Performance",     line: "Black Parade by Beyoncé",                         img: "beyonce.jpg", mono: "B",  q: "Beyoncé Black Parade" },
+        { year: "2021", award: "Best Rap Song",                line: "Savage Remix by Megan Thee Stallion &amp; Beyoncé", img: "megan.jpg", mono: "MB", q: "Megan Thee Stallion Savage Remix Beyoncé" },
+        { year: "2021", award: "Best Rap Performance",         line: "Savage Remix by Megan Thee Stallion &amp; Beyoncé", img: "megan.jpg", mono: "MB", q: "Megan Thee Stallion Savage Remix Beyoncé" },
+        { year: "2023", award: "Best Melodic Rap Performance", line: "Wait for U by Future ft. Drake",                       img: "future.jpg", mono: "FD", q: "Future Wait For U Drake" }
+      ];
+      const grid = document.getElementById('grammyGrid');
+      if (!grid) return;
+      grid.innerHTML = GRAMMY_CARDS.map(c => `
+        <a class="grammy" href="https://www.youtube.com/results?search_query=${encodeURIComponent(c.q)}" target="_blank" rel="noopener" aria-label="Watch the record on YouTube">
+          <span class="g-media">
+            <span class="g-mono" aria-hidden="true">${c.mono}</span>
+            <img src="./assets/artists/${c.img}" alt="" loading="lazy"
+                 onload="this.previousElementSibling.style.display='none'"
+                 onerror="this.remove()" />
+            <span class="g-play" aria-hidden="true">&#9654;</span>
+          </span>
+          <span class="g-year">${c.year}</span>
+          <h4>${c.award}</h4>
+          <p>${c.line}</p>
+        </a>`).join('');
+    })();
 
     // ── Neighborhood Nip Foundation (ported from the FIFA dashboard) ──
     // Three pills swap a short blurb; a quote rotator cycles Nipsey's
