@@ -517,13 +517,20 @@
       filter: grayscale(1); transition: transform 0.4s ease;
     }
     a.grammy:hover .g-media img { transform: scale(1.05); }
-    /* Monogram tile shows until a matching artist photo exists. */
+    /* Sleeve-style tile shows until the song's cover art exists. */
     .g-mono {
       position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 42px; letter-spacing: 0.05em;
-      color: rgba(255,255,255,0.85);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px; padding: 12px; text-align: center;
       background: linear-gradient(135deg, #262626 0%, #101010 100%);
+    }
+    .g-mono b {
+      font-weight: 700; font-size: 17px; line-height: 1.2;
+      color: rgba(255,255,255,0.92); letter-spacing: -0.01em;
+    }
+    .g-mono i {
+      font-style: normal; font-size: 10.5px; letter-spacing: 0.14em;
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
     }
     .g-play {
       position: absolute; right: 10px; bottom: 10px;
@@ -1262,29 +1269,30 @@
     });
     showRoute((location.hash || '#home').slice(1));
 
-    // ── Grammy cards: interactive artist media ──
+    // ── Grammy cards: interactive song artwork ──
     // Each card links to the winning record on YouTube (search URLs are
-    // deterministic, so they can't break). The photo slot auto-upgrades:
-    // it tries assets/artists/<img>; while the file doesn't exist the
-    // branded monogram tile shows instead, so uploading beyonce.jpg,
-    // megan.jpg or future.jpg later lights the cards up with no code
-    // change. Nipsey's two cards use photos already in the repo.
+    // deterministic, so they cannot break). The artwork slot tries
+    // assets/artists/<img> (the cover of the winning song); until that
+    // file exists a sleeve-style tile with the song title shows, so
+    // uploading racks.jpg, higher.jpg, brownskingirl.jpg,
+    // blackparade.jpg, savage.jpg and waitforu.jpg lights the cards up
+    // with no code change.
     (function renderGrammys(){
       const GRAMMY_CARDS = [
-        { year: "2020", award: "Best Rap Performance",         line: "Racks in the Middle by Nipsey Hussle",                 img: "nipsey.jpg",  mono: "NH", q: "Nipsey Hussle Racks in the Middle" },
-        { year: "2020", award: "Best Rap/Sung Performance",    line: "Higher by Nipsey Hussle",                              img: "nipsey2.jpg", mono: "NH", q: "DJ Khaled Higher Nipsey Hussle John Legend" },
-        { year: "2021", award: "Best Music Video",             line: "Brown Skin Girl by Beyoncé",                      img: "beyonce.jpg", mono: "B",  q: "Beyoncé Brown Skin Girl official video" },
-        { year: "2021", award: "Best R&amp;B Performance",     line: "Black Parade by Beyoncé",                         img: "beyonce.jpg", mono: "B",  q: "Beyoncé Black Parade" },
-        { year: "2021", award: "Best Rap Song",                line: "Savage Remix by Megan Thee Stallion &amp; Beyoncé", img: "megan.jpg", mono: "MB", q: "Megan Thee Stallion Savage Remix Beyoncé" },
-        { year: "2021", award: "Best Rap Performance",         line: "Savage Remix by Megan Thee Stallion &amp; Beyoncé", img: "megan.jpg", mono: "MB", q: "Megan Thee Stallion Savage Remix Beyoncé" },
-        { year: "2023", award: "Best Melodic Rap Performance", line: "Wait for U by Future ft. Drake",                       img: "future.jpg", mono: "FD", q: "Future Wait For U Drake" }
+        { year: "2020", award: "Best Rap Performance",         line: "Racks in the Middle by Nipsey Hussle",                 img: "racks.jpg",         title: "Racks in the Middle", sub: "Nipsey Hussle",                       q: "Nipsey Hussle Racks in the Middle" },
+        { year: "2020", award: "Best Rap/Sung Performance",    line: "Higher by Nipsey Hussle",                              img: "higher.jpg",        title: "Higher",              sub: "Nipsey Hussle",                       q: "DJ Khaled Higher Nipsey Hussle John Legend" },
+        { year: "2021", award: "Best Music Video",             line: "Brown Skin Girl by Beyoncé",                      img: "brownskingirl.jpg", title: "Brown Skin Girl",     sub: "Beyoncé",                        q: "Beyoncé Brown Skin Girl official video" },
+        { year: "2021", award: "Best R&amp;B Performance",     line: "Black Parade by Beyoncé",                         img: "blackparade.jpg",   title: "Black Parade",        sub: "Beyoncé",                        q: "Beyoncé Black Parade" },
+        { year: "2021", award: "Best Rap Song",                line: "Savage Remix by Megan Thee Stallion &amp; Beyoncé", img: "savage.jpg",     title: "Savage Remix",        sub: "Megan Thee Stallion &amp; Beyoncé", q: "Megan Thee Stallion Savage Remix Beyoncé" },
+        { year: "2021", award: "Best Rap Performance",         line: "Savage Remix by Megan Thee Stallion &amp; Beyoncé", img: "savage.jpg",     title: "Savage Remix",        sub: "Megan Thee Stallion &amp; Beyoncé", q: "Megan Thee Stallion Savage Remix Beyoncé" },
+        { year: "2023", award: "Best Melodic Rap Performance", line: "Wait for U by Future ft. Drake",                       img: "waitforu.jpg",      title: "Wait for U",          sub: "Future ft. Drake",                    q: "Future Wait For U Drake" }
       ];
       const grid = document.getElementById('grammyGrid');
       if (!grid) return;
       grid.innerHTML = GRAMMY_CARDS.map(c => `
         <a class="grammy" href="https://www.youtube.com/results?search_query=${encodeURIComponent(c.q)}" target="_blank" rel="noopener" aria-label="Watch the record on YouTube">
           <span class="g-media">
-            <span class="g-mono" aria-hidden="true">${c.mono}</span>
+            <span class="g-mono" aria-hidden="true"><b>${c.title}</b><i>${c.sub}</i></span>
             <img src="./assets/artists/${c.img}" alt="" loading="lazy"
                  onload="this.previousElementSibling.style.display='none'"
                  onerror="this.remove()" />
