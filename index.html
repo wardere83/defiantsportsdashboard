@@ -517,21 +517,47 @@
       filter: grayscale(1); transition: transform 0.4s ease;
     }
     a.grammy:hover .g-media img { transform: scale(1.05); }
-    /* Sleeve-style tile shows until the song's cover art exists. */
+    /* Vinyl record tile shows until the song's cover art exists: a
+       round grooved disc with a red center label, spindle hole, and a
+       slow spin on hover, like a record on a player. */
     .g-mono {
       position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #232323 0%, #0e0e0e 100%);
+    }
+    .g-disc {
+      position: relative; height: 86%; aspect-ratio: 1 / 1;
+      border-radius: 50%;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 4px; padding: 12px; text-align: center;
-      background: linear-gradient(135deg, #262626 0%, #101010 100%);
+      gap: 3px; padding: 0 12%; text-align: center;
+      background:
+        repeating-radial-gradient(circle at 50% 50%,
+          #141414 0px, #141414 2px, #1d1d1d 3px, #1d1d1d 4px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.07);
     }
-    .g-mono b {
-      font-weight: 700; font-size: 17px; line-height: 1.2;
-      color: rgba(255,255,255,0.92); letter-spacing: -0.01em;
+    /* Red center label under the type, like the pressing's label. */
+    .g-disc::before {
+      content: ""; position: absolute; left: 50%; top: 50%;
+      width: 62%; aspect-ratio: 1 / 1; border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, #c8433f 0%, var(--cta) 70%);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.25);
     }
-    .g-mono i {
-      font-style: normal; font-size: 10.5px; letter-spacing: 0.14em;
-      text-transform: uppercase; color: rgba(255,255,255,0.5);
+    .g-disc b, .g-disc i, .g-hole { position: relative; }
+    .g-disc b {
+      font-weight: 700; font-size: 12.5px; line-height: 1.15;
+      color: #fff; letter-spacing: -0.01em; max-width: 100%;
     }
+    .g-hole {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: #0e0e0e; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.25);
+    }
+    .g-disc i {
+      font-style: normal; font-size: 7.5px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.85);
+    }
+    a.grammy:hover .g-disc { animation: discSpin 7s linear infinite; }
+    @keyframes discSpin { to { transform: rotate(360deg); } }
     .g-play {
       position: absolute; right: 10px; bottom: 10px;
       width: 34px; height: 34px; border-radius: 50%;
@@ -542,6 +568,7 @@
     a.grammy:hover .g-play { transform: scale(1.1); }
     @media (prefers-reduced-motion: reduce) {
       a.grammy, .g-media img, .g-play { transition: none; }
+      a.grammy:hover .g-disc { animation: none; }
     }
     @media (max-width: 600px) {
       .ceo-bio { flex-direction: column; text-align: center; gap: 20px; }
@@ -1292,7 +1319,7 @@
       grid.innerHTML = GRAMMY_CARDS.map(c => `
         <a class="grammy" href="https://www.youtube.com/results?search_query=${encodeURIComponent(c.q)}" target="_blank" rel="noopener" aria-label="Watch the record on YouTube">
           <span class="g-media">
-            <span class="g-mono" aria-hidden="true"><b>${c.title}</b><i>${c.sub}</i></span>
+            <span class="g-mono" aria-hidden="true"><span class="g-disc"><b>${c.title}</b><span class="g-hole"></span><i>${c.sub}</i></span></span>
             <img src="./assets/artists/${c.img}" alt="" loading="lazy"
                  onload="this.previousElementSibling.style.display='none'"
                  onerror="this.remove()" />
