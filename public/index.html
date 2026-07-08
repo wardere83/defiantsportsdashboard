@@ -585,6 +585,12 @@
       color: var(--ink-4); font-weight: 700; margin-bottom: 10px;
     }
     .res-region h5 { font-family: var(--serif); font-weight: 700; font-size: 22px; margin: 0 0 12px; }
+    /* Slim panoramic skyline strip inside each region card. */
+    .region-pano {
+      margin: 0 0 12px; border-radius: 6px; overflow: hidden;
+      border: 1px solid var(--line); line-height: 0;
+    }
+    .region-pano svg { display: block; width: 100%; height: auto; }
     .res-region p { font-size: 14px; color: var(--ink-2); line-height: 1.55; margin: 0 0 12px; }
     .res-region .note { font-size: 12.5px; color: var(--ink-4); }
 
@@ -971,19 +977,118 @@
           <article class="res-region">
             <div class="kicker">Region · 01</div>
             <h5>East Coast</h5>
-            <p>New York · New Jersey · Philadelphia · Boston · Washington, D.C. · Atlanta · Miami</p>
+            <!-- Slim panoramic New York skyline (One WTC, Empire State, Chrysler) -->
+            <figure class="region-pano" aria-label="New York skyline">
+              <svg viewBox="0 0 800 150" preserveAspectRatio="xMidYMax slice" role="img">
+                <defs><linearGradient id="skyNY" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#39404b"/><stop offset="1" stop-color="#191b1f"/>
+                </linearGradient></defs>
+                <rect width="800" height="150" fill="url(#skyNY)"/>
+                <g fill="#0c0d0f">
+                  <rect x="0" y="106" width="800" height="44"/>
+                  <rect x="18" y="84" width="40" height="66"/>
+                  <rect x="70" y="66" width="30" height="84"/>
+                  <rect x="112" y="90" width="46" height="60"/>
+                  <polygon points="196,150 196,58 206,58 206,44 216,44 216,34 226,34 226,44 236,44 236,58 246,58 246,150"/>
+                  <rect x="219" y="8" width="4" height="30"/>
+                  <rect x="262" y="76" width="34" height="74"/>
+                  <rect x="306" y="52" width="16" height="98"/>
+                  <rect x="334" y="88" width="44" height="62"/>
+                  <polygon points="396,150 396,60 404,52 412,44 420,52 428,60 428,150"/>
+                  <rect x="410" y="16" width="3" height="34"/>
+                  <rect x="446" y="70" width="38" height="80"/>
+                  <polygon points="502,150 502,42 530,28 558,42 558,150"/>
+                  <rect x="528" y="2" width="4" height="30"/>
+                  <rect x="576" y="80" width="36" height="70"/>
+                  <rect x="624" y="60" width="26" height="90"/>
+                  <rect x="662" y="92" width="42" height="58"/>
+                  <rect x="716" y="72" width="30" height="78"/>
+                  <rect x="756" y="98" width="30" height="52"/>
+                </g>
+                <g fill="#d1f452" opacity="0.75">
+                  <rect x="82" y="80" width="3" height="3"/><rect x="212" y="70" width="3" height="3"/>
+                  <rect x="312" y="66" width="3" height="3"/><rect x="522" y="60" width="3" height="3"/>
+                  <rect x="634" y="76" width="3" height="3"/><rect x="726" y="88" width="3" height="3"/>
+                </g>
+              </svg>
+            </figure>
+            <p>New York and New Jersey</p>
             <div class="note">Anchored around Ivy + HBCU athletic programs and the Northeast professional pipeline.</div>
           </article>
           <article class="res-region">
             <div class="kicker">Region · 02</div>
             <h5>West Coast</h5>
-            <p>Los Angeles · San Diego · Bay Area · Sacramento</p>
+            <!-- Slim panoramic Los Angeles skyline (US Bank Tower, Wilshire Grand, palms) -->
+            <figure class="region-pano" aria-label="Los Angeles skyline">
+              <svg viewBox="0 0 800 150" preserveAspectRatio="xMidYMax slice" role="img">
+                <defs><linearGradient id="skyLA" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#4a4038"/><stop offset="1" stop-color="#1b1917"/>
+                </linearGradient></defs>
+                <rect width="800" height="150" fill="url(#skyLA)"/>
+                <g fill="#0c0d0f">
+                  <rect x="0" y="112" width="800" height="38"/>
+                  <rect x="30" y="92" width="44" height="58"/>
+                  <rect x="96" y="74" width="34" height="76"/>
+                  <rect x="146" y="98" width="40" height="52"/>
+                  <polygon points="216,150 216,56 224,48 252,48 260,56 260,150"/>
+                  <rect x="286" y="66" width="30" height="84"/>
+                  <path d="M348 150 L348 44 Q368 30 388 44 L388 150 Z"/>
+                  <rect x="366" y="20" width="3" height="26"/>
+                  <rect x="414" y="58" width="36" height="92"/>
+                  <polygon points="474,150 474,52 486,38 512,38 512,150"/>
+                  <rect x="508" y="12" width="3" height="28"/>
+                  <rect x="538" y="84" width="40" height="66"/>
+                  <rect x="594" y="70" width="28" height="80"/>
+                  <rect x="636" y="96" width="38" height="54"/>
+                  <path d="M712 150 L712 96 C702 92 700 84 706 78 C698 76 700 66 708 66 C704 58 714 52 720 58 C724 50 736 52 736 62 C744 60 748 70 740 76 C748 80 744 92 736 94 L736 150 Z" transform="translate(-12 0)"/>
+                  <rect x="722" y="98" width="4" height="52"/>
+                  <path d="M770 150 L770 104 C762 100 760 94 766 90 C758 86 762 78 770 80 C768 72 778 68 782 76 C790 70 796 78 790 84 C798 86 794 96 786 96 L786 150 Z" transform="translate(-6 0)"/>
+                </g>
+                <g fill="#d1f452" opacity="0.75">
+                  <rect x="108" y="88" width="3" height="3"/><rect x="234" y="66" width="3" height="3"/>
+                  <rect x="364" y="60" width="3" height="3"/><rect x="488" y="54" width="3" height="3"/>
+                  <rect x="604" y="84" width="3" height="3"/>
+                </g>
+              </svg>
+            </figure>
+            <p>Los Angeles</p>
             <div class="note">Rooted in Crenshaw, extended across California's Division I and community-college athlete networks.</div>
           </article>
           <article class="res-region">
             <div class="kicker">Region · 03</div>
             <h5>Pacific Northwest</h5>
-            <p>Seattle · Portland · Tacoma · Spokane</p>
+            <!-- Slim panoramic Seattle skyline (Space Needle, Columbia Center, Mt. Rainier) -->
+            <figure class="region-pano" aria-label="Seattle skyline">
+              <svg viewBox="0 0 800 150" preserveAspectRatio="xMidYMax slice" role="img">
+                <defs><linearGradient id="skySEA" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#35414a"/><stop offset="1" stop-color="#161a1d"/>
+                </linearGradient></defs>
+                <rect width="800" height="150" fill="url(#skySEA)"/>
+                <polygon points="560,150 640,58 668,84 700,54 800,150" fill="#232a30"/>
+                <polygon points="626,74 640,58 654,74 646,70 638,78 632,70" fill="#e8edf0" opacity="0.85"/>
+                <g fill="#0c0d0f">
+                  <rect x="0" y="112" width="800" height="38"/>
+                  <path d="M96 150 L104 74 L108 74 L106 62 L88 56 Q86 50 92 48 L124 40 Q132 40 134 46 Q138 50 132 54 L114 60 L112 74 L116 74 L124 150 Z" transform="translate(-20 0)"/>
+                  <ellipse cx="90" cy="46" rx="34" ry="9"/>
+                  <rect x="87" y="20" width="4" height="20"/>
+                  <rect x="150" y="94" width="36" height="56"/>
+                  <rect x="200" y="78" width="30" height="72"/>
+                  <rect x="246" y="60" width="34" height="90"/>
+                  <polygon points="298,150 298,44 316,32 334,44 334,150"/>
+                  <path d="M356 150 L356 36 Q374 26 392 36 L392 150 Z"/>
+                  <rect x="410" y="66" width="30" height="84"/>
+                  <rect x="454" y="84" width="40" height="66"/>
+                  <polygon points="510,150 510,70 522,60 534,70 534,150"/>
+                  <rect x="552" y="96" width="34" height="54"/>
+                  <rect x="600" y="108" width="30" height="42"/>
+                </g>
+                <g fill="#d1f452" opacity="0.75">
+                  <rect x="258" y="72" width="3" height="3"/><rect x="312" y="52" width="3" height="3"/>
+                  <rect x="370" y="46" width="3" height="3"/><rect x="464" y="94" width="3" height="3"/>
+                </g>
+              </svg>
+            </figure>
+            <p>Seattle</p>
             <div class="note">Regional workshops delivered in partnership with universities and community sports programs.</div>
           </article>
         </div>
