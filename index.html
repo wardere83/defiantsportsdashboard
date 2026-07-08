@@ -507,16 +507,13 @@
        the card and zooms the artist photo; a red play chip signals it. */
     a.grammy { cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
     a.grammy:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--ink-4); }
-    /* The media slot IS the record: a circle, no rectangular sleeve.
-       Cover art (when uploaded) renders as a round disc too. */
     .g-media {
-      position: relative; display: block; aspect-ratio: 1 / 1;
-      width: min(64%, 170px); margin: 4px auto 10px;
-      border-radius: 50%; overflow: visible; background: transparent;
+      position: relative; display: block; aspect-ratio: 10 / 7;
+      border-radius: 6px; overflow: hidden; background: #161616;
+      margin-bottom: 4px;
     }
     .g-media img {
       width: 100%; height: 100%; object-fit: cover; display: block;
-      border-radius: 50%;
       filter: grayscale(1); transition: transform 0.4s ease;
     }
     a.grammy:hover .g-media img { transform: scale(1.05); }
@@ -526,9 +523,10 @@
     .g-mono {
       position: absolute; inset: 0;
       display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #232323 0%, #0e0e0e 100%);
     }
     .g-disc {
-      position: relative; height: 100%; aspect-ratio: 1 / 1;
+      position: relative; height: 86%; aspect-ratio: 1 / 1;
       border-radius: 50%;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 3px; padding: 0 12%; text-align: center;
@@ -561,7 +559,7 @@
     a.grammy:hover .g-disc { animation: discSpin 7s linear infinite; }
     @keyframes discSpin { to { transform: rotate(360deg); } }
     .g-play {
-      position: absolute; right: 4%; bottom: 4%;
+      position: absolute; right: 10px; bottom: 10px;
       width: 34px; height: 34px; border-radius: 50%;
       background: var(--cta); color: #fff;
       display: flex; align-items: center; justify-content: center;
@@ -747,8 +745,20 @@
       border-radius: 10px; padding: 28px;
     }
     .fnd-card h3 { font-size: 18px; margin: 0 0 14px; }
-    .fnd-video { border-radius: 8px; overflow: hidden; background: #000; }
-    .fnd-video video { width: 100%; display: block; }
+    /* The video sits like a record on a player: a circular grooved
+       vinyl disc with the footage playing as its center label. */
+    .fnd-video {
+      width: min(80%, 330px); aspect-ratio: 1 / 1; margin: 0 auto;
+      border-radius: 50%; padding: 9%; overflow: hidden;
+      background:
+        repeating-radial-gradient(circle at 50% 50%,
+          #141414 0px, #141414 2px, #1d1d1d 3px, #1d1d1d 4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.07);
+    }
+    .fnd-video video {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      border-radius: 50%;
+    }
     .fnd-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
     .fnd-pill {
       border: 1px solid var(--line); background: #fff; color: var(--ink-2);
