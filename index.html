@@ -469,19 +469,43 @@
     .standards .sol-card .num { height: 44px; }
     .standards .sol-card h3 { min-height: 35px; }
 
-    /* ─────────────── Case studies ─────────────── */
-    .cases { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
-    .case {
+    /* ─────────────── Leadership · Grammy Awards ─────────────── */
+    /* CEO bio card: portrait + short bio on one white card. */
+    .ceo-bio {
       background: #fff; border: 1px solid var(--line);
-      border-radius: 10px; padding: 40px 36px;
-      display: flex; flex-direction: column; gap: 18px;
+      border-radius: 10px; padding: 36px;
+      display: flex; align-items: center; gap: 32px;
+      max-width: 780px; margin: 0 auto 56px;
     }
-    .case .badge {
+    .ceo-photo {
+      width: 132px; height: 132px; border-radius: 50%;
+      object-fit: cover; object-position: center top; flex: 0 0 auto;
+      border: 3px solid #101010;
+    }
+    .ceo-text h3 { font-size: 24px; margin: 0 0 2px; }
+    .ceo-role {
       font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--ink-4); font-weight: 600;
+      color: var(--cta); font-weight: 700; margin: 0 0 12px;
     }
-    .case h4 { font-family: var(--serif); font-weight: 700; font-size: 24px; margin: 0; line-height: 1.15; }
-    .case p { font-size: 14.5px; color: var(--ink-3); line-height: 1.6; margin: 0; }
+    .ceo-text p:last-child { font-size: 15px; color: var(--ink-3); line-height: 1.6; margin: 0; }
+    /* The seven Grammys, one card each. */
+    .grammys { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+    .grammy {
+      background: #fff; border: 1px solid var(--line);
+      border-radius: 10px; padding: 28px 26px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .g-year {
+      align-self: flex-start;
+      background: var(--accent); color: #101010;
+      font-size: 11.5px; font-weight: 700; letter-spacing: 0.08em;
+      padding: 4px 12px; border-radius: 999px;
+    }
+    .grammy h4 { font-family: var(--serif); font-weight: 700; font-size: 18px; margin: 0; line-height: 1.25; }
+    .grammy p { font-size: 13.5px; color: var(--ink-3); line-height: 1.5; margin: 0; }
+    @media (max-width: 600px) {
+      .ceo-bio { flex-direction: column; text-align: center; gap: 20px; }
+    }
 
     /* ─────────────── Defiant NIL ─────────────── */
     .nil-hero { background: #000; color: #fff; padding: 84px 0; text-align: center; }
@@ -625,7 +649,7 @@
 
     /* White cards on the dark canvas (Foundation style): re-scope the
        ink/line tokens inside every card so their text stays dark. */
-    .sol-card, .case, .nil-state, .nil-explainer, .res-card, .fnd-card {
+    .sol-card, .ceo-bio, .grammy, .nil-state, .nil-explainer, .res-card, .fnd-card {
       --ink: #101010; --ink-2: #2b2b2b; --ink-3: #4a4a4a; --ink-4: #8a8a8a;
       --line: #e5e5e5; --line-2: #d1d1d1;
       color: #101010;
@@ -688,7 +712,7 @@
       .hero { padding: 60px 0 80px; }
       .hero-grid { grid-template-columns: 1fr; gap: 32px; }
       .const { height: 380px; }
-      .sol-grid, .cases, .res-programs, .res-regions { grid-template-columns: 1fr; }
+      .sol-grid, .res-programs, .res-regions { grid-template-columns: 1fr; }
       .foot-grid { grid-template-columns: 1fr 1fr; }
       .nav-cta .btn.ghost { display: none; }
     }
@@ -823,34 +847,56 @@
       </div>
     </section>
 
-    <!-- CASES -->
+    <!-- LEADERSHIP · GRAMMY AWARDS -->
     <section class="section panel">
       <div class="container">
         <div class="section-head">
-          <p class="eyebrow">Case Studies</p>
-          <h2>Deals that moved the room.</h2>
-          <p>Every partnership signed through Defiant Sports carries story, receipts, and stewardship.</p>
+          <p class="eyebrow">Leadership</p>
+          <h2>Seven Grammy Awards.</h2>
         </div>
-        <div class="cases">
-          <article class="case">
-            <span class="badge">Case Study · Footwear</span>
-            <h4>Four athletes signed for a footwear launch.</h4>
-            <p>A footwear brand needed authentic athlete voices for a universal product story. Defiant Sports surfaced four fit-first athletes within one week.</p>
+        <div class="ceo-bio">
+          <img class="ceo-photo" src="./assets/team/carless.jpg" alt="Steven Carless, CEO of Defiant Sports" loading="lazy" />
+          <div class="ceo-text">
+            <h3>Steven Carless</h3>
+            <p class="ceo-role">CEO, Defiant Sports</p>
+            <p>Steven Carless, also known as "Steve-O", is a 7-time Grammy award winner, an entrepreneur, talent manager, tech advisor and philanthropist.</p>
+          </div>
+        </div>
+        <div class="grammys">
+          <article class="grammy">
+            <span class="g-year">2020</span>
+            <h4>Best Rap Performance</h4>
+            <p>"Racks in the Middle" · Nipsey Hussle</p>
           </article>
-          <article class="case">
-            <span class="badge">Case Study · Media</span>
-            <h4>Weekly podcast bookings secured without the scramble.</h4>
-            <p>A top-ranked conference podcast needed fresh athlete guests every single week. Defiant Sports matched the right voices reliably, week over week.</p>
+          <article class="grammy">
+            <span class="g-year">2020</span>
+            <h4>Best Rap/Sung Performance</h4>
+            <p>"Higher" · Nipsey Hussle</p>
           </article>
-          <article class="case">
-            <span class="badge">Case Study · Telecom</span>
-            <h4>A landmark college NIL deal, signed clean.</h4>
-            <p>A national telecom brand needed a landmark college NIL campaign done right. Defiant Sports delivered it signed, contracted, and widely covered.</p>
+          <article class="grammy">
+            <span class="g-year">2021</span>
+            <h4>Best Music Video</h4>
+            <p>"Brown Skin Girl" · Beyoncé</p>
           </article>
-          <article class="case">
-            <span class="badge">Case Study · Digital</span>
-            <h4>A campus athlete network built in one quarter.</h4>
-            <p>A fast-growing digital brand needed athlete voices across schools, states, and sports. Defiant Sports assembled the full roster in one quarter.</p>
+          <article class="grammy">
+            <span class="g-year">2021</span>
+            <h4>Best R&amp;B Performance</h4>
+            <p>"Black Parade" · Beyoncé</p>
+          </article>
+          <article class="grammy">
+            <span class="g-year">2021</span>
+            <h4>Best Rap Song</h4>
+            <p>"Savage Remix" · Megan Thee Stallion &amp; Beyoncé</p>
+          </article>
+          <article class="grammy">
+            <span class="g-year">2021</span>
+            <h4>Best Rap Performance</h4>
+            <p>"Savage Remix" · Megan Thee Stallion &amp; Beyoncé</p>
+          </article>
+          <article class="grammy">
+            <span class="g-year">2023</span>
+            <h4>Best Melodic Rap Performance</h4>
+            <p>"Wait for U" · Future ft. Drake</p>
           </article>
         </div>
       </div>
