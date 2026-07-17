@@ -32,13 +32,13 @@ Optional configuration:
   README.md
   DEPLOYMENT.md
   index.html                       # static preview copy
-  assets/defiant-sports-logo.jpeg  # source logo
+  assets/defiant-sports-logo.png  # source logo (white mark on transparent background)
   docs/
     LIVE_SOURCES.md
   public/
     index.html                     # served by Express
     assets/
-      defiant-sports-logo.jpeg     # mirrored for /public-rooted requests
+      defiant-sports-logo.png     # mirrored for /public-rooted requests
 ```
 
 ## Deploying from GitHub

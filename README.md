@@ -78,7 +78,7 @@ Impact view.
 
 - `index.html`, root copy of the dashboard for static GitHub Pages preview.
 - `public/index.html`, production copy served by the Express app.
-- `assets/defiant-sports-logo.jpeg`, Defiant Sports logo (also mirrored
+- `assets/defiant-sports-logo.png`, Defiant Sports logo (also mirrored
   to `public/assets/` so the Express server resolves it the same way).
 - `server.js`, Node/Express server hosting static files plus the live
   API endpoints.
