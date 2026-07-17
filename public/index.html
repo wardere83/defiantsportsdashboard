@@ -543,7 +543,7 @@
       background: radial-gradient(circle, #c8433f 0%, var(--cta) 70%);
       box-shadow: inset 0 0 0 1px rgba(0,0,0,0.25);
     }
-    .g-disc b, .g-disc i, .g-hole { position: relative; }
+    .g-disc b, .g-hole { position: relative; }
     .g-disc b {
       font-weight: 700; font-size: 12.5px; line-height: 1.15;
       color: #fff; letter-spacing: -0.01em; max-width: 100%;
@@ -551,10 +551,6 @@
     .g-hole {
       width: 9px; height: 9px; border-radius: 50%;
       background: #0e0e0e; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.25);
-    }
-    .g-disc i {
-      font-style: normal; font-size: 7.5px; letter-spacing: 0.12em;
-      text-transform: uppercase; color: rgba(255,255,255,0.85);
     }
     a.grammy:hover .g-disc { animation: discSpin 7s linear infinite; }
     @keyframes discSpin { to { transform: rotate(360deg); } }
@@ -1318,7 +1314,7 @@
       grid.innerHTML = GRAMMY_CARDS.map(c => `
         <a class="grammy" href="https://www.youtube.com/results?search_query=${encodeURIComponent(c.q)}" target="_blank" rel="noopener" aria-label="Watch the record on YouTube">
           <span class="g-media">
-            <span class="g-mono" aria-hidden="true"><span class="g-disc"><b>${c.title}</b><span class="g-hole"></span><i>${c.sub}</i></span></span>
+            <span class="g-mono" aria-hidden="true"><span class="g-disc"><b>${c.title}</b><span class="g-hole"></span></span></span>
             <img src="./assets/artists/${c.img}" alt="" loading="lazy"
                  onload="this.previousElementSibling.style.display='none'"
                  onerror="this.remove()" />
