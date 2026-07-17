@@ -511,10 +511,10 @@
       border-radius: 6px; overflow: hidden; background: #161616;
       margin-bottom: 4px;
     }
-    /* Vinyl record that spins in a constant loop. When the song's
-       cover art exists it becomes the record's face (a picture disc)
-       with faint grooves and the spindle hole kept on top; otherwise
-       the grooved disc with the red label and song title shows. */
+    /* Vinyl record that spins while hovered. When the song's cover
+       art exists it becomes the record's face (a picture disc) with
+       faint grooves and the spindle hole kept on top; otherwise the
+       grooved disc with the red label and song title shows. */
     .g-mono {
       position: absolute; inset: 0;
       display: flex; align-items: center; justify-content: center;
@@ -529,8 +529,8 @@
         repeating-radial-gradient(circle at 50% 50%,
           #141414 0px, #141414 2px, #1d1d1d 3px, #1d1d1d 4px);
       box-shadow: 0 6px 18px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.07);
-      animation: discSpin 7s linear infinite;
     }
+    a.grammy:hover .g-disc { animation: discSpin 7s linear infinite; }
     .g-cover {
       position: absolute; inset: 0; width: 100%; height: 100%;
       border-radius: 50%; object-fit: cover; display: block;
@@ -573,7 +573,7 @@
     a.grammy:hover .g-play { transform: scale(1.1); }
     @media (prefers-reduced-motion: reduce) {
       a.grammy, .g-play { transition: none; }
-      .g-disc { animation: none; }
+      a.grammy:hover .g-disc { animation: none; }
     }
     @media (max-width: 600px) {
       .ceo-bio { flex-direction: column; text-align: center; gap: 20px; }
@@ -939,7 +939,7 @@
           </div>
         </div>
         <!-- Interactive Grammy cards: each shows a vinyl record spinning
-             in a constant loop with the song's cover art as its face
+             on hover with the song's cover art as its face
              (picture disc); hover lifts the card, click plays the
              winning record on YouTube. Rendered from GRAMMY_CARDS. -->
         <div class="grammys" id="grammyGrid"></div>
@@ -1303,7 +1303,7 @@
     // ── Grammy cards: spinning picture-disc artwork ──
     // Each card links to the winning record on YouTube (search URLs are
     // deterministic, so they cannot break). The cover art from
-    // assets/artists/<img> becomes the face of the looping vinyl disc;
+    // assets/artists/<img> becomes the face of the vinyl disc (spins on hover);
     // if a file is missing the grooved disc with the red label and the
     // song title shows instead
     // (uploading a new cover needs no code change).
