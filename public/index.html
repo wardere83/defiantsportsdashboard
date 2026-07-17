@@ -1369,7 +1369,7 @@
         const tick = () => {
           qRoot.classList.remove('popping');
           void qRoot.offsetWidth;
-          qText.textContent = NIPSEY_QUOTES[i % NIPSEY_QUOTES.length];
+          qText.textContent = '“' + NIPSEY_QUOTES[i % NIPSEY_QUOTES.length] + '”';
           qRoot.classList.add('popping');
           i++;
         };
