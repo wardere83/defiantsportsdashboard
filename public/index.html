@@ -86,7 +86,8 @@
        horizontally centered in the nav bar. */
     .brand-group {
       display: flex; align-items: center; gap: 14px;
-      justify-self: center;
+      /* Sit in the middle grid column so the pair is page-centered. */
+      grid-column: 2; justify-self: center;
       height: 100%;
     }
     /* Right-side actions live in the third grid column and right-align. */
@@ -100,7 +101,7 @@
     /* Official Defiant Sports logo, inlined from the repo's
        assets/defiant-sports-logo.jpeg so it renders instantly. */
     .brand-logo {
-      height: 34px; width: auto; display: block;
+      height: 44px; width: auto; display: block;
       filter: invert(1); /* black mark -> white on the dark nav */ 
       user-select: none; -webkit-user-drag: none;
     }
