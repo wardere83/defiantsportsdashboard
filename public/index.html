@@ -512,14 +512,10 @@
       border-radius: 6px; overflow: hidden; background: #161616;
       margin-bottom: 4px;
     }
-    .g-media img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
-      transition: transform 0.4s ease;
-    }
-    a.grammy:hover .g-media img { transform: scale(1.05); }
-    /* Vinyl record tile shows until the song's cover art exists: a
-       round grooved disc with a red center label, spindle hole, and a
-       slow spin on hover, like a record on a player. */
+    /* Vinyl record that spins in a constant loop. When the song's
+       cover art exists it becomes the record's face (a picture disc)
+       with faint grooves and the spindle hole kept on top; otherwise
+       the grooved disc with the red label and song title shows. */
     .g-mono {
       position: absolute; inset: 0;
       display: flex; align-items: center; justify-content: center;
@@ -534,6 +530,21 @@
         repeating-radial-gradient(circle at 50% 50%,
           #141414 0px, #141414 2px, #1d1d1d 3px, #1d1d1d 4px);
       box-shadow: 0 6px 18px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.07);
+      animation: discSpin 7s linear infinite;
+    }
+    .g-cover {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      border-radius: 50%; object-fit: cover; display: block;
+    }
+    .g-disc.has-art b, .g-disc.has-art::before { display: none; }
+    /* Faint groove rings over the art so it still reads as a record. */
+    .g-disc.has-art::after {
+      content: ""; position: absolute; inset: 0; border-radius: 50%;
+      background:
+        repeating-radial-gradient(circle at 50% 50%,
+          rgba(0,0,0,0.16) 0px, rgba(0,0,0,0.16) 1px,
+          rgba(0,0,0,0) 2px, rgba(0,0,0,0) 5px);
+      pointer-events: none;
     }
     /* Red center label under the type, like the pressing's label. */
     .g-disc::before {
@@ -552,7 +563,6 @@
       width: 9px; height: 9px; border-radius: 50%;
       background: #0e0e0e; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.25);
     }
-    a.grammy:hover .g-disc { animation: discSpin 7s linear infinite; }
     @keyframes discSpin { to { transform: rotate(360deg); } }
     .g-play {
       position: absolute; right: 10px; bottom: 10px;
@@ -563,8 +573,8 @@
     }
     a.grammy:hover .g-play { transform: scale(1.1); }
     @media (prefers-reduced-motion: reduce) {
-      a.grammy, .g-media img, .g-play { transition: none; }
-      a.grammy:hover .g-disc { animation: none; }
+      a.grammy, .g-play { transition: none; }
+      .g-disc { animation: none; }
     }
     @media (max-width: 600px) {
       .ceo-bio { flex-direction: column; text-align: center; gap: 20px; }
@@ -929,9 +939,9 @@
             <p>Steven Carless, also known as "Steve-O", is a 7-time Grammy award winner, an entrepreneur, talent manager, tech advisor and philanthropist.</p>
           </div>
         </div>
-        <!-- Interactive Grammy cards: artist photo (auto-upgrades when a
-             matching file lands in assets/artists/, monogram fallback
-             until then), hover lift + photo zoom, click plays the
+        <!-- Interactive Grammy cards: each shows a vinyl record spinning
+             in a constant loop with the song's cover art as its face
+             (picture disc); hover lifts the card, click plays the
              winning record on YouTube. Rendered from GRAMMY_CARDS. -->
         <div class="grammys" id="grammyGrid"></div>
       </div>
@@ -1291,14 +1301,13 @@
     });
     showRoute((location.hash || '#home').slice(1));
 
-    // ── Grammy cards: interactive song artwork ──
+    // ── Grammy cards: spinning picture-disc artwork ──
     // Each card links to the winning record on YouTube (search URLs are
-    // deterministic, so they cannot break). The artwork slot tries
-    // assets/artists/<img> (the cover of the winning song); until that
-    // file exists a sleeve-style tile with the song title shows, so
-    // uploading racks.jpg, higher.jpg, brownskingirl.jpg,
-    // blackparade.jpg, savage.jpg and waitforu.jpg lights the cards up
-    // with no code change.
+    // deterministic, so they cannot break). The cover art from
+    // assets/artists/<img> becomes the face of the looping vinyl disc;
+    // if a file is missing the grooved disc with the red label and the
+    // song title shows instead
+    // (uploading a new cover needs no code change).
     (function renderGrammys(){
       const GRAMMY_CARDS = [
         { year: "2020", award: "Best Rap Performance",         line: "Racks in the Middle by Nipsey Hussle",                 img: "racks.jpg",         title: "Racks in the Middle", sub: "Nipsey Hussle",                       q: "Nipsey Hussle Racks in the Middle" },
@@ -1314,10 +1323,9 @@
       grid.innerHTML = GRAMMY_CARDS.map(c => `
         <a class="grammy" href="https://www.youtube.com/results?search_query=${encodeURIComponent(c.q)}" target="_blank" rel="noopener" aria-label="Watch the record on YouTube">
           <span class="g-media">
-            <span class="g-mono" aria-hidden="true"><span class="g-disc"><b>${c.title}</b><span class="g-hole"></span></span></span>
-            <img src="./assets/artists/${c.img}" alt="" loading="lazy"
-                 onload="this.previousElementSibling.style.display='none'"
-                 onerror="this.remove()" />
+            <span class="g-mono" aria-hidden="true"><span class="g-disc"><img class="g-cover" src="./assets/artists/${c.img}" alt="" loading="lazy"
+                 onload="this.parentElement.classList.add('has-art')"
+                 onerror="this.remove()" /><b>${c.title}</b><span class="g-hole"></span></span></span>
             <span class="g-play" aria-hidden="true">&#9654;</span>
           </span>
           <span class="g-year">${c.year}</span>
