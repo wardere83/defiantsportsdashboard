@@ -725,7 +725,8 @@
 
     /* White cards on the dark canvas (Foundation style): re-scope the
        ink/line tokens inside every card so their text stays dark. */
-    .sol-card, .ceo-bio, .grammy, .nil-state, .nil-explainer, .res-card, .fnd-card {
+    .sol-card, .ceo-bio, .grammy, .nil-state, .nil-explainer, .res-card, .fnd-card,
+    .partner-tab, .tp-card {
       --ink: #101010; --ink-2: #2b2b2b; --ink-3: #4a4a4a; --ink-4: #8a8a8a;
       --line: #e5e5e5; --line-2: #d1d1d1;
       color: #101010;
@@ -774,6 +775,71 @@
     .fnd-quote.popping blockquote { animation: fndPop 0.45s ease; }
     @keyframes fndPop { 0% { opacity: 0; transform: translateY(4px); } 100% { opacity: 1; transform: none; } }
     @media (max-width: 900px) { .fnd-grid { grid-template-columns: 1fr; } }
+
+    /* ─────────────── Scale partners (Grammy section) ─────────────── */
+    /* Two partner tabs side by side under the Grammy grid, carried
+       over from the original World Cup dashboard's partner rail. */
+    .partner-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 56px; }
+    .partner-tab {
+      background: #fff; border: 1px solid var(--line);
+      border-radius: 10px; padding: 34px 30px;
+      display: flex; flex-direction: column; gap: 10px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .partner-tab:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--ink-4); }
+    .partner-kicker {
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ink-4); font-weight: 700;
+    }
+    .partner-tab h4 { font-family: var(--serif); font-weight: 700; font-size: 24px; margin: 0; line-height: 1.15; }
+    .partner-lane {
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--cta); font-weight: 700; margin: 0 0 4px;
+    }
+    .partner-tab p:last-child { font-size: 14.5px; color: var(--ink-3); line-height: 1.6; margin: 0; }
+    @media (max-width: 720px) { .partner-tabs { grid-template-columns: 1fr; } }
+
+    /* ─────────────── Team Partners ─────────────── */
+    /* One bio row per person: round portrait beside role, name, and
+       the long-form bio carried over from the original dashboard. */
+    .tp-stack { display: flex; flex-direction: column; gap: 28px; max-width: 880px; margin: 0 auto; }
+    .tp-card {
+      background: #fff; border: 1px solid var(--line);
+      border-radius: 10px; padding: 36px;
+      display: flex; align-items: flex-start; gap: 32px;
+    }
+    .tp-photo {
+      width: 148px; height: 148px; border-radius: 50%;
+      object-fit: cover; object-position: center top; flex: 0 0 auto;
+      border: 3px solid #101010;
+    }
+    .tp-text h3 { font-size: 24px; margin: 0 0 2px; }
+    .tp-role {
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--cta); font-weight: 700; margin: 0 0 12px;
+    }
+    .tp-text p:last-child { font-size: 15px; color: var(--ink-3); line-height: 1.65; margin: 0; }
+    @media (max-width: 600px) {
+      .tp-card { flex-direction: column; align-items: center; text-align: center; gap: 20px; }
+    }
+
+    /* ─────────────── Defying the Odds ─────────────── */
+    /* Minimalist: a black quote hero, three mission cards (reusing
+       .sol-card), and the shared CTA band. Only the hero is new. */
+    .odds-hero { background: #000; color: #fff; padding: 100px 0; text-align: center; }
+    .odds-hero .eyebrow {
+      font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--accent); font-weight: 600; margin: 0 0 26px;
+    }
+    .odds-hero blockquote {
+      font-family: var(--serif); font-weight: 700;
+      font-size: clamp(24px, 3.4vw, 38px); line-height: 1.3;
+      letter-spacing: -0.02em; max-width: 900px; margin: 0 auto 26px;
+    }
+    .odds-hero cite {
+      font-style: normal; font-size: 12px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: rgba(255,255,255,0.6); font-weight: 600;
+    }
 
     /* ============================================================
        RESPONSIVE TIERS
@@ -842,6 +908,8 @@
         </div>
         <a href="#nil" data-route="nil">Defiant NIL</a>
         <a href="#resources" data-route="resources">Resources</a>
+        <a href="#partners" data-route="partners">Team Partners</a>
+        <a href="#odds" data-route="odds">Defying the Odds</a>
         <a href="#foundation" data-route="foundation">Nip Foundation</a>
       </nav>
       <!-- Auth buttons removed; the hamburger menu is the
@@ -943,6 +1011,23 @@
              (picture disc); hover lifts the card, click plays the
              winning record on YouTube. Rendered from GRAMMY_CARDS. -->
         <div class="grammys" id="grammyGrid"></div>
+
+        <!-- Scale partners carried over from the original World Cup
+             dashboard's partner rail: two tabs side by side. -->
+        <div class="partner-tabs">
+          <article class="partner-tab">
+            <div class="partner-kicker">Scale Partner · 01</div>
+            <h4>Bulle Consulting</h4>
+            <p class="partner-lane">Capacity Building · Fund Development</p>
+            <p>Bulle Consulting helps organizations across the Defiant network build durable capacity and scale fund development, so every program has the structure and resources to grow city by city.</p>
+          </article>
+          <article class="partner-tab">
+            <div class="partner-kicker">Scale Partner · 02</div>
+            <h4>The Dream Company</h4>
+            <p class="partner-lane">Multimedia Strategy · Marketing</p>
+            <p>The Dream Company leads multimedia and marketing strategy for the Defiant roster, carrying every athlete's story across sport, music, and culture.</p>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -1175,6 +1260,99 @@
     </section>
   </main>
 
+  <!-- ==================== TEAM PARTNERS ==================== -->
+  <!-- Leadership bios carried over from the original Defiant dashboard:
+       Steven Carless, Hassan Wardere, and Jamal "Mally" Brandon, in that
+       order, each with the portrait already shipped in assets/team/. -->
+  <main id="route-partners" class="route">
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Team Partners</p>
+          <h2>The people behind Defiant.</h2>
+          <p>The leadership team steering Defiant Sports and The Defiant Foundation, from the boardroom to the block.</p>
+        </div>
+        <div class="tp-stack">
+          <article class="tp-card">
+            <img class="tp-photo" src="./assets/team/carless.jpg" alt="Steven Pierre Carless" loading="lazy" />
+            <div class="tp-text">
+              <h3>Steven Pierre Carless</h3>
+              <p class="tp-role">CEO, The Defiant Foundation</p>
+              <p>Grammy Award-winning executive Steven Pierre Carless, widely known as Steve-O, is a trailblazing leader recognized for his work with Nipsey Hussle, Beyoncé, Polo G, John Legend, and others. His contributions to award-winning records have earned him multiple Grammys, reinforcing his impact at the highest level of the industry. In 2021, he made history as the first Black President of Warner Records, cementing his legacy as a transformative force in music and culture. Now serving as CEO of The Defiant Foundation, Carless brings elite leadership to drive a value-driven impact across the U.S. and globally.</p>
+            </div>
+          </article>
+          <article class="tp-card">
+            <img class="tp-photo" src="./assets/team/hassan.jpg" alt="Hassan Wardere" loading="lazy" />
+            <div class="tp-text">
+              <h3>Hassan Wardere</h3>
+              <p class="tp-role">Strategic Policy Advisor</p>
+              <p>Hassan Wardere is a high-impact policy strategist and organizational scaling expert with extensive cross-sector experience spanning government agencies, global corporations, and CBOs. He specializes in advancing the Return on Relationship (RoR) framework, leveraging authentic connectivity as a strategic driver of systemic evolution and institutional growth. As a transformational leader, Hassan integrates systems thinking, adaptive leadership, and equity-centered design to help organizations build robust capacity. His multidimensional approach is engineered to deliver measurable results in some of the world's most complex and multifaceted environments.</p>
+            </div>
+          </article>
+          <article class="tp-card">
+            <img class="tp-photo" src="./assets/team/brandon.jpg" alt="Jamal Mally Brandon" loading="lazy" />
+            <div class="tp-text">
+              <h3>Jamal “Mally” Brandon</h3>
+              <p class="tp-role">VP, Digital Media &amp; Growth Strategy</p>
+              <p>Jamal “Mally” Brandon is a music executive and serial entrepreneur with a proven track record spanning production, artist management, and digital media strategy. Having worked with multi-platinum artists and legacy acts, he built his expertise in production before transitioning into executive leadership, driving impactful business and content initiatives. As a key force behind Shot Selection Media, he has contributed to generating over 1 billion YouTube views through targeted digital marketing and audience growth strategies. Now serving as VP of Digital Media &amp; Growth Strategies, Brandon leverages his cross-functional expertise to scale digital reach, optimize engagement, and dismantle systemic mechanisms that do not add value to communities they market to.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== DEFYING THE ODDS ==================== -->
+  <!-- Minimalist page positioned around The Defiant Foundation's
+       mission statement: quote hero, three mission cards, CTA band. -->
+  <main id="route-odds" class="route">
+    <section class="odds-hero">
+      <div class="container">
+        <p class="eyebrow">Defying the Odds</p>
+        <blockquote>“Without opportunities, people are lost. It’s our mission to guide them, to empower them and to help them find their path. We are Defiant in our commitment to provide the resources and support they need to thrive.”</blockquote>
+        <cite>The Defiant Foundation</cite>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">The Mission</p>
+          <h2>Guide. Empower. Thrive.</h2>
+          <p>The Defiant Foundation, led by CEO Steven Carless, turns that commitment into programs that open doors for the people the system overlooks.</p>
+        </div>
+        <div class="sol-grid">
+          <article class="sol-card">
+            <div class="num">01</div>
+            <h3>Guide</h3>
+            <p>Mentorship and direction for people the system leaves without a map. We meet them where they are and help them find their path.</p>
+          </article>
+          <article class="sol-card">
+            <div class="num">02</div>
+            <h3>Empower</h3>
+            <p>Workshops in financial literacy, athlete empowerment, and transformational leadership put the tools of ownership in people's hands.</p>
+          </article>
+          <article class="sol-card">
+            <div class="num">03</div>
+            <h3>Thrive</h3>
+            <p>Resources and long-term support so opportunity becomes stability, and stability becomes a legacy that outlasts a season.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <div class="container">
+        <h2>Be Defiant with us.</h2>
+        <p>Every contribution funds the resources and support people need to thrive.</p>
+        <div class="btns">
+          <a class="btn white" href="https://thedefiantfoundation.org/" target="_blank" rel="noopener">Visit The Defiant Foundation</a>
+          <a class="btn outline-white" href="https://thedefiantfoundation.org/donate/" target="_blank" rel="noopener">Donate</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
   <!-- ==================== NEIGHBORHOOD NIP FOUNDATION ==================== -->
   <!-- Ported from the previous FIFA dashboard build: community photo,
        Nip Forever video, the Mission / Plaza / Vision pill panel, and
@@ -1250,6 +1428,8 @@
           <h6>Company</h6>
           <ul>
             <li><a href="#about" data-route="about">About Us</a></li>
+            <li><a href="#partners" data-route="partners">Team Partners</a></li>
+            <li><a href="#odds" data-route="odds">Defying the Odds</a></li>
             <li><a href="#foundation" data-route="foundation">Neighborhood Nip Foundation</a></li>
             <li><a href="https://thedefiantfoundation.org/donate/" target="_blank" rel="noopener">The Defiant Foundation</a></li>
           </ul>
@@ -1269,7 +1449,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    const ROUTES = ['home','about','athletes','brands','universities','nil','resources','foundation'];
+    const ROUTES = ['home','about','athletes','brands','universities','nil','resources','partners','odds','foundation'];
     function showRoute(name){
       if (!ROUTES.includes(name)) name = 'home';
       document.querySelectorAll('.route').forEach(el => {
@@ -1281,6 +1461,7 @@
       window.scrollTo({top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
       const nice = { home:'Home', about:'About Us', athletes:'Athletes', brands:'Brands',
                      universities:'Universities', nil:'Defiant NIL', resources:'Resources',
+                     partners:'Team Partners', odds:'Defying the Odds',
                      foundation:'Neighborhood Nip Foundation' }[name];
       document.title = nice === 'Home'
         ? 'Defiant Sports | Athlete Branding, Endorsements & NIL Marketplace'
