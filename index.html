@@ -926,10 +926,9 @@
           </div>
         </div>
         <a href="#nil" data-route="nil">Defiant NIL</a>
-        <a href="#resources" data-route="resources">Resources</a>
+        <a href="#foundation" data-route="foundation">Nip Foundation</a>
         <a href="#partners" data-route="partners">Defiant Team</a>
         <a href="#odds" data-route="odds">Defying the Odds</a>
-        <a href="#foundation" data-route="foundation">Nip Foundation</a>
       </nav>
       <!-- Auth buttons removed; the hamburger menu is the
            only nav affordance and lives in the true center of the bar. -->
@@ -1085,77 +1084,6 @@
       </div>
     </section>
 
-  </main>
-
-  <!-- ==================== RESOURCES ==================== -->
-  <main id="route-resources" class="route">
-    <section class="section">
-      <div class="container">
-        <div class="section-head">
-          <p class="eyebrow">Resources</p>
-          <h2>Athlete workshops. Financial literacy. Transformational leadership.</h2>
-          <p>Defiant Sports currently provides athlete workshops on athlete empowerment, financial literacy, and liberation-driven transformational leadership across the East Coast, West Coast, and Pacific Northwest. Every athlete in the Defiant marketplace has access to the full curriculum.</p>
-        </div>
-
-        <div class="res-programs">
-          <article class="res-card">
-            <div class="icon">1</div>
-            <h4>Athlete Empowerment</h4>
-            <p>Story ownership, personal-brand strategy, negotiation, and how to run yourself as the CEO of your name and image.</p>
-          </article>
-          <article class="res-card">
-            <div class="icon">2</div>
-            <h4>Financial Literacy</h4>
-            <p>Taxes, entity setup, banking, credit, investing, and long-tail royalties, taught in athletes' language, on their schedule.</p>
-          </article>
-          <article class="res-card">
-            <div class="icon">3</div>
-            <h4>Liberation-Driven Transformational Leadership</h4>
-            <p>Community stewardship, ownership over consumption, and the leadership discipline athletes need to move rooms, teams, and generations.</p>
-          </article>
-        </div>
-
-        <div class="res-regions">
-          <article class="res-region">
-            <div class="kicker">Region · 01</div>
-            <h5>East Coast</h5>
-            <!-- Slim panoramic New York skyline (One WTC, Empire State, Chrysler) -->
-            <figure class="region-pano">
-              <img src="./assets/regions/newyork.jpg" alt="New York skyline at night" loading="lazy" />
-            </figure>
-            <p>New York and New Jersey</p>
-          </article>
-          <article class="res-region">
-            <div class="kicker">Region · 02</div>
-            <h5>West Coast</h5>
-            <!-- Slim panoramic Los Angeles skyline (US Bank Tower, Wilshire Grand, palms) -->
-            <figure class="region-pano">
-              <img src="./assets/regions/losangeles.jpg" alt="Los Angeles skyline at night" loading="lazy" />
-            </figure>
-            <p>Los Angeles</p>
-          </article>
-          <article class="res-region">
-            <div class="kicker">Region · 03</div>
-            <h5>Pacific Northwest</h5>
-            <!-- Slim panoramic Seattle skyline (Space Needle, Columbia Center, Mt. Rainier) -->
-            <figure class="region-pano">
-              <img src="./assets/regions/seattle.jpg" alt="Seattle skyline with Mount Rainier" loading="lazy" />
-            </figure>
-            <p>Seattle</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="cta-band">
-      <div class="container">
-        <h2>Book a Defiant Sports workshop.</h2>
-        <p>Athletes, teams, universities, and community groups can request a workshop.</p>
-        <div class="btns">
-          <a class="btn white" href="https://defiantsports.io" target="_blank" rel="noopener">Request a Workshop</a>
-        </div>
-      </div>
-    </section>
   </main>
 
   <!-- ==================== ABOUT ==================== -->
@@ -1445,9 +1373,8 @@
           <h6>Resources</h6>
           <ul>
             <li><a href="#nil" data-route="nil">Defiant NIL</a></li>
-            <li><a href="#resources" data-route="resources">Workshops</a></li>
-            <li><a href="#resources" data-route="resources">Financial Literacy</a></li>
-            <li><a href="#resources" data-route="resources">Leadership</a></li>
+            <li><a href="#foundation" data-route="foundation">Nip Foundation</a></li>
+            <li><a href="#odds" data-route="odds">Defying the Odds</a></li>
           </ul>
         </div>
         <div>
@@ -1475,7 +1402,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    const ROUTES = ['home','about','athletes','brands','universities','nil','resources','partners','odds','foundation'];
+    const ROUTES = ['home','about','athletes','brands','universities','nil','partners','odds','foundation'];
     function showRoute(name){
       if (!ROUTES.includes(name)) name = 'home';
       document.querySelectorAll('.route').forEach(el => {
@@ -1486,7 +1413,7 @@
       });
       window.scrollTo({top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
       const nice = { home:'Home', about:'About Us', athletes:'Athletes', brands:'Brands',
-                     universities:'Universities', nil:'Defiant NIL', resources:'Resources',
+                     universities:'Universities', nil:'Defiant NIL',
                      partners:'Defiant Team', odds:'Defying the Odds',
                      foundation:'Neighborhood Nip Foundation' }[name];
       document.title = nice === 'Home'
