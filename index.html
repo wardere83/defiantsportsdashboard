@@ -823,6 +823,25 @@
       .tp-card { flex-direction: column; align-items: center; text-align: center; gap: 20px; }
     }
 
+    /* ─────────────── Defiant Team ticker ─────────────── */
+    /* Looping marquee where the page heading used to sit. The track
+       holds six identical copies of the phrase; sliding it by half its
+       own width lands on an identical frame, so the loop is seamless. */
+    .team-ticker { overflow: hidden; margin: 0 0 18px; }
+    .team-ticker-track {
+      display: inline-flex; white-space: nowrap; will-change: transform;
+      animation: teamTicker 30s linear infinite;
+    }
+    .team-ticker-track span {
+      font-family: var(--serif); font-weight: 700;
+      font-size: clamp(26px, 3.4vw, 40px); letter-spacing: -0.02em;
+      line-height: 1.1; padding-right: 56px;
+    }
+    @keyframes teamTicker { to { transform: translateX(-50%); } }
+    @media (prefers-reduced-motion: reduce) {
+      .team-ticker-track { animation: none; }
+    }
+
     /* ─────────────── Defying the Odds ─────────────── */
     /* Minimalist: a black quote hero, three mission cards (reusing
        .sol-card), and the shared CTA band. Only the hero is new. */
@@ -1268,6 +1287,16 @@
       <div class="container">
         <div class="section-head">
           <p class="eyebrow">Defiant Team</p>
+          <div class="team-ticker" role="img" aria-label="In God We Trust, Defiant Till The Systems Adjust.">
+            <div class="team-ticker-track" aria-hidden="true">
+              <span>In God We Trust, Defiant Till The Systems Adjust.</span>
+              <span>In God We Trust, Defiant Till The Systems Adjust.</span>
+              <span>In God We Trust, Defiant Till The Systems Adjust.</span>
+              <span>In God We Trust, Defiant Till The Systems Adjust.</span>
+              <span>In God We Trust, Defiant Till The Systems Adjust.</span>
+              <span>In God We Trust, Defiant Till The Systems Adjust.</span>
+            </div>
+          </div>
           <p>The leadership team steering Defiant Sports and The Defiant Foundation, from the boardroom to the block.</p>
         </div>
         <div class="tp-stack">
