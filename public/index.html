@@ -178,6 +178,27 @@
     /* Right grid column, kept as a spacer even when empty so the
        brand-group in the middle column stays perfectly centered. */
     .nav-cta { display: flex; align-items: center; gap: 12px; justify-self: end; min-height: 30px; }
+    /* Language switcher: four flag buttons in the top-right corner.
+       Flags only, no labels; the active language gets the accent ring. */
+    .lang-bar { display: flex; align-items: center; gap: 4px; }
+    .lang-flag {
+      background: none; border: 1px solid transparent; border-radius: 8px;
+      font-size: 20px; line-height: 1; padding: 6px 7px; cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .lang-flag:hover { background: rgba(255,255,255,0.1); }
+    .lang-flag.on { border-color: var(--accent); background: rgba(255,255,255,0.06); }
+    @media (max-width: 600px) {
+      .lang-flag { font-size: 17px; padding: 5px 5px; }
+    }
+    /* Google Translate runs headless off the googtrans cookie; keep
+       every piece of its UI (banner, balloon, tooltip, spinner) out of
+       the page and stop it from pushing the body down. */
+    body { top: 0 !important; }
+    .goog-te-banner-frame, .goog-te-balloon-frame, #goog-gt-tt,
+    .goog-te-menu-frame, .goog-tooltip, .goog-te-gadget,
+    .goog-te-spinner-pos, iframe.skiptranslate { display: none !important; }
+    .goog-text-highlight { background: none !important; box-shadow: none !important; }
 
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
@@ -838,9 +859,8 @@
       animation: teamTicker 45s linear infinite;
     }
     .team-ticker-track span {
-      font-family: var(--serif); font-weight: 700;
-      font-size: clamp(26px, 3.4vw, 40px); letter-spacing: -0.02em;
-      line-height: 1.1; padding-right: 56px;
+      font-weight: 600; font-size: 16px; letter-spacing: 0.01em;
+      line-height: 1.3; padding-right: 44px;
     }
     @keyframes teamTicker { to { transform: translateX(-50%); } }
     @media (prefers-reduced-motion: reduce) {
@@ -935,9 +955,16 @@
         <a href="#partners" data-route="partners">Defiant Team</a>
         <a href="#odds" data-route="odds">Defying the Odds</a>
       </nav>
-      <!-- Auth buttons removed; the hamburger menu is the
-           only nav affordance and lives in the true center of the bar. -->
-      <div class="nav-cta" aria-hidden="true"></div>
+      <!-- Language switcher: flags only, in the top-right corner.
+           en=US, fr=France, pt=Brazil (Brazilian Portuguese), ar=Saudi Arabia. -->
+      <div class="nav-cta">
+        <div class="lang-bar" role="group" aria-label="Language">
+          <button class="lang-flag on" type="button" data-lang="en" aria-label="English" title="English">🇺🇸</button>
+          <button class="lang-flag" type="button" data-lang="fr" aria-label="Français" title="Français">🇫🇷</button>
+          <button class="lang-flag" type="button" data-lang="pt" aria-label="Português (Brasil)" title="Português (Brasil)">🇧🇷</button>
+          <button class="lang-flag" type="button" data-lang="ar" aria-label="العربية" title="العربية">🇸🇦</button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -1220,14 +1247,18 @@
       <div class="container">
         <div class="section-head">
           <p class="eyebrow">Defiant Team</p>
-          <div class="team-ticker" role="img" aria-label="In God We Trust, Defiant Till The Systems Adjust.">
+          <div class="team-ticker" role="img" aria-label="In God We Trust, Defiant Till the Systems Adjust.">
             <div class="team-ticker-track" aria-hidden="true">
-              <span>In God We Trust, Defiant Till The Systems Adjust.</span>
-              <span>In God We Trust, Defiant Till The Systems Adjust.</span>
-              <span>In God We Trust, Defiant Till The Systems Adjust.</span>
-              <span>In God We Trust, Defiant Till The Systems Adjust.</span>
-              <span>In God We Trust, Defiant Till The Systems Adjust.</span>
-              <span>In God We Trust, Defiant Till The Systems Adjust.</span>
+              <span>In God We Trust, Defiant Till the Systems Adjust.</span>
+              <span>In God We Trust, Defiant Till the Systems Adjust.</span>
+              <span>In God We Trust, Defiant Till the Systems Adjust.</span>
+              <span>In God We Trust, Defiant Till the Systems Adjust.</span>
+              <span>In God We Trust, Defiant Till the Systems Adjust.</span>
+              <span>In God We Trust, Defiant Till the Systems Adjust.</span>
+              <span>In God We Trust, Defiant Till the Systems Adjust.</span>
+              <span>In God We Trust, Defiant Till the Systems Adjust.</span>
+              <span>In God We Trust, Defiant Till the Systems Adjust.</span>
+              <span>In God We Trust, Defiant Till the Systems Adjust.</span>
             </div>
           </div>
           <p>The leadership team steering Defiant Sports and The Defiant Foundation, from the boardroom to the block.</p>
@@ -1405,6 +1436,10 @@
   </footer>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Google Translate engine mount point. Must exist for the engine
+       to initialise; parked off-screen, never display:none. -->
+  <div id="google_translate_element" style="position:absolute;left:-9999px;top:0;height:1px;overflow:hidden"></div>
 
   <script>
     const ROUTES = ['home','about','athletes','brands','universities','nil','partners','odds','foundation'];
@@ -1878,6 +1913,72 @@
           if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fire(); }
         });
       });
+    })();
+
+    // ── Language flags: cookie-driven Google Translate ──
+    // Clicking a flag writes the googtrans cookie and pokes the hidden
+    // engine's select for an in-place translation (no reload). English
+    // clears the cookie and reloads back to the original copy. Arabic
+    // also flips the document to RTL. Google's plain 'pt' is Brazilian
+    // Portuguese, which is the dialect this site wants.
+    const PAGE_LANGS = ['en','fr','pt','ar'];
+    function googleTranslateElementInit(){
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: PAGE_LANGS.join(','),
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+    window.googleTranslateElementInit = googleTranslateElementInit;
+    (function loadTranslateEngine(){
+      const s = document.createElement('script');
+      s.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      s.defer = true;
+      document.body.appendChild(s);
+    })();
+    function currentLang(){
+      const m = document.cookie.match(/(?:^|;\s*)googtrans=\/en\/([a-z-]+)/i);
+      return m && PAGE_LANGS.includes(m[1]) ? m[1] : 'en';
+    }
+    function markActiveFlag(lang){
+      document.querySelectorAll('.lang-flag').forEach(b =>
+        b.classList.toggle('on', b.dataset.lang === lang));
+    }
+    function applyDocLang(lang){
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    }
+    function writeTransCookie(lang){
+      const val = 'googtrans=/en/' + lang + ';path=/;SameSite=Lax';
+      document.cookie = val;
+      document.cookie = val + ';domain=' + location.hostname;
+      document.cookie = val + ';domain=.' + location.hostname;
+    }
+    function clearTransCookie(){
+      const gone = 'googtrans=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;SameSite=Lax';
+      document.cookie = gone;
+      document.cookie = gone + ';domain=' + location.hostname;
+      document.cookie = gone + ';domain=.' + location.hostname;
+    }
+    function setPageLanguage(lang){
+      markActiveFlag(lang);
+      applyDocLang(lang);
+      if (lang === 'en'){ clearTransCookie(); location.reload(); return; }
+      writeTransCookie(lang);
+      let tries = 0;
+      (function poke(){
+        const combo = document.querySelector('.goog-te-combo');
+        if (combo){ combo.value = lang; combo.dispatchEvent(new Event('change')); return; }
+        if (++tries < 40) setTimeout(poke, 150);
+        else location.reload();
+      })();
+    }
+    document.querySelectorAll('.lang-flag').forEach(btn =>
+      btn.addEventListener('click', () => setPageLanguage(btn.dataset.lang)));
+    (function restoreLang(){
+      const lang = currentLang();
+      markActiveFlag(lang);
+      applyDocLang(lang);
     })();
   </script>
 </body>
