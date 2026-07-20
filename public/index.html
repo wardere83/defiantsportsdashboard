@@ -828,9 +828,12 @@
        holds six identical copies of the phrase; sliding it by half its
        own width lands on an identical frame, so the loop is seamless. */
     .team-ticker { overflow: hidden; margin: 0 0 18px; }
+    /* The Defiant Team page opens on the ticker, so it doesn't need
+       the full 120px of section air above the fold. */
+    .team-section { padding-top: 44px; }
     .team-ticker-track {
       display: inline-flex; white-space: nowrap; will-change: transform;
-      animation: teamTicker 30s linear infinite;
+      animation: teamTicker 45s linear infinite;
     }
     .team-ticker-track span {
       font-family: var(--serif); font-weight: 700;
@@ -1211,7 +1214,7 @@
        Steven Carless, Hassan Wardere, and Jamal "Mally" Brandon, in that
        order, each with the portrait already shipped in assets/team/. -->
   <main id="route-partners" class="route">
-    <section class="section">
+    <section class="section team-section">
       <div class="container">
         <div class="section-head">
           <p class="eyebrow">Defiant Team</p>
