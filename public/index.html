@@ -580,7 +580,7 @@
     }
 
     /* ─────────────── Defiant NIL ─────────────── */
-    .nil-hero { background: #000; color: #fff; padding: 84px 0; text-align: center; }
+    .nil-hero { background: #000; color: #fff; padding: 44px 0 84px; text-align: center; }
     .nil-hero h2 {
       font-family: var(--serif); font-weight: 700;
       font-size: clamp(34px, 5vw, 56px);
@@ -828,9 +828,11 @@
        holds six identical copies of the phrase; sliding it by half its
        own width lands on an identical frame, so the loop is seamless. */
     .team-ticker { overflow: hidden; margin: 0 0 18px; }
-    /* The Defiant Team page opens on the ticker, so it doesn't need
-       the full 120px of section air above the fold. */
-    .team-section { padding-top: 44px; }
+    /* Every route that opens on a plain section (About, Athletes,
+       Brands, Universities, Defiant Team, Nip Foundation) starts just
+       under the nav instead of after 120px of empty air. Later
+       sections on the same page keep the full rhythm. */
+    .route > .section:first-child { padding-top: 44px; }
     .team-ticker-track {
       display: inline-flex; white-space: nowrap; will-change: transform;
       animation: teamTicker 45s linear infinite;
@@ -848,7 +850,7 @@
     /* ─────────────── Defying the Odds ─────────────── */
     /* Minimalist: a black quote hero, three mission cards (reusing
        .sol-card), and the shared CTA band. Only the hero is new. */
-    .odds-hero { background: #000; color: #fff; padding: 100px 0; text-align: center; }
+    .odds-hero { background: #000; color: #fff; padding: 44px 0 100px; text-align: center; }
     .odds-hero .eyebrow {
       font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
       color: var(--accent); font-weight: 600; margin: 0 0 26px;
@@ -1214,7 +1216,7 @@
        Steven Carless, Hassan Wardere, and Jamal "Mally" Brandon, in that
        order, each with the portrait already shipped in assets/team/. -->
   <main id="route-partners" class="route">
-    <section class="section team-section">
+    <section class="section">
       <div class="container">
         <div class="section-head">
           <p class="eyebrow">Defiant Team</p>
